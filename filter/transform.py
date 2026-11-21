@@ -13,7 +13,7 @@ time of each action, estimates the time spent on each reel, and writes:
   data/<user>_reels.csv      - same data for spreadsheets / quick viewing
 
 Usage:
-  python3 filter/transform.py [user]          (testing: justin)
+  python3 filter/transform.py [user]          (default: justin)
 
 From other code:
   from filter.transform import load_reels
