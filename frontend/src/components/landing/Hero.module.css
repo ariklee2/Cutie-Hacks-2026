@@ -1,13 +1,24 @@
-/* The film fills this section edge to edge, directly under the header (no
-   rules at either edge). The title sits on it, vertically centered and
-   left-aligned to the content container (same left edge as the blocks below).
-   `isolation` keeps the title's blend inside the hero. */
+/* The first screen (below the header): plain page red with the film near the
+   top — a thin strip of red between it and the header — and the rest of the
+   screen red below it, so the next section starts just below the fold. */
+.stage {
+  display: flex;
+  align-items: flex-start;
+  min-height: calc(100svh - var(--snapshot-header-height));
+  padding-top: var(--mantine-spacing-lg);
+  padding-bottom: var(--snapshot-space-section);
+}
+
+/* The film block: film edge to edge, the title on it vertically centered and
+   left-aligned to the content container (same left edge as the sections
+   below). `isolation` keeps the title's blend inside the film. */
 .hero {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   display: flex;
   align-items: center;
+  width: 100%;
   min-height: clamp(22rem, 60vh, 38rem);
   padding-block: var(--snapshot-space-page);
 }

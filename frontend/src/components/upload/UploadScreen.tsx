@@ -22,14 +22,14 @@ type SubmitState =
 
 /**
  * The movie screen is the drop zone: drop the three files on it, or click /
- * press Enter to pick them. A counter under the screen shows how many of the
- * three are in; any problems are listed under it. Once all three are in and
+ * press Enter to pick them. Under the screen, the three file names turn green
+ * as each is added; any problems are listed below. Once all three are in and
  * named, "Create Snapshot" saves them to data/, runs the transform and every
  * feature (via POST /api/snapshot), then goes to the first page of the
  * snapshot sequence (/snapshot/<name>/top-creators).
  */
 export function UploadScreen() {
-  const { slots, unrecognised, addFiles: addToSlots, addedCount, allAdded } = useInstagramFiles();
+  const { slots, unrecognised, addFiles: addToSlots, allAdded } = useInstagramFiles();
   const [name, setName] = useState('');
   const [submit, setSubmit] = useState<SubmitState>({ status: 'idle' });
   const router = useRouter();
@@ -164,43 +164,45 @@ export function UploadScreen() {
             </>
           ) : (
             <>
-              <p className={classes.title}>{screen.title}</p>
-              <p className={classes.hint}>{screen.hint}</p>
+              <p className={classes.prompt}>{screen.prompt}</p>
+              <p className={classes.promptFiles}>
+                {INSTAGRAM_FILES.map((spec) => spec.fileName).join(', ')}
+              </p>
             </>
           )}
         </div>
       </div>
 
-      <div className={classes.status} role="status" aria-live="polite">
-        <div className={classes.progress}>
-          {/* The three files; each turns green once that exact file is in. */}
-          <ul className={classes.fileList}>
-            {INSTAGRAM_FILES.map((spec) => {
-              const added = slots[spec.kind].status === 'added';
-              return (
-                <li key={spec.kind} data-added={added || undefined}>
-                  {spec.fileName}
-                  {added && <span className={classes.visuallyHidden}> {uploadContent.fileAdded}</span>}
-                </li>
-              );
-            })}
-          </ul>
-          <p className={classes.counter}>{uploadContent.counter(addedCount, INSTAGRAM_FILES.length)}</p>
-        </div>
-        {problems.map((message) => (
-          <p key={message} className={classes.message}>
-            {message}
-          </p>
-        ))}
-      </div>
-
+      {/* Toolbar flush under the screen: name + the three files at the
+          bottom-left corner, "Create Snapshot" at the bottom-right. */}
       <SnapshotForm
         name={name}
         onNameChange={setName}
         ready={allAdded}
         submitting={submit.status === 'saving'}
         onSubmit={createSnapshotFromFiles}
-      />
+      >
+        {/* Each file name turns green once that exact file is in. */}
+        <ul className={classes.fileList} aria-live="polite">
+          {INSTAGRAM_FILES.map((spec) => {
+            const added = slots[spec.kind].status === 'added';
+            return (
+              <li key={spec.kind} data-added={added || undefined}>
+                {spec.fileName}
+                {added && <span className={classes.visuallyHidden}> {uploadContent.fileAdded}</span>}
+              </li>
+            );
+          })}
+        </ul>
+      </SnapshotForm>
+
+      <div className={classes.status} role="status" aria-live="polite">
+        {problems.map((message) => (
+          <p key={message} className={classes.message}>
+            {message}
+          </p>
+        ))}
+      </div>
     </div>
   );
 }

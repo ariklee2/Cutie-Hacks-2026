@@ -58,7 +58,17 @@ export const color = {
   filmEdge: palette.ink, // film edges, gaps between frames, clapperboard
   filmFrame: palette.paper, // film frame windows, sprocket holes
   textOnFilm: palette.theatre, // copy set on the film's white frames; 13.9:1
-  screenFrame: palette.ink, // the movie screen's black masking frame (upload page)
+  // "Light" pages (the upload page): white background, black text, dark red
+  // for the dashed drop-zone border and button outline. Ink on white 19.8:1;
+  // theatre red on white 13.9:1.
+  lightBackground: palette.paper,
+  lightText: palette.ink,
+  lightAccent: palette.theatre,
+  // Landing page sections below the film, each one step lighter than the
+  // last (shades of the theatre scale, never new hues). White text:
+  // 12.0:1 on band 1, 9.4:1 on band 2.
+  band1: theatre[7], // #6E0F1C — Description
+  band2: theatre[6], // #8A1626 — What's in your snapshot
   // A file name on the upload page once that file is in: green fill, ink text.
   // 8.0:1 against the deep red; ink on it 11.4:1. Status only — never decoration.
   added: palette.added,
@@ -83,7 +93,6 @@ export const fontWeight = {
   regular: '400',
   medium: '500',
   semibold: '600',
-  bold: '700', // instructions that must read as bold (upload screen)
 } as const;
 
 export const lineHeight = {
@@ -143,6 +152,8 @@ export const motion = {
   easeIn: 'cubic-bezier(0.6, 0, 0.9, 0.3)', // the clapper stick snapping shut
   easeInOut: 'cubic-bezier(0.7, 0, 0.2, 1)', // the clapperboard lifting away
   filmFrameDuration: '3s', // time for the film to advance one frame
+  hoverDuration: '0.15s', // square buttons lighting up on hover
+  hoverScale: '1.06', // ...and growing slightly
 } as const;
 
 /* ----------------------------------------------------------------- Film --

@@ -10,22 +10,49 @@
   justify-content: flex-start;
 }
 
-/* Plain white text, no box. */
+/*
+ * The header link (Get Snapshot / Go Back): a square box, sized like Create
+ * Snapshot. Hover / focus: lights up (fills with the accent, text flips to the
+ * page color) and grows slightly.
+ *   - red pages: white border and text; fills white with red text
+ *   - light pages (upload): dark red border, black text; fills dark red with
+ *     white text
+ */
 .link {
-  font-size: var(--mantine-font-size-md);
+  --accent: var(--snapshot-color-text);
+  --on-accent: var(--snapshot-color-background);
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  font-size: var(--mantine-font-size-sm);
   font-weight: var(--snapshot-font-weight-semibold);
-  letter-spacing: var(--snapshot-letter-spacing-heading);
   color: var(--snapshot-color-text);
   text-decoration: none;
-  text-underline-offset: 0.25em;
+  border: 1px solid var(--accent);
+  border-radius: 0;
+  transition:
+    transform var(--snapshot-hover-duration) var(--snapshot-ease-out),
+    background-color var(--snapshot-hover-duration),
+    color var(--snapshot-hover-duration);
 }
 
-.link:hover {
-  text-decoration: underline;
+:global(body:has([data-surface='light'])) .link {
+  --accent: var(--snapshot-color-light-accent);
+  --on-accent: var(--snapshot-color-light-background);
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--on-accent);
+  background: var(--accent);
+  transform: scale(var(--snapshot-hover-scale));
 }
 
 .link:focus-visible {
-  outline: 2px solid var(--snapshot-color-text);
-  outline-offset: 4px;
-  border-radius: var(--snapshot-radius);
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link {
+    transition: none;
+  }
 }

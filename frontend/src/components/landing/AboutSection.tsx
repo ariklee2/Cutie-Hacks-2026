@@ -1,19 +1,37 @@
-import { Container, SimpleGrid } from '@mantine/core';
+import { Container } from '@mantine/core';
+import type { CSSProperties } from 'react';
 
 import type { LandingSection } from '@/content/landing';
 
-import { PlaceholderBlock } from './PlaceholderBlock';
 import classes from './AboutSection.module.css';
 
-/** The landing copy blocks, below the film, in white on the deep red. */
+/**
+ * The landing copy below the film: each section is its own full-width band, a
+ * large heading on the left and the text on the right. Each band is one shade
+ * lighter red than the one above (--snapshot-color-band-1, -2, …).
+ */
 export function AboutSection({ sections }: { sections: LandingSection[] }) {
   return (
-    <Container component="section" className={classes.about} aria-label="About">
-      <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="xl">
-        {sections.map((section) => (
-          <PlaceholderBlock key={section.label} label={section.label} content={section.content} />
-        ))}
-      </SimpleGrid>
-    </Container>
+    <>
+      {sections.map((section, i) => (
+        <section
+          key={section.label}
+          className={classes.band}
+          style={{ '--band-color': `var(--snapshot-color-band-${i + 1})` } as CSSProperties}
+          aria-labelledby={`about-${i}`}
+        >
+          <Container className={classes.inner}>
+            <h2 id={`about-${i}`} className={classes.heading}>
+              {section.label}
+            </h2>
+            {section.content === null ? (
+              <p className={classes.placeholder}>Placeholder — to be written</p>
+            ) : (
+              <p className={classes.text}>{section.content}</p>
+            )}
+          </Container>
+        </section>
+      ))}
+    </>
   );
 }

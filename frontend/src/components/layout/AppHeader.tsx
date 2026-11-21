@@ -9,7 +9,8 @@ import { navigation } from '@/content/navigation';
 import classes from './AppHeader.module.css';
 
 /**
- * Site header: one plain white text link.
+ * Site header: one link in a square box that lights up and grows slightly on
+ * hover (like Create Snapshot).
  *   - Landing page: "Get Snapshot", top right, into the upload page.
  *   - Upload page: "Go Back", top left, to the landing page.
  * (A client component only because it reads the current path.)

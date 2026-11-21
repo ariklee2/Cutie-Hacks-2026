@@ -5,18 +5,22 @@ import { FilmStrip } from '@/components/cinema/FilmStrip';
 import classes from './Hero.module.css';
 
 /**
- * Landing hero: film runs behind the whole section, edge to edge. The title
- * sits on it, vertically centered and left-aligned with the page content.
+ * Landing hero. The first screen is plain red with the film centered in it
+ * (red above and below), so the sections that follow start just below the
+ * fold. The film runs edge to edge sideways; the title sits on it, vertically
+ * centered and left-aligned with the page content.
  */
 export function Hero({ title }: { title: string }) {
   return (
-    <section className={classes.hero}>
-      <FilmStrip />
-      <Container className={classes.inner}>
-        <Title order={1} className={classes.title}>
-          {title}
-        </Title>
-      </Container>
+    <section className={classes.stage}>
+      <div className={classes.hero}>
+        <FilmStrip />
+        <Container className={classes.inner}>
+          <Title order={1} className={classes.title}>
+            {title}
+          </Title>
+        </Container>
+      </div>
     </section>
   );
 }
