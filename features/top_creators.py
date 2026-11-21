@@ -22,7 +22,7 @@ from filter.transform import load_reels  # noqa: E402
 MIN_WATCH_SECONDS = 3
 
 
-def top_creators(user="justin", n=5, min_seconds=MIN_WATCH_SECONDS):
+def top_creators(user="arik", n=5, min_seconds=MIN_WATCH_SECONDS):
     """
 
     Return the n creators with the most watched reels, most first.

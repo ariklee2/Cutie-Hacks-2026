@@ -1,0 +1,18 @@
+/* The screen sits centered in the space under the header. */
+.stage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100dvh - var(--snapshot-header-height));
+  padding-top: var(--snapshot-space-section);
+  padding-bottom: var(--snapshot-space-page);
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

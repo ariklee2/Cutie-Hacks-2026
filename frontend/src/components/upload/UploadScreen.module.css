@@ -1,0 +1,111 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-lg);
+  width: 100%;
+  max-width: 60rem;
+  margin: 0 auto;
+}
+
+/* The movie screen: a paper picture inside a black masking frame. */
+.screen {
+  display: grid;
+  aspect-ratio: 2 / 1;
+  min-height: 20rem;
+  padding: var(--mantine-spacing-md);
+  background: var(--snapshot-color-screen-frame);
+  border-radius: var(--snapshot-radius);
+  cursor: pointer;
+}
+
+.screen:focus-visible {
+  outline: 2px solid var(--snapshot-color-text);
+  outline-offset: 4px;
+}
+
+.picture {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mantine-spacing-sm);
+  padding: var(--mantine-spacing-xl) var(--mantine-spacing-lg);
+  background: var(--snapshot-color-film-frame);
+  color: var(--snapshot-color-text-on-film);
+  text-align: center;
+}
+
+.picture p {
+  margin: 0;
+}
+
+/* Dragging files over the screen: the picture's edge is marked in red. */
+.screen[data-dragging] .picture {
+  outline: 2px dashed var(--snapshot-color-text-on-film);
+  outline-offset: calc(-1 * var(--mantine-spacing-md));
+}
+
+.title {
+  font-size: var(--mantine-font-size-xl);
+  font-weight: var(--snapshot-font-weight-semibold);
+  letter-spacing: var(--snapshot-letter-spacing-heading);
+  line-height: 1.2;
+}
+
+.note,
+.hint {
+  font-size: var(--mantine-font-size-md);
+}
+
+.hint {
+  margin-top: var(--mantine-spacing-sm) !important;
+  font-size: var(--mantine-font-size-sm);
+}
+
+.fileList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--mantine-spacing-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fileList li {
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  font-size: var(--mantine-font-size-sm);
+  font-weight: var(--snapshot-font-weight-semibold);
+  border: 1px solid currentColor;
+  border-radius: var(--snapshot-radius);
+}
+
+/* Counter and any problems, under the screen. */
+.status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--mantine-spacing-xs);
+  text-align: center;
+}
+
+.status p {
+  margin: 0;
+}
+
+/* How many of the three files are in, e.g. "2 of 3 files added". */
+.counter {
+  font-size: var(--mantine-font-size-lg);
+  font-weight: var(--snapshot-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.message {
+  font-size: var(--mantine-font-size-sm);
+}
+
+@media (max-width: $mantine-breakpoint-sm) {
+  .screen {
+    aspect-ratio: auto;
+  }
+}

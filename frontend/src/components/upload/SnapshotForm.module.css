@@ -1,0 +1,75 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-sm);
+  width: 100%;
+  max-width: 32rem;
+  margin: 0 auto;
+}
+
+.label {
+  font-size: var(--mantine-font-size-sm);
+  font-weight: var(--snapshot-font-weight-semibold);
+}
+
+.row {
+  display: flex;
+  gap: var(--mantine-spacing-sm);
+}
+
+/* White outline on the deep red, white text. */
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: var(--mantine-spacing-sm) var(--mantine-spacing-md);
+  font: inherit;
+  font-size: var(--mantine-font-size-md);
+  color: var(--snapshot-color-text);
+  background: transparent;
+  border: 1px solid var(--snapshot-color-text);
+  border-radius: var(--snapshot-radius);
+}
+
+.input::placeholder {
+  color: var(--snapshot-color-text);
+  opacity: 0.6;
+}
+
+.input:focus-visible,
+.submit:focus-visible {
+  outline: 2px solid var(--snapshot-color-text);
+  outline-offset: 2px;
+}
+
+.input[aria-invalid='true'] {
+  border-style: dashed;
+}
+
+/* Solid white button with red text — the one action on the page. */
+.submit {
+  padding: var(--mantine-spacing-sm) var(--mantine-spacing-lg);
+  font: inherit;
+  font-size: var(--mantine-font-size-md);
+  font-weight: var(--snapshot-font-weight-semibold);
+  color: var(--snapshot-color-text-on-film);
+  background: var(--snapshot-color-film-frame);
+  border: 1px solid var(--snapshot-color-film-frame);
+  border-radius: var(--snapshot-radius);
+  cursor: pointer;
+}
+
+.submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.hint {
+  margin: 0;
+  font-size: var(--mantine-font-size-xs);
+}
+
+@media (max-width: $mantine-breakpoint-xs) {
+  .row {
+    flex-direction: column;
+  }
+}

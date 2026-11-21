@@ -1,0 +1,31 @@
+/* No bottom rule: the film starts directly below the header. */
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: var(--snapshot-header-height);
+}
+
+.inner[data-align='start'] {
+  justify-content: flex-start;
+}
+
+/* Plain white text, no box. */
+.link {
+  font-size: var(--mantine-font-size-md);
+  font-weight: var(--snapshot-font-weight-semibold);
+  letter-spacing: var(--snapshot-letter-spacing-heading);
+  color: var(--snapshot-color-text);
+  text-decoration: none;
+  text-underline-offset: 0.25em;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--snapshot-color-text);
+  outline-offset: 4px;
+  border-radius: var(--snapshot-radius);
+}

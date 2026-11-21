@@ -1,0 +1,33 @@
+/* The film fills this section edge to edge, directly under the header (no
+   rules at either edge). The title sits on it, vertically centered and
+   left-aligned to the content container (same left edge as the blocks below).
+   `isolation` keeps the title's blend inside the hero. */
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: clamp(22rem, 60vh, 38rem);
+  padding-block: var(--snapshot-space-page);
+}
+
+.inner {
+  width: 100%;
+}
+
+/*
+ * The title is white and blended with `difference`, so it reads black on the
+ * white frames and white on the black edges and gaps — full contrast at every
+ * moment as the film moves.
+ */
+.title {
+  position: relative;
+  mix-blend-mode: difference;
+  color: var(--snapshot-color-text);
+  text-align: left;
+  font-size: var(--snapshot-font-size-display);
+  line-height: var(--snapshot-line-height-display);
+  letter-spacing: var(--snapshot-letter-spacing-display);
+  font-weight: var(--snapshot-font-weight-semibold);
+}

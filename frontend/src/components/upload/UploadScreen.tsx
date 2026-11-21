@@ -1,0 +1,193 @@
+'use client';
+
+import { useEffect, useRef, useState, type DragEvent, type KeyboardEvent } from 'react';
+
+import { uploadContent } from '@/content/upload';
+import { createSnapshot, type SnapshotResult } from '@/lib/api/snapshot';
+import { INSTAGRAM_FILES, type InstagramFileKind } from '@/lib/instagramFiles';
+import { normaliseSnapshotName } from '@/lib/snapshotName';
+
+import { SnapshotForm } from './SnapshotForm';
+import { useInstagramFiles } from './useInstagramFiles';
+import classes from './UploadScreen.module.css';
+
+const { screen } = uploadContent;
+
+type SubmitState =
+  | { status: 'idle' }
+  | { status: 'saving' }
+  | { status: 'done'; result: SnapshotResult }
+  | { status: 'error'; message: string };
+
+/**
+ * The movie screen is the drop zone: drop the three files on it, or click /
+ * press Enter to pick them. A counter under the screen shows how many of the
+ * three are in; any problems are listed under it. Once all three are in and
+ * named, "Create Snapshot" saves them to data/ and runs filter/transform.py
+ * (via POST /api/snapshot); the screen reports the result.
+ */
+export function UploadScreen() {
+  const { slots, unrecognised, addFiles: addToSlots, addedCount, allAdded } = useInstagramFiles();
+  const [name, setName] = useState('');
+  const [submit, setSubmit] = useState<SubmitState>({ status: 'idle' });
+
+  // New files make any earlier result stale.
+  const addFiles = (files: Iterable<File>) => {
+    setSubmit({ status: 'idle' });
+    addToSlots(files);
+  };
+
+  const createSnapshotFromFiles = async () => {
+    const files = {} as Record<InstagramFileKind, File>;
+    for (const spec of INSTAGRAM_FILES) {
+      const slot = slots[spec.kind];
+      if (slot.status !== 'added') return;
+      files[spec.kind] = slot.file;
+    }
+    setSubmit({ status: 'saving' });
+    try {
+      const result = await createSnapshot(normaliseSnapshotName(name), files);
+      setSubmit({ status: 'done', result });
+    } catch (error) {
+      setSubmit({ status: 'error', message: (error as Error).message });
+    }
+  };
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [dragging, setDragging] = useState(false);
+  const dragDepth = useRef(0); // dragenter/leave fire for children too
+
+  // A file dropped beside the screen would otherwise make the browser leave
+  // the page to open it.
+  useEffect(() => {
+    const block = (event: globalThis.DragEvent) => {
+      if (event.dataTransfer?.types.includes('Files')) event.preventDefault();
+    };
+    window.addEventListener('dragover', block);
+    window.addEventListener('drop', block);
+    return () => {
+      window.removeEventListener('dragover', block);
+      window.removeEventListener('drop', block);
+    };
+  }, []);
+
+  const problems = [
+    ...INSTAGRAM_FILES.flatMap((spec) => {
+      const slot = slots[spec.kind];
+      return slot.status === 'problem' ? [uploadContent.problem(slot.fileName, slot.message)] : [];
+    }),
+    ...unrecognised,
+    ...(submit.status === 'error' ? [submit.message] : []),
+    ...(submit.status === 'done' && submit.result.failedSections.length > 0
+      ? [uploadContent.screen.partial(submit.result.failedSections)]
+      : []),
+  ];
+
+  const openPicker = () => inputRef.current?.click();
+
+  const onDragEnter = (event: DragEvent) => {
+    if (!event.dataTransfer.types.includes('Files')) return;
+    event.preventDefault();
+    dragDepth.current += 1;
+    setDragging(true);
+  };
+  const onDragOver = (event: DragEvent) => {
+    if (!event.dataTransfer.types.includes('Files')) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'copy';
+  };
+  const onDragLeave = () => {
+    dragDepth.current = Math.max(0, dragDepth.current - 1);
+    if (dragDepth.current === 0) setDragging(false);
+  };
+  const onDrop = (event: DragEvent) => {
+    event.preventDefault();
+    dragDepth.current = 0;
+    setDragging(false);
+    addFiles(event.dataTransfer.files);
+  };
+  const onKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      openPicker();
+    }
+  };
+
+  return (
+    <div className={classes.wrap}>
+      <div
+        role="button"
+        tabIndex={0}
+        aria-describedby="upload-instructions"
+        className={classes.screen}
+        data-dragging={dragging || undefined}
+        data-complete={allAdded || undefined}
+        onClick={openPicker}
+        onKeyDown={onKeyDown}
+        onDragEnter={onDragEnter}
+        onDragOver={onDragOver}
+        onDragLeave={onDragLeave}
+        onDrop={onDrop}
+      >
+        <input
+          ref={inputRef}
+          type="file"
+          accept=".json,application/json"
+          multiple
+          hidden
+          onChange={(event) => {
+            if (event.target.files) addFiles(event.target.files);
+            event.target.value = ''; // allow choosing the same file again
+          }}
+        />
+        <div className={classes.picture} id="upload-instructions">
+          {dragging ? (
+            <p className={classes.title}>{screen.dragging}</p>
+          ) : submit.status === 'saving' ? (
+            <>
+              <p className={classes.title}>{screen.saving}</p>
+              <p className={classes.note}>{screen.savingNote}</p>
+            </>
+          ) : submit.status === 'done' ? (
+            <>
+              <p className={classes.title}>{screen.done}</p>
+              <p className={classes.note}>{screen.doneNote(submit.result.reels, submit.result.name)}</p>
+            </>
+          ) : allAdded ? (
+            <>
+              <p className={classes.title}>{screen.complete}</p>
+              <p className={classes.note}>{screen.completeNote}</p>
+            </>
+          ) : (
+            <>
+              <p className={classes.title}>{screen.title}</p>
+              <p className={classes.note}>{screen.intro}</p>
+              <ul className={classes.fileList}>
+                {INSTAGRAM_FILES.map((spec) => (
+                  <li key={spec.kind}>{spec.fileName}</li>
+                ))}
+              </ul>
+              <p className={classes.hint}>{screen.hint}</p>
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className={classes.status} role="status" aria-live="polite">
+        <p className={classes.counter}>{uploadContent.counter(addedCount, INSTAGRAM_FILES.length)}</p>
+        {problems.map((message) => (
+          <p key={message} className={classes.message}>
+            {message}
+          </p>
+        ))}
+      </div>
+
+      <SnapshotForm
+        name={name}
+        onNameChange={setName}
+        ready={allAdded}
+        submitting={submit.status === 'saving'}
+        onSubmit={createSnapshotFromFiles}
+      />
+    </div>
+  );
+}

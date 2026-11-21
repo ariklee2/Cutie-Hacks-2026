@@ -1,0 +1,53 @@
+.film {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/*
+ * Three repeating layers over an ink base:
+ *   1. sprocket holes along the top edge
+ *   2. sprocket holes along the bottom edge
+ *   3. paper frames (a hard-edged stripe pattern: frame, then ink gap)
+ * The track is one frame period wider than the film and shifts left by exactly
+ * one period per loop, so the repeat is seamless.
+ */
+.track {
+  height: 100%;
+  width: calc(100% + var(--snapshot-film-frame-period));
+  background-color: var(--snapshot-color-film-edge);
+  background-image:
+    var(--film-sprocket),
+    var(--film-sprocket),
+    linear-gradient(
+      to right,
+      var(--snapshot-color-film-frame) 0
+        calc(var(--snapshot-film-frame-period) - var(--snapshot-film-frame-gap)),
+      transparent 0
+    );
+  background-repeat: repeat-x;
+  background-position:
+    0 0,
+    0 100%,
+    calc(var(--snapshot-film-frame-gap) / 2) 50%;
+  background-size:
+    auto var(--snapshot-film-edge),
+    auto var(--snapshot-film-edge),
+    var(--snapshot-film-frame-period)
+      calc(100% - 2 * var(--snapshot-film-edge) - 2 * var(--snapshot-film-frame-inset));
+  animation: run var(--snapshot-film-frame-duration) linear infinite;
+  will-change: transform;
+}
+
+@keyframes run {
+  to {
+    transform: translateX(calc(-1 * var(--snapshot-film-frame-period)));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+}
