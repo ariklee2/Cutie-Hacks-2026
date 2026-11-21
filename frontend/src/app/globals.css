@@ -4,6 +4,23 @@
 /* The page background is a solid deep red: Mantine paints the body with the
    theme's `white`, which is set to color.background (#5C0A14). */
 
+/*
+ * "Light" pages (white background, black text): a page opts in by putting
+ * data-surface="light" on its root element. Switching on <body> (via :has)
+ * means the shared header follows too, with no flash of red on load. Text and
+ * line variables are re-pointed, so components need no light-specific rules.
+ */
+body:has([data-surface='light']) {
+  background-color: var(--snapshot-color-light-background);
+  color: var(--snapshot-color-light-text);
+  --snapshot-color-text: var(--snapshot-color-light-text);
+  --snapshot-color-text-muted: var(--snapshot-color-light-text);
+  --snapshot-color-text-on-film: var(--snapshot-color-light-text);
+  --snapshot-color-background: var(--snapshot-color-light-background);
+  --snapshot-border-hairline: 1px solid var(--snapshot-color-light-text);
+  --snapshot-border-placeholder: 1px dashed var(--snapshot-color-light-text);
+}
+
 ::selection {
   background: var(--snapshot-color-text);
   color: var(--snapshot-color-background);

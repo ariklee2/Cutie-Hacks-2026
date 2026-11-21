@@ -2,8 +2,8 @@
 export const uploadContent = {
   pageTitle: 'Add your Instagram files',
   screen: {
-    title: 'From your Instagram data export add:',
-    hint: 'Click or drag them in',
+    /** The one line on the screen while waiting for files. */
+    prompt: 'Click or Drag',
     dragging: 'Drop to add',
     complete: 'All three files are in',
     completeNote: 'Name your snapshot below, then create it.',
@@ -14,11 +14,9 @@ export const uploadContent = {
       reels === null
         ? `Saved to data/${name}_snapshot.json.`
         : `Processed ${reels.toLocaleString()} reels and saved data/${name}_snapshot.json.`,
-    /** Shown under the counter if some features failed but the rest saved. */
+    /** Shown under the toolbar if some features failed but the rest saved. */
     partial: (sections: string[]) => `These parts of the snapshot couldn't be built: ${sections.join(', ')}.`,
   },
-  /** Counter under the screen, to the right of the file names. */
-  counter: (added: number, total: number) => `${added} of ${total} files added`,
   /** Screen-reader suffix on a file name that's been added (it also turns green). */
   fileAdded: 'added',
   /** A recognised file that couldn't be read. */
@@ -26,9 +24,9 @@ export const uploadContent = {
   notAFile: (name: string) =>
     `${name} isn't one of the three files. Use liked_posts.json, saved_posts.json and videos_watched.json.`,
   form: {
+    /** Read by screen readers; the field shows the placeholder instead. */
     nameLabel: 'Name',
-    namePlaceholder: 'e.g. justin',
-    nameHint: 'Letters, numbers, - and _. Files are saved as data/<name>_….json; an existing name is replaced.',
+    namePlaceholder: 'Name',
     submit: 'Create Snapshot',
     submitting: 'Creating…',
   },

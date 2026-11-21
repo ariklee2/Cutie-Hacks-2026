@@ -1,33 +1,41 @@
-.form {
+/* One row under the screen, flush with its left and right edges:
+   [file names] ...................................... [name] [Create Snapshot] */
+.toolbar {
   display: flex;
-  flex-direction: column;
-  gap: var(--mantine-spacing-sm);
-  width: 100%;
-  max-width: 32rem;
-  margin: 0 auto;
-}
-
-.label {
-  font-size: var(--mantine-font-size-sm);
-  font-weight: var(--snapshot-font-weight-semibold);
-}
-
-.row {
-  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start; /* both ends sit right at the screen's bottom edge */
+  justify-content: space-between;
   gap: var(--mantine-spacing-sm);
 }
 
-/* White outline on the deep red, white text. */
+.left {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+}
+
+/* Name field then the button, pinned to the screen's right edge (also when
+   the toolbar wraps on narrow screens). `stretch` makes the name field the
+   button's height, so their tops (and bottoms) line up. */
+.right {
+  display: flex;
+  align-items: stretch;
+  gap: var(--mantine-spacing-sm);
+  margin-left: auto;
+}
+
+/* Same size as the .json pills beside it (padding, text, 1px border);
+   outlined in the text color (black on the light upload page). */
 .input {
-  flex: 1;
-  min-width: 0;
-  padding: var(--mantine-spacing-sm) var(--mantine-spacing-md);
+  width: 9.5rem;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
   font: inherit;
-  font-size: var(--mantine-font-size-md);
+  font-size: var(--mantine-font-size-sm);
   color: var(--snapshot-color-text);
   background: transparent;
   border: 1px solid var(--snapshot-color-text);
-  border-radius: var(--snapshot-radius);
+  border-radius: 0; /* square, like the .json labels and the buttons */
 }
 
 .input::placeholder {
@@ -45,17 +53,31 @@
   border-style: dashed;
 }
 
-/* Solid white button with red text — the one action on the page. */
+/* The one action on the page, sized exactly like the .json pills: a square
+   box, black text, solid dark red border (echoing the drop zone's dashed one).
+   Hover / focus: lights up (fills dark red, white text) and grows slightly —
+   same as the header's Go Back. */
 .submit {
-  padding: var(--mantine-spacing-sm) var(--mantine-spacing-lg);
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
   font: inherit;
-  font-size: var(--mantine-font-size-md);
+  font-size: var(--mantine-font-size-sm);
   font-weight: var(--snapshot-font-weight-semibold);
-  color: var(--snapshot-color-text-on-film);
-  background: var(--snapshot-color-film-frame);
-  border: 1px solid var(--snapshot-color-film-frame);
-  border-radius: var(--snapshot-radius);
+  color: var(--snapshot-color-text);
+  background: var(--snapshot-color-light-background);
+  border: 1px solid var(--snapshot-color-light-accent);
+  border-radius: 0;
   cursor: pointer;
+  transition:
+    transform var(--snapshot-hover-duration) var(--snapshot-ease-out),
+    background-color var(--snapshot-hover-duration),
+    color var(--snapshot-hover-duration);
+}
+
+.submit:enabled:hover,
+.submit:enabled:focus-visible {
+  color: var(--snapshot-color-light-background);
+  background: var(--snapshot-color-light-accent);
+  transform: scale(var(--snapshot-hover-scale));
 }
 
 .submit:disabled {
@@ -63,13 +85,17 @@
   opacity: 0.5;
 }
 
-.hint {
-  margin: 0;
-  font-size: var(--mantine-font-size-xs);
+@media (prefers-reduced-motion: reduce) {
+  .submit {
+    transition: none;
+  }
 }
 
-@media (max-width: $mantine-breakpoint-xs) {
-  .row {
-    flex-direction: column;
-  }
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
