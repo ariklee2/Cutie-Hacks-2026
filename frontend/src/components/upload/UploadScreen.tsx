@@ -165,12 +165,6 @@ export function UploadScreen() {
           ) : (
             <>
               <p className={classes.title}>{screen.title}</p>
-              <p className={classes.note}>{screen.intro}</p>
-              <ul className={classes.fileList}>
-                {INSTAGRAM_FILES.map((spec) => (
-                  <li key={spec.kind}>{spec.fileName}</li>
-                ))}
-              </ul>
               <p className={classes.hint}>{screen.hint}</p>
             </>
           )}
@@ -178,7 +172,21 @@ export function UploadScreen() {
       </div>
 
       <div className={classes.status} role="status" aria-live="polite">
-        <p className={classes.counter}>{uploadContent.counter(addedCount, INSTAGRAM_FILES.length)}</p>
+        <div className={classes.progress}>
+          {/* The three files; each turns green once that exact file is in. */}
+          <ul className={classes.fileList}>
+            {INSTAGRAM_FILES.map((spec) => {
+              const added = slots[spec.kind].status === 'added';
+              return (
+                <li key={spec.kind} data-added={added || undefined}>
+                  {spec.fileName}
+                  {added && <span className={classes.visuallyHidden}> {uploadContent.fileAdded}</span>}
+                </li>
+              );
+            })}
+          </ul>
+          <p className={classes.counter}>{uploadContent.counter(addedCount, INSTAGRAM_FILES.length)}</p>
+        </div>
         {problems.map((message) => (
           <p key={message} className={classes.message}>
             {message}

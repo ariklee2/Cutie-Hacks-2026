@@ -2,9 +2,8 @@
 export const uploadContent = {
   pageTitle: 'Add your Instagram files',
   screen: {
-    title: 'Drop your three Instagram files here',
-    intro: 'From your Instagram data export:',
-    hint: 'or click the screen to choose them',
+    title: 'From your Instagram data export add:',
+    hint: 'Click or drag them in',
     dragging: 'Drop to add',
     complete: 'All three files are in',
     completeNote: 'Name your snapshot below, then create it.',
@@ -18,8 +17,10 @@ export const uploadContent = {
     /** Shown under the counter if some features failed but the rest saved. */
     partial: (sections: string[]) => `These parts of the snapshot couldn't be built: ${sections.join(', ')}.`,
   },
-  /** Counter under the screen. */
+  /** Counter under the screen, to the right of the file names. */
   counter: (added: number, total: number) => `${added} of ${total} files added`,
+  /** Screen-reader suffix on a file name that's been added (it also turns green). */
+  fileAdded: 'added',
   /** A recognised file that couldn't be read. */
   problem: (fileName: string, reason: string) => `${fileName}: ${reason}`,
   notAFile: (name: string) =>

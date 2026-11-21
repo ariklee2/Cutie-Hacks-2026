@@ -47,19 +47,39 @@
 
 .title {
   font-size: var(--mantine-font-size-xl);
-  font-weight: var(--snapshot-font-weight-semibold);
+  font-weight: var(--snapshot-font-weight-bold);
   letter-spacing: var(--snapshot-letter-spacing-heading);
   line-height: 1.2;
 }
 
-.note,
-.hint {
+.note {
   font-size: var(--mantine-font-size-md);
 }
 
 .hint {
-  margin-top: var(--mantine-spacing-sm) !important;
-  font-size: var(--mantine-font-size-sm);
+  font-size: var(--mantine-font-size-md);
+}
+
+/* Under the screen: the file names, then the counter, then any problems. */
+.status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+  text-align: center;
+}
+
+.status p {
+  margin: 0;
+}
+
+/* File names on the left, counter on the right; wraps on narrow screens. */
+.progress {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mantine-spacing-md);
 }
 
 .fileList {
@@ -72,32 +92,35 @@
   list-style: none;
 }
 
+/* Waiting: white outline. Added: filled green with ink text — the change in
+   fill (not just hue) shows it without relying on color. */
 .fileList li {
   padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
   font-size: var(--mantine-font-size-sm);
   font-weight: var(--snapshot-font-weight-semibold);
-  border: 1px solid currentColor;
+  border: 1px solid var(--snapshot-color-text);
   border-radius: var(--snapshot-radius);
 }
 
-/* Counter and any problems, under the screen. */
-.status {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--mantine-spacing-xs);
-  text-align: center;
-}
-
-.status p {
-  margin: 0;
+.fileList li[data-added] {
+  color: var(--snapshot-color-film-edge);
+  background: var(--snapshot-color-added);
+  border-color: var(--snapshot-color-added);
 }
 
 /* How many of the three files are in, e.g. "2 of 3 files added". */
 .counter {
-  font-size: var(--mantine-font-size-lg);
-  font-weight: var(--snapshot-font-weight-semibold);
+  font-size: var(--mantine-font-size-md);
   font-variant-numeric: tabular-nums;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 .message {

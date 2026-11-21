@@ -107,7 +107,9 @@ Semantic roles (`color.*` in tokens / `--snapshot-color-*`): `text` = white
 instead. `border` = white at 40% (decorative hairlines), `borderStrong` = white
 (placeholder outlines, a UI boundary). `filmEdge` = ink, `filmFrame` = white,
 `textOnFilm` = theatre (red copy on white, 13.9:1), `screenFrame` = ink (the
-movie screen's masking frame). There is no
+movie screen's masking frame), `added` = `#4ADE80` — **status green, used only
+for an upload file name once that file is in** (filled green with ink text:
+8.0:1 against the deep red, ink on it 11.4:1); never decoration. There is no
 accent color. Mantine's color scheme is forced to "light", which here means
 red background and white text.
 
@@ -129,7 +131,8 @@ a second family; create hierarchy with size and weight.
 | `xl` | 24px | Section headings (`h2`) |
 | `display` | `clamp(56px, 12vw, 152px)` | Hero title only (`h1`) |
 
-Weights: 400 regular, 500 medium, 600 semibold (headings, labels). Line height:
+Weights: 400 regular, 500 medium, 600 semibold (headings, labels), 700 bold
+(only for instructions that must read as bold — the upload screen's line). Line height:
 0.92 display / 1.2 headings / 1.55 body. Letter spacing: −0.045em display,
 −0.015em headings.
 
@@ -190,9 +193,13 @@ everything else stays still.
 - **Movie screen = drop zone** (`upload/UploadScreen`): a white picture inside
   a black masking frame (`screenFrame`), text in `textOnFilm`, directly on the
   deep red background (no theatre decor). Dragging files over it marks the picture's
-  edge with a dashed red outline. Under it, a single **counter** ("2 of 3 files
-  added") — no per-file markers. Any problem (unreadable file, a file that isn't
-  one of the three) is listed as a short line under the counter.
+  edge with a dashed red outline. Inside the screen: **"From your Instagram
+  data export add:"** in bold, then "Click or drag them in". Under it, one row:
+  the three file names as pills on the left (white outline while waiting;
+  **filled green** with ink text once that exact file is in, plus a hidden
+  "added" for screen readers — no check marks), then the counter ("2 of 3
+  files added", regular weight) on the right. Any problem (unreadable file, a
+  file that isn't one of the three) is listed as a short line below that row.
 - **Charts** (`src/components/snapshot/`, following the dataviz guidance):
   one white series on the deep red (13.9:1), so no legend — the page title
   names it. Bars ≤ 24px thick, square at the baseline (a 1px hairline), 4px
