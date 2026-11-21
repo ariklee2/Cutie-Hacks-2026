@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState, type DragEvent, type KeyboardEvent } from 'react';
 
 import { uploadContent } from '@/content/upload';
@@ -23,13 +24,15 @@ type SubmitState =
  * The movie screen is the drop zone: drop the three files on it, or click /
  * press Enter to pick them. A counter under the screen shows how many of the
  * three are in; any problems are listed under it. Once all three are in and
- * named, "Create Snapshot" saves them to data/ and runs filter/transform.py
- * (via POST /api/snapshot); the screen reports the result.
+ * named, "Create Snapshot" saves them to data/, runs the transform and every
+ * feature (via POST /api/snapshot), then goes to the first page of the
+ * snapshot sequence (/snapshot/<name>/top-creators).
  */
 export function UploadScreen() {
   const { slots, unrecognised, addFiles: addToSlots, addedCount, allAdded } = useInstagramFiles();
   const [name, setName] = useState('');
   const [submit, setSubmit] = useState<SubmitState>({ status: 'idle' });
+  const router = useRouter();
 
   // New files make any earlier result stale.
   const addFiles = (files: Iterable<File>) => {
@@ -48,6 +51,8 @@ export function UploadScreen() {
     try {
       const result = await createSnapshot(normaliseSnapshotName(name), files);
       setSubmit({ status: 'done', result });
+      // First page of the snapshot sequence.
+      router.push(`/snapshot/${encodeURIComponent(result.name)}/top-creators`);
     } catch (error) {
       setSubmit({ status: 'error', message: (error as Error).message });
     }

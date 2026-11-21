@@ -14,11 +14,12 @@
  * command line. Runs on the local Node server only (it writes to disk).
  */
 import { execFile } from 'node:child_process';
-import { readFile, writeFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { promisify } from 'node:util';
 
 import { INSTAGRAM_FILES } from '@/lib/instagramFiles';
+import { DATA_DIR, REPO_ROOT, readSnapshot } from '@/lib/server/snapshotStore';
 import { isValidSnapshotName, normaliseSnapshotName } from '@/lib/snapshotName';
 
 export const runtime = 'nodejs';
@@ -26,8 +27,6 @@ export const dynamic = 'force-dynamic';
 
 const run = promisify(execFile);
 
-/** Repo root: the folder that holds data/ and filter/ (frontend's parent). */
-const REPO_ROOT = process.env.SNAPSHOT_REPO_ROOT ?? path.resolve(process.cwd(), '..');
 /** Python with pandas + pyarrow installed. */
 const PYTHON = process.env.SNAPSHOT_PYTHON ?? 'python3';
 const MAX_FILE_BYTES = 100 * 1024 * 1024;
@@ -63,10 +62,9 @@ export async function POST(request: Request) {
     contents.push({ fileName: `${name}_${spec.kind}.json`, text });
   }
 
-  const dataDir = path.join(REPO_ROOT, 'data');
   try {
     await Promise.all(
-      contents.map(({ fileName, text }) => writeFile(path.join(dataDir, fileName), text, 'utf8')),
+      contents.map(({ fileName, text }) => writeFile(path.join(DATA_DIR, fileName), text, 'utf8')),
     );
   } catch (error) {
     console.error('[snapshot] saving files failed', error);
@@ -92,7 +90,8 @@ export async function POST(request: Request) {
   let failedSections: string[];
   try {
     await python('features/snapshot.py');
-    const snapshot = JSON.parse(await readFile(path.join(dataDir, `${name}_snapshot.json`), 'utf8'));
+    const snapshot = await readSnapshot(name);
+    if (!snapshot) throw new Error(`data/${name}_snapshot.json was not written`);
     failedSections = snapshot.failed_sections ?? [];
   } catch (error) {
     const err = error as { stderr?: string; message: string };

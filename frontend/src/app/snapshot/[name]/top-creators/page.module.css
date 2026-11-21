@@ -1,0 +1,22 @@
+.page {
+  padding-top: var(--snapshot-space-section);
+  padding-bottom: var(--snapshot-space-page);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  line-height: var(--snapshot-line-height-display);
+  letter-spacing: var(--snapshot-letter-spacing-display);
+  font-weight: var(--snapshot-font-weight-semibold);
+}
+
+.subtitle {
+  margin: var(--mantine-spacing-md) 0 var(--snapshot-space-section);
+  font-size: var(--mantine-font-size-lg);
+}
+
+.message {
+  margin: 0;
+  font-size: var(--mantine-font-size-lg);
+}

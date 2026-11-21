@@ -1,0 +1,173 @@
+/*
+ * Horizontal bars (dataviz mark spec): ≤ 24px thick, square at the baseline,
+ * 4px rounded data-end; value at the tip in the text color; one white series on
+ * the deep red (13.9:1), so no legend — the page title names it.
+ */
+.chart {
+  --bar-thickness: 24px;
+  --value-room: 3.5rem; /* space past the longest bar for its number */
+  --label-width: minmax(8rem, 15rem);
+  margin: 0;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The whole row is the hover / focus target (bigger than the bar). */
+.row {
+  display: grid;
+  grid-template-columns: var(--label-width) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--mantine-spacing-md);
+  padding-block: var(--mantine-spacing-xs);
+  border-radius: var(--snapshot-radius);
+  cursor: default;
+}
+
+.row:focus-visible {
+  outline: 2px solid var(--snapshot-color-text);
+  outline-offset: 4px;
+}
+
+.account {
+  font-size: var(--mantine-font-size-md);
+  font-weight: var(--snapshot-font-weight-semibold);
+  overflow-wrap: anywhere;
+}
+
+/* The baseline every bar grows from. */
+.track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+  min-height: calc(var(--bar-thickness) + 2 * var(--mantine-spacing-xs));
+  border-left: var(--snapshot-border-hairline);
+}
+
+.bar {
+  flex: none;
+  width: calc(var(--ratio) * (100% - var(--value-room)));
+  min-width: 2px;
+  height: var(--bar-thickness);
+  background: var(--snapshot-color-film-frame);
+  border-radius: 0 var(--snapshot-radius) var(--snapshot-radius) 0;
+  transform-origin: left center;
+  animation: grow 0.7s var(--snapshot-ease-out) calc(0.15s + var(--i) * 0.1s) both;
+}
+
+/* Hovered / focused bar lifts with a white outline. */
+.row[data-active] .bar {
+  outline: 2px solid var(--snapshot-color-text);
+  outline-offset: 2px;
+}
+
+.value {
+  font-size: var(--mantine-font-size-lg);
+  font-weight: var(--snapshot-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  animation: appear 0.3s ease-out calc(0.65s + var(--i) * 0.1s) both;
+}
+
+/* Tooltip above the bar's tip: value first (strong), account second. */
+.tooltip {
+  position: absolute;
+  z-index: 1;
+  bottom: calc(100% + var(--mantine-spacing-xs));
+  left: calc(var(--ratio) * (100% - var(--value-room)));
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  font-size: var(--mantine-font-size-sm);
+  white-space: nowrap;
+  color: var(--snapshot-color-text-on-film);
+  background: var(--snapshot-color-film-frame);
+  border-radius: var(--snapshot-radius);
+  pointer-events: none;
+}
+
+.tooltip strong {
+  font-size: var(--mantine-font-size-md);
+}
+
+.tableToggle {
+  margin-top: var(--mantine-spacing-xl);
+  padding: 0;
+  font: inherit;
+  font-size: var(--mantine-font-size-sm);
+  color: var(--snapshot-color-text);
+  background: none;
+  border: none;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  cursor: pointer;
+}
+
+.tableToggle:focus-visible {
+  outline: 2px solid var(--snapshot-color-text);
+  outline-offset: 4px;
+  border-radius: var(--snapshot-radius);
+}
+
+.table {
+  margin-top: var(--mantine-spacing-md);
+  border-collapse: collapse;
+  font-size: var(--mantine-font-size-md);
+}
+
+.table th,
+.table td {
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-lg) var(--mantine-spacing-xs) 0;
+  text-align: left;
+  border-bottom: var(--snapshot-border-hairline);
+}
+
+.table td:last-child,
+.table th:last-child {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar,
+  .value {
+    animation: none;
+  }
+}
+
+/* Narrow screens: account name above its bar. */
+@media (max-width: $mantine-breakpoint-xs) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--mantine-spacing-xs);
+  }
+}

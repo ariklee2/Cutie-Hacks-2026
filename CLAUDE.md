@@ -57,7 +57,15 @@ never with `fetch` inside components.
   and the name is valid) send them to `POST /api/snapshot`; the screen shows
   "Saving and processing…", then "Snapshot created" with the reel count from
   `transform.py` and the snapshot file name, or the error under the counter
-  (including any snapshot sections that failed).
+  (including any snapshot sections that failed). On success it goes straight
+  to `/snapshot/<name>/top-creators`.
+- `/snapshot/<name>/top-creators` — **first page of the snapshot sequence**.
+  Server component reading `data/<name>_snapshot.json` through
+  `src/lib/server/snapshotStore.ts` (`readSnapshot`; 404 if missing). Shows
+  `top_creators` as an animated horizontal bar chart (`TopCreatorsChart`); the
+  subtitle's date range comes from `watch_time.per_day`. Later sequence pages
+  go under `/snapshot/<name>/…` and read the same file; copy lives in
+  `src/content/snapshot.ts`.
 
 ## Running the frontend
 
@@ -150,8 +158,9 @@ no large rounded cards.
 
 The visual motif is **cinema**: film and the clapperboard
 (`src/components/cinema/`), and the movie screen on the upload page
-(`src/components/upload/`). Film and clapperboard are the only places motion
-is allowed; everything else stays still.
+(`src/components/upload/`). Motion is allowed only for the film and
+clapperboard, and for **chart entrances** on snapshot pages (below);
+everything else stays still.
 
 - **Film** (`FilmStrip`): fills the whole hero, directly from the header to the
   description section below, with no rules at either edge —
@@ -184,8 +193,17 @@ is allowed; everything else stays still.
   edge with a dashed red outline. Under it, a single **counter** ("2 of 3 files
   added") — no per-file markers. Any problem (unreadable file, a file that isn't
   one of the three) is listed as a short line under the counter.
-- Don't add new animations outside the film motif. Film art is built from
-  tokens in `cinema/filmArt.ts`, never hard-coded colors.
+- **Charts** (`src/components/snapshot/`, following the dataviz guidance):
+  one white series on the deep red (13.9:1), so no legend — the page title
+  names it. Bars ≤ 24px thick, square at the baseline (a 1px hairline), 4px
+  rounded data-end, value at the tip in the text color. Entrance: bars grow
+  from the baseline one after another (0.7s `--snapshot-ease-out`, 0.1s
+  stagger), each value fades in as its bar lands; off under
+  `prefers-reduced-motion`. The whole row is the hover/focus target: the bar
+  gets a white outline and a white tooltip at its tip (value first, then the
+  account). Every chart has a "View as table" toggle with the same numbers.
+- Don't add other animations. Film art is built from tokens in
+  `cinema/filmArt.ts`, never hard-coded colors.
 - The header has no logo. (`public/logo-black.webp` is no longer used.)
 
 ### Component conventions
