@@ -17,6 +17,7 @@ import type { MantineColorsTuple } from '@mantine/core';
 export const palette = {
   theatre: '#5C0A14',
   paper: '#FFFFFF',
+  added: '#4ADE80', // status green: an upload file that's been added (only use)
   ink: '#0B0A09',
 } as const;
 
@@ -58,6 +59,9 @@ export const color = {
   filmFrame: palette.paper, // film frame windows, sprocket holes
   textOnFilm: palette.theatre, // copy set on the film's white frames; 13.9:1
   screenFrame: palette.ink, // the movie screen's black masking frame (upload page)
+  // A file name on the upload page once that file is in: green fill, ink text.
+  // 8.0:1 against the deep red; ink on it 11.4:1. Status only — never decoration.
+  added: palette.added,
 } as const;
 
 /* ----------------------------------------------------------- Typography --
@@ -79,6 +83,7 @@ export const fontWeight = {
   regular: '400',
   medium: '500',
   semibold: '600',
+  bold: '700', // instructions that must read as bold (upload screen)
 } as const;
 
 export const lineHeight = {
