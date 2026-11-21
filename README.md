@@ -1,6 +1,6 @@
 Project Scope:
 
-** Instagram Reels Wrapped **
+**Instagram Reels Wrapped**
 - Upload users Insta JSON (Like Data + Filter for Reels). (Arik)
 - Build Wrapped profile.
     - Recent top creator. (Justin)
