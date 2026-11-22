@@ -26,8 +26,16 @@ export function AboutSection({ sections }: { sections: LandingSection[] }) {
             </h2>
             {section.content === null ? (
               <p className={classes.placeholder}>Placeholder — to be written</p>
-            ) : (
+            ) : typeof section.content === 'string' ? (
               <p className={classes.text}>{section.content}</p>
+            ) : (
+              <ul className={classes.list}>
+                {section.content.map((item) => (
+                  <li key={item.name} className={classes.item}>
+                    <strong className={classes.itemName}>{item.name}</strong> — {item.detail}
+                  </li>
+                ))}
+              </ul>
             )}
           </Container>
         </section>

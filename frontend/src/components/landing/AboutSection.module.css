@@ -29,6 +29,30 @@
   line-height: var(--mantine-line-height);
 }
 
+/* A list of named items (e.g. what's in your snapshot): one per row between
+   hairlines, the name in semibold, then its one-line hook. */
+.list {
+  margin: 0;
+  padding: 0;
+  max-width: 36rem;
+  list-style: none;
+}
+
+.item {
+  padding: var(--mantine-spacing-sm) 0;
+  font-size: var(--mantine-font-size-lg);
+  line-height: var(--mantine-line-height);
+  border-top: var(--snapshot-border-hairline);
+}
+
+.item:last-child {
+  border-bottom: var(--snapshot-border-hairline);
+}
+
+.itemName {
+  font-weight: var(--snapshot-font-weight-semibold);
+}
+
 /* Unwritten copy: visibly unfinished. */
 .placeholder {
   margin: 0;
