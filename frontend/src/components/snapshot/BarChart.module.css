@@ -1,11 +1,11 @@
 /*
- * Horizontal bars (dataviz mark spec): ≤ 24px thick, square at the baseline,
+ * Shared horizontal bar chart for every snapshot page (dataviz mark spec): ≤ 24px thick, square at the baseline,
  * 4px rounded data-end; value at the tip in the text color; one white series on
  * the deep red (13.9:1), so no legend — the page title names it.
  */
 .chart {
   --bar-thickness: 24px;
-  --value-room: 3.5rem; /* space past the longest bar for its number */
+  --value-room: 5rem; /* space past the longest bar for its value ("1h 22m") */
   --label-width: minmax(8rem, 15rem);
   margin: 0;
 }

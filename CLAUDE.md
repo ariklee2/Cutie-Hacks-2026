@@ -19,7 +19,7 @@ clubs).
   what the frontend's snapshot pages and charts read; its shape is typed in
   `frontend/src/lib/snapshotData.ts` (keep in sync with `SCHEMA_VERSION`). A
   feature that raises becomes `{"error": "..."}` and is listed in
-  `failed_sections`; the rest are still written. Top creators/hashtags break
+  `failed_sections`; the rest are still written. Top creators/hashtags keep the top 10 (`TOP_N`) and break
   ties alphabetically in the snapshot (the features themselves break ties
   arbitrarily, and `top_hashtags` can even change between runs), so
   rebuilding a snapshot gives the same file. When adding a feature, add a
@@ -59,13 +59,40 @@ never with `fetch` inside components.
   `transform.py` and the snapshot file name, or the error under the counter
   (including any snapshot sections that failed). On success it goes straight
   to `/snapshot/<name>/top-creators`.
-- `/snapshot/<name>/top-creators` — **first page of the snapshot sequence**.
-  Server component reading `data/<name>_snapshot.json` through
-  `src/lib/server/snapshotStore.ts` (`readSnapshot`; 404 if missing). Shows
-  `top_creators` as an animated horizontal bar chart (`TopCreatorsChart`); the
-  subtitle's date range comes from `watch_time.per_day`. Later sequence pages
-  go under `/snapshot/<name>/…` and read the same file; copy lives in
-  `src/content/snapshot.ts`.
+- `/snapshot/<name>/<step>` — **the snapshot sequence**, in the order of
+  `src/lib/snapshotSequence.ts`. Every page is a server component reading
+  `data/<name>_snapshot.json` through `src/lib/server/snapshotStore.ts`
+  (`readSnapshot`; 404 if missing), wrapped in `SnapshotPage` (title,
+  subtitle, then Back / Next links to its neighbours; the last page's Next
+  is "Start over"). The left / right arrow keys do the same (`ArrowKeyNav`),
+  but stop at both ends: no wrap from the share card back to the start;
+  ignored while typing in a field or with a modifier key held. A failed or empty section shows one line of copy
+  (`SnapshotMessage`) instead. Copy lives in `src/content/snapshot.ts`;
+  formatting helpers (week range, "4h 57m", local times) in
+  `src/lib/snapshotFormat.ts`.
+  1. `top-creators` — first page; upload success lands here. `top_creators`
+     (top 10) as a `BarChart` with no table toggle; the subtitle's date range comes from `watch_time.per_day`.
+  2. `top-hashtags` — `top_hashtags` (top 10) as a `BarChart` with no
+     table toggle.
+  3. `watch-time` — total time as a `HeroStat`, the busiest day under it,
+     then a `StatList` (scroll distance in inches and miles from
+     `watch_time.scroll`: one reel = one scroll = one ~6in phone screen,
+     `SCROLL_INCHES_PER_REEL` in `reels_watched_duration.py`; reels and time
+     per day on average), then a `ColumnLineChart`:
+     one vertical column per day with a line joining the column tops, the
+     busiest day's value labeled (tooltip adds that day's reel count).
+  4. `binge` — the longest session as a `HeroStat` (local day and times,
+     reel count), session count and median in a `StatList`, then the
+     longest sessions as a `BarChart`.
+  5. `loyalty` — the Loyal / Variety verdict as a `HeroStat`, the 0–100
+     score on a `ScoreMeter` (dashed tick at 50, the backend's threshold),
+     then the metrics in a `StatList`.
+  6. `club` — the club as a `HeroStat`, then every club's share as a
+     `BarChart`.
+  7. `share` — `ShareCard`: one line per earlier page on a white card in a
+     black frame (the movie-screen look, red text), with **Share** (the
+     device share sheet, only shown where `navigator.share` exists) and
+     **Copy text** (clipboard) sending the same lines as plain text.
 
 ## Running the frontend
 
@@ -200,7 +227,9 @@ everything else stays still.
   "added" for screen readers — no check marks), then the counter ("2 of 3
   files added", regular weight) on the right. Any problem (unreadable file, a
   file that isn't one of the three) is listed as a short line below that row.
-- **Charts** (`src/components/snapshot/`, following the dataviz guidance):
+- **Charts** (`src/components/snapshot/BarChart`, shared by every snapshot
+  page, following the dataviz guidance; `ScoreMeter` uses the same bar spec;
+  `ColumnLineChart` on the time-on-reels page is the vertical variant below):
   one white series on the deep red (13.9:1), so no legend — the page title
   names it. Bars ≤ 24px thick, square at the baseline (a 1px hairline), 4px
   rounded data-end, value at the tip in the text color. Entrance: bars grow
@@ -208,7 +237,16 @@ everything else stays still.
   stagger), each value fades in as its bar lands; off under
   `prefers-reduced-motion`. The whole row is the hover/focus target: the bar
   gets a white outline and a white tooltip at its tip (value first, then the
-  account). Every chart has a "View as table" toggle with the same numbers.
+  row's label). Every chart has a "View as table" toggle with the same numbers, except
+  top creators and top hashtags (`table={false}`).
+- **Column + line chart** (`ColumnLineChart`): vertical columns ≤ 24px wide,
+  4px rounded top, in white at 40% (`border`) so the solid white 2px line
+  over their tops and its dots (2px deep-red ring) stay readable; one series,
+  one axis — the line traces the same values. Only the highlighted point
+  (busiest day) is labeled. Entrance: columns grow up (0.08s stagger), then
+  the line is wiped in left to right (a clip, not a dash animation, which
+  breaks with `vector-effect: non-scaling-stroke`); off under
+  `prefers-reduced-motion`.
 - Don't add other animations. Film art is built from tokens in
   `cinema/filmArt.ts`, never hard-coded colors.
 - The header has no logo. (`public/logo-black.webp` is no longer used.)

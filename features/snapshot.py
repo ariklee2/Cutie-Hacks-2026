@@ -25,13 +25,19 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from features.binge_session import binge_sessions  # noqa: E402
 from features.clubs import assign_club  # noqa: E402
 from features.loyal_or_variety import classify  # noqa: E402
-from features.reels_watched_duration import TIMEZONE, watch_hours  # noqa: E402
+from features.reels_watched_duration import (  # noqa: E402
+    SCROLL_INCHES_PER_REEL,
+    TIMEZONE,
+    reels_scrolled,
+    scroll_distance,
+    watch_hours,
+)
 from features.top_creators import top_creators  # noqa: E402
 from features.top_hashtags import top_hashtags  # noqa: E402
 from filter.transform import DATA_DIR  # noqa: E402
 
 SCHEMA_VERSION = 1
-TOP_N = 5  # top creators / hashtags to keep (the features' own default)
+TOP_N = 10  # top creators / hashtags to keep
 ALL = 1_000_000  # ask a feature for its whole ranking
 TOP_SESSIONS = 3  # longest binge sessions to list
 
@@ -72,12 +78,30 @@ def snapshot_top_hashtags(user):
 
 def snapshot_watch_time(user):
     total, per_day = watch_hours(user)
+    total_reels, reels_per_day = reels_scrolled(user)
+    inches, miles = scroll_distance(total_reels)
     days = [
-        {"date": day.strftime("%Y-%m-%d"), "weekday": day.strftime("%A"), "hours": _num(hours)}
+        {
+            "date": day.strftime("%Y-%m-%d"),
+            "weekday": day.strftime("%A"),
+            "hours": _num(hours),
+            "reels": _num(reels_per_day.get(day, 0)),
+        }
         for day, hours in per_day.items()
     ]
     busiest = max(days, key=lambda d: d["hours"]) if days else None
-    return {"timezone": TIMEZONE, "total_hours": _num(total), "per_day": days, "busiest_day": busiest}
+    return {
+        "timezone": TIMEZONE,
+        "total_hours": _num(total),
+        "total_reels": _num(total_reels),  # one reel = one scroll
+        "scroll": {  # thumb distance: one phone screen per reel
+            "inches_per_reel": SCROLL_INCHES_PER_REEL,
+            "inches": _num(inches),
+            "miles": _num(miles),
+        },
+        "per_day": days,
+        "busiest_day": busiest,
+    }
 
 
 def snapshot_binge_sessions(user):

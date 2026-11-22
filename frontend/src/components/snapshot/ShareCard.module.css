@@ -1,0 +1,103 @@
+/*
+ * The share card reads like the upload page's movie screen: a white picture
+ * inside a black masking frame, copy in theatre red (textOnFilm, 13.9:1).
+ */
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--mantine-spacing-lg);
+}
+
+.frame {
+  width: 100%;
+  max-width: 28rem;
+  padding: var(--mantine-spacing-md);
+  background: var(--snapshot-color-screen-frame);
+  border-radius: var(--snapshot-radius);
+}
+
+.card {
+  padding: var(--mantine-spacing-xl) var(--mantine-spacing-lg);
+  color: var(--snapshot-color-text-on-film);
+  background: var(--snapshot-color-film-frame);
+}
+
+.header {
+  margin-bottom: var(--mantine-spacing-lg);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 2.75rem);
+  line-height: var(--snapshot-line-height-display);
+  letter-spacing: var(--snapshot-letter-spacing-display);
+  font-weight: var(--snapshot-font-weight-semibold);
+}
+
+.meta {
+  margin: var(--mantine-spacing-sm) 0 0;
+  font-size: var(--mantine-font-size-sm);
+  font-weight: var(--snapshot-font-weight-medium);
+}
+
+.rows {
+  margin: 0;
+}
+
+/* Hairlines in the card's own red, since the page hairline is white. */
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--mantine-spacing-md);
+  padding: var(--mantine-spacing-sm) 0;
+  border-top: 1px solid currentColor;
+}
+
+.row dt {
+  flex: none;
+  font-size: var(--mantine-font-size-sm);
+}
+
+.row dd {
+  margin: 0;
+  font-size: var(--mantine-font-size-lg);
+  font-weight: var(--snapshot-font-weight-semibold);
+  letter-spacing: var(--snapshot-letter-spacing-heading);
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-md);
+}
+
+/* Outlined white buttons, matching the upload page's plain controls. */
+.button {
+  padding: var(--mantine-spacing-sm) var(--mantine-spacing-lg);
+  font: inherit;
+  font-size: var(--mantine-font-size-md);
+  font-weight: var(--snapshot-font-weight-semibold);
+  color: var(--snapshot-color-text);
+  background: none;
+  border: 1px solid var(--snapshot-color-text);
+  border-radius: var(--snapshot-radius);
+  cursor: pointer;
+}
+
+.button:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--snapshot-color-text);
+  outline-offset: 4px;
+}
+
+.status {
+  font-size: var(--mantine-font-size-sm);
+}

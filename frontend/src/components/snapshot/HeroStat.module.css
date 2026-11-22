@@ -1,0 +1,25 @@
+.hero {
+  margin-bottom: var(--snapshot-space-section);
+}
+
+.value {
+  margin: 0;
+  font-size: clamp(3rem, 10vw, 7rem);
+  line-height: var(--snapshot-line-height-display);
+  letter-spacing: var(--snapshot-letter-spacing-display);
+  font-weight: var(--snapshot-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.caption {
+  margin-top: var(--mantine-spacing-md);
+  font-size: var(--mantine-font-size-lg);
+}
+
+.caption p {
+  margin: 0;
+}
+
+.caption p + p {
+  margin-top: var(--mantine-spacing-xs);
+}
