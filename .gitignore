@@ -1,0 +1,14 @@
+# Secrets (API keys). Never commit.
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# Raw scraper responses (re-creatable, may contain other people's data)
+data/*_apify_*.json

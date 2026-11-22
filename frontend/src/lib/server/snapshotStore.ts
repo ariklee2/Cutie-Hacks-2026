@@ -5,6 +5,7 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 
+import type { RecommendationsData } from '@/lib/recommendationsData';
 import type { SnapshotData } from '@/lib/snapshotData';
 import { isValidSnapshotName } from '@/lib/snapshotName';
 
@@ -21,6 +22,21 @@ export async function readSnapshot(name: string): Promise<SnapshotData | null> {
   try {
     const text = await readFile(path.join(DATA_DIR, `${name}_snapshot.json`), 'utf8');
     return JSON.parse(text) as SnapshotData;
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null;
+    throw error;
+  }
+}
+
+/**
+ * Reads data/<name>_recommendations.json (written by features/recommender.py).
+ * Returns null if the name is invalid or recommendations haven't been made.
+ */
+export async function readRecommendations(name: string): Promise<RecommendationsData | null> {
+  if (!isValidSnapshotName(name)) return null;
+  try {
+    const text = await readFile(path.join(DATA_DIR, `${name}_recommendations.json`), 'utf8');
+    return JSON.parse(text) as RecommendationsData;
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null;
     throw error;

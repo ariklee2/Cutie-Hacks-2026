@@ -12,6 +12,7 @@ export const snapshotContent = {
     binge: 'Longest binge',
     loyalty: 'Loyal or variety',
     club: 'Your club',
+    recommendations: 'For you',
     share: 'Share card',
   } satisfies Record<SnapshotStep, string>,
   sequence: {
@@ -135,6 +136,27 @@ export const snapshotContent = {
     counted: (counted: number, unclassified: number) =>
       `${reels(counted)} matched a club; ${reels(unclassified)} didn’t fit any.`,
     failed: "Your club couldn't be worked out from your files.",
+  },
+
+  recommendations: {
+    title: 'Recommended for you',
+    subtitle:
+      'Reels and accounts you haven’t seen yet, picked to match the reels you liked, saved and watched for a while.',
+    basedOn: (tags: string[]) => `Based on what you engage with most: ${tags.map((t) => `#${t}`).join(', ')}.`,
+    reelsHeading: 'Reels',
+    profilesHeading: 'Accounts',
+    openReel: 'Watch on Instagram',
+    openProfile: 'View on Instagram',
+    by: (creator: string) => `@${creator}`,
+    matchingReels: (n: number) => `${reels(n)} matching your taste`,
+    noCaption: 'No caption',
+    noneFound: 'Nothing new matched your taste closely enough this time.',
+    /** Not generated yet for this name. */
+    missing: 'Your recommendations haven’t been found yet.',
+    find: 'Find recommendations',
+    finding: 'Finding recommendations…',
+    cost: 'This searches Instagram for new reels (via Apify) and takes up to a minute.',
+    failed: (reason: string) => reason,
   },
 
   share: {

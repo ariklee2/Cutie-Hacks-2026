@@ -13,6 +13,24 @@ clubs).
 - `features/*.py` — analysis functions over that table (`top_creators`,
   `top_hashtags`, `watch_hours`, `binge_sessions`, `classify`, `assign_club`).
   Each also runs as a CLI: `python3 features/<name>.py [user]`.
+- `features/recommender.py <user> [--dry-run|--offline|--refresh]` — reels and
+  profiles the user would enjoy → **`data/<user>_recommendations.json`**.
+  Taste profile from the reels table: weight per reel = saved 3, liked 2,
+  watched ≥ 15s 1–2 (scaled by seconds); weighted hashtags (generic ones like
+  #fyp dropped) and a TF-IDF profile of captions + hashtags. Candidates: recent
+  reels under the top 5 hashtags via Apify's `instagram-hashtag-scraper`
+  (12 per hashtag ≈ $0.16 per uncached run at $0.0026/result). Ranking: 80%
+  similarity (rescaled so the best match = 1) + 20% log popularity; reels
+  already seen and reels with zero similarity are dropped; ≤ 2 per creator;
+  each has a `why`. Profiles = unseen creators of the scored reels, by summed
+  score. (Apify's profile scraper no longer returns Instagram's related
+  profiles, so it isn't used.) Raw Apify responses are cached in
+  `data/<user>_apify_*.json` (gitignored) and reused for the same hashtags in
+  any order; `--dry-run` prints the queries and cost without calling anything.
+  Ties sort alphabetically so runs are reproducible.
+- **Secrets:** the Apify token is `APIFY_TOKEN` in the repo-root `.env`
+  (gitignored; template in `.env.example`) or the environment. Never print it,
+  log it, put it in a URL or commit it.
 - `features/snapshot.py <user>` — runs every feature above and writes the
   results to **`data/<user>_snapshot.json`** (plain JSON: ISO times, 0–1
   shares; one section per feature plus `watch_time.busiest_day`). This file is
@@ -97,7 +115,19 @@ never with `fetch` inside components.
      then the metrics in a `StatList`.
   6. `club` — the club as a `HeroStat`, then every club's share as a
      `BarChart`.
-  7. `share` — `ShareCard`: one line per earlier page on a white card in a
+  7. `recommendations` ("For you") — reads `data/<name>_recommendations.json`
+     (`readRecommendations`; shape in `src/lib/recommendationsData.ts`) from
+     `features/recommender.py`: a "based on #…" line, then **Reels** (creator,
+     two-line caption preview, `why`, "Watch on Instagram ↗") and **Accounts**
+     (username · name, `why`, "View on Instagram ↗") side by side, stacked on
+     narrow screens; links open Instagram in a new tab. If the file doesn't
+     exist yet, `FindRecommendations` shows a square **Find recommendations**
+     button that POSTs `/api/recommendations` (`src/app/api/recommendations/
+     route.ts`), which runs the recommender for that name (needs a snapshot;
+     one run per name at a time) and the page refreshes. It's only ever run on
+     click: an uncached run spends ≈ $0.16 of Apify credit and takes up to a
+     minute. The token never leaves the Python process.
+  8. `share` — `ShareCard`: one line per earlier page on a white card in a
      black frame (the movie-screen look, red text), with **Share** (the
      device share sheet, only shown where `navigator.share` exists) and
      **Copy text** (clipboard) sending the same lines as plain text.
