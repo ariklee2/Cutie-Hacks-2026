@@ -14,7 +14,7 @@
  * command line. Runs on the local Node server only (it writes to disk).
  */
 import { execFile } from 'node:child_process';
-import { writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { promisify } from 'node:util';
 
@@ -67,6 +67,8 @@ export async function POST(request: Request) {
   }
 
   try {
+    // data/ isn't in git (uploads are personal), so a fresh clone may not have it.
+    await mkdir(DATA_DIR, { recursive: true });
     await Promise.all(
       contents.map(({ fileName, text }) => writeFile(path.join(DATA_DIR, fileName), text, 'utf8')),
     );
