@@ -116,8 +116,9 @@ never with `fetch` inside components.
   wrapped in `SnapshotPage`: at least one screen tall, content centered,
   title / subtitle / content / links entering one after another, an optional
   giant faint **backdrop** word (`backdrop` prop, `watermark` color) cropped
-  off the bottom-right, and Back / Next links (the last scene's Next is
-  "Start over"). The shared layout (`app/snapshot/[name]/layout.tsx`) stays
+  off the bottom-right, and Back / Next links. The last scene (share)
+  instead offers **Start over** (middle, back to the first scene) and **Back
+  to home** (right, a plain link to the landing page `/`). The shared layout (`app/snapshot/[name]/layout.tsx`) stays
   mounted between scenes and holds:
   - **`SceneProgress`** — one thin segment per scene under the header (past
     full, current filling in, upcoming faint).

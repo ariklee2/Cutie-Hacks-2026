@@ -1,4 +1,5 @@
 import { Container } from '@mantine/core';
+import Link from 'next/link';
 import type { ReactNode } from 'react';
 
 import { snapshotContent } from '@/content/snapshot';
@@ -16,6 +17,7 @@ const copy = snapshotContent;
  * (`data-scene`, see globals.css), with a giant faint `backdrop` word behind
  * it. Title, subtitle, content and the Back / Next links come in one after
  * another. Tap the sides, use ← →, or the links to move (with the film wipe).
+ * The last scene offers Start over (first scene) and Back to home (landing).
  */
 export function SnapshotPage({
   name,
@@ -63,17 +65,33 @@ export function SnapshotPage({
               <span className={classes.sequenceName}>{copy.steps[previous]}</span>
             </SceneLink>
           )}
-          <span className={classes.keysHint} aria-hidden="true">
-            {copy.sequence.keysHint}
-          </span>
-          <SceneLink
-            href={snapshotHref(name, next ?? snapshotSequence[0])}
-            className={classes.sequenceLink}
-            data-direction="next"
-          >
-            <span className={classes.sequenceHint}>{next ? copy.sequence.next : copy.sequence.restart}</span>
-            <span className={classes.sequenceName}>{copy.steps[next ?? snapshotSequence[0]]}</span>
-          </SceneLink>
+          {next ? (
+            <>
+              <span className={classes.keysHint} aria-hidden="true">
+                {copy.sequence.keysHint}
+              </span>
+              <SceneLink href={snapshotHref(name, next)} className={classes.sequenceLink} data-direction="next">
+                <span className={classes.sequenceHint}>{copy.sequence.next}</span>
+                <span className={classes.sequenceName}>{copy.steps[next]}</span>
+              </SceneLink>
+            </>
+          ) : (
+            // Last scene: replay from the first scene (middle), or leave for the landing page (right).
+            <>
+              <SceneLink
+                href={snapshotHref(name, snapshotSequence[0])}
+                className={classes.sequenceLink}
+                data-direction="restart"
+              >
+                <span className={classes.sequenceHint}>{copy.sequence.restart}</span>
+                <span className={classes.sequenceName}>{copy.steps[snapshotSequence[0]]}</span>
+              </SceneLink>
+              <Link href={copy.sequence.home.href} className={classes.sequenceLink} data-direction="next">
+                <span className={classes.sequenceHint}>{copy.sequence.home.hint}</span>
+                <span className={classes.sequenceName}>{copy.sequence.home.name}</span>
+              </Link>
+            </>
+          )}
         </nav>
       </Container>
     </SceneTapArea>

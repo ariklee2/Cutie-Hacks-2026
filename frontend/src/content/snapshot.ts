@@ -39,8 +39,10 @@ export const snapshotContent = {
     label: 'Snapshot pages',
     previous: 'Back',
     next: 'Next',
-    /** Shown on the last page, back to the start. */
+    /** Last scene, middle: replay the snapshot from its first scene. */
     restart: 'Start over',
+    /** Last scene, right: leave the snapshot for the landing page. */
+    home: { hint: 'All done?', name: 'Back to home', href: '/' },
     /** Between the Back and Next links; the arrow keys do the same. */
     keysHint: 'Tap the sides or use ← →',
     /** Progress bar, for screen readers. */

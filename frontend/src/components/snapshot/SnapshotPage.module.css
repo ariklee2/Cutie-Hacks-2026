@@ -131,6 +131,13 @@
   justify-self: start;
 }
 
+/* Last scene: Start over sits in the middle column. */
+.sequenceLink[data-direction='restart'] {
+  grid-column: 2;
+  justify-self: center;
+  text-align: center;
+}
+
 .sequenceLink[data-direction='next'] {
   grid-column: 3;
   justify-self: end;
