@@ -85,6 +85,7 @@ export const cssVariablesResolver: CSSVariablesResolver = () => ({
     '--snapshot-color-light-background': color.lightBackground,
     '--snapshot-color-light-text': color.lightText,
     '--snapshot-color-light-accent': color.lightAccent,
+    '--snapshot-color-light-error': color.lightError,
     '--snapshot-color-band-1': color.band1,
     '--snapshot-color-band-2': color.band2,
     '--snapshot-color-added': color.added,

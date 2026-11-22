@@ -20,9 +20,17 @@ export const uploadContent = {
   /** Screen-reader suffix on a file name that's been added (it also turns green). */
   fileAdded: 'added',
   /** A recognised file that couldn't be read. */
-  problem: (fileName: string, reason: string) => `${fileName}: ${reason}`,
-  notAFile: (name: string) =>
-    `${name} isn't one of the three files. Use liked_posts.json, saved_posts.json and videos_watched.json.`,
+  /** A file with the right name whose contents aren't that export. `reason` starts "it …". */
+  problem: (fileName: string, reason: string) => `${fileName} can't be used: ${reason}`,
+  /** A file whose name isn't one of the three. */
+  notAFile: (name: string) => `${name} isn't one of the files Insta Snapshot needs.`,
+  /** Shown after any problem, listing what's still missing. */
+  stillNeeded: (fileNames: string[]) =>
+    `Still needed: ${
+      fileNames.length === 1
+        ? fileNames[0]
+        : `${fileNames.slice(0, -1).join(', ')} and ${fileNames[fileNames.length - 1]}`
+    }.`,
   form: {
     /** Read by screen readers; the field shows the placeholder instead. */
     nameLabel: 'Name',

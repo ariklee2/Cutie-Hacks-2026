@@ -42,7 +42,7 @@ export function useInstagramFiles() {
         continue;
       }
       setSlot(kind, { status: 'reading', fileName: file.name });
-      readInstagramFile(file)
+      readInstagramFile(kind, file)
         .then(({ entries }) => setSlot(kind, { status: 'added', fileName: file.name, entries, file }))
         .catch((error: Error) =>
           setSlot(kind, { status: 'problem', fileName: file.name, message: error.message }),

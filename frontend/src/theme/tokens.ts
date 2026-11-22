@@ -65,6 +65,9 @@ export const color = {
   lightBackground: palette.paper,
   lightText: palette.ink,
   lightAccent: palette.theatre,
+  // Error messages on light pages: a clearly red shade of the theatre scale,
+  // 7.0:1 on white. Only for problems the user must fix.
+  lightError: theatre[5],
   // Landing page sections below the film, each one step lighter than the
   // last (shades of the theatre scale, never new hues). White text:
   // 12.0:1 on band 1, 9.4:1 on band 2.

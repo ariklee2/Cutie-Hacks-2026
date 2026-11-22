@@ -117,8 +117,11 @@
   white-space: nowrap;
 }
 
+/* Error lines (wrong file, still needed, failed run): clearly red
+   (lightError, theatre.5) — 7.0:1 on white. */
 .message {
   font-size: var(--mantine-font-size-sm);
+  color: var(--snapshot-color-light-error);
 }
 
 @media (max-width: $mantine-breakpoint-sm) {
