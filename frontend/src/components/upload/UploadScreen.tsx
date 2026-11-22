@@ -87,6 +87,13 @@ export function UploadScreen() {
       : []),
   ];
 
+  // After any problem with a file, say exactly which files are still needed.
+  const stillNeeded = INSTAGRAM_FILES.filter((spec) => slots[spec.kind].status !== 'added').map(
+    (spec) => spec.fileName,
+  );
+  const fileProblem = unrecognised.length > 0 || INSTAGRAM_FILES.some((spec) => slots[spec.kind].status === 'problem');
+  if (fileProblem && stillNeeded.length > 0) problems.push(uploadContent.stillNeeded(stillNeeded));
+
   const openPicker = () => inputRef.current?.click();
 
   const onDragEnter = (event: DragEvent) => {

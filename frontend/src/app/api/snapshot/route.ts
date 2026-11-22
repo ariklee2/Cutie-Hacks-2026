@@ -18,7 +18,7 @@ import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { promisify } from 'node:util';
 
-import { INSTAGRAM_FILES } from '@/lib/instagramFiles';
+import { INSTAGRAM_FILES, checkInstagramExport } from '@/lib/instagramFiles';
 import { DATA_DIR, REPO_ROOT, readSnapshot } from '@/lib/server/snapshotStore';
 import { isValidSnapshotName, normaliseSnapshotName } from '@/lib/snapshotName';
 
@@ -47,17 +47,21 @@ export async function POST(request: Request) {
     return fail(400, 'Name must be 1–40 letters, numbers, - or _.');
   }
 
-  // Read and check all three before writing anything.
+  // Read and check all three before writing anything — the same checks as the
+  // upload page (lib/instagramFiles.ts), so nothing unusable reaches data/.
+  const missing = INSTAGRAM_FILES.filter((spec) => !(form.get(spec.kind) instanceof File));
+  if (missing.length > 0) {
+    return fail(400, `Still needed: ${missing.map((spec) => spec.fileName).join(', ')}.`);
+  }
   const contents: { fileName: string; text: string }[] = [];
   for (const spec of INSTAGRAM_FILES) {
-    const file = form.get(spec.kind);
-    if (!(file instanceof File)) return fail(400, `Missing ${spec.fileName}.`);
+    const file = form.get(spec.kind) as File;
     if (file.size > MAX_FILE_BYTES) return fail(413, `${spec.fileName} is too large.`);
     const text = await file.text();
     try {
-      JSON.parse(text);
-    } catch {
-      return fail(400, `${spec.fileName} isn't valid JSON.`);
+      checkInstagramExport(spec.kind, text);
+    } catch (error) {
+      return fail(400, `${spec.fileName} can't be used: ${(error as Error).message}`);
     }
     contents.push({ fileName: `${name}_${spec.kind}.json`, text });
   }
