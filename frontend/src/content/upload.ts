@@ -31,6 +31,17 @@ export const uploadContent = {
         ? fileNames[0]
         : `${fileNames.slice(0, -1).join(', ')} and ${fileNames[fileNames.length - 1]}`
     }.`,
+  /** Under the toolbar: reopen a snapshot made earlier, without uploading again. */
+  openSaved: {
+    prompt: 'Already made one? Open it by name, no upload needed.',
+    nameLabel: 'Name of a saved snapshot',
+    namePlaceholder: 'Name',
+    submit: 'Open Snapshot',
+    checking: 'Opening…',
+    notFound: (name: string) => `There’s no saved snapshot called “${name}” yet. Upload your files above to make one.`,
+    invalid: 'Names are letters, numbers, - or _.',
+    failed: 'Couldn’t check for that snapshot. Is the server running?',
+  },
   form: {
     /** Read by screen readers; the field shows the placeholder instead. */
     nameLabel: 'Name',

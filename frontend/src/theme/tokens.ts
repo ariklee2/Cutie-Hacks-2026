@@ -83,6 +83,27 @@ export const color = {
 } as const;
 
 /*
+ * Share card color schemes (the carousel on the share scene). Each: card
+ * background, text, the picture inside the film frame and its title, and the
+ * year. Contrast — text on card / title on picture / year on card:
+ *   classic   19.8 / 13.9 / 13.9
+ *   midnight  19.8 /  7.0 / 12.2  (gold year: a deliberate second use of gold)
+ *   cherry     9.4 /  9.4 /  9.4
+ *   gold      12.2 / 13.9 /  8.6
+ *   mono      19.8 / 19.8 / 19.8
+ * The film frame is always ink.
+ */
+export const shareSchemes = {
+  classic: { bg: palette.paper, fg: palette.ink, picture: theatre[8], onPicture: palette.paper, year: theatre[8] },
+  midnight: { bg: palette.ink, fg: palette.paper, picture: theatre[5], onPicture: palette.paper, year: palette.gold },
+  cherry: { bg: theatre[6], fg: palette.paper, picture: palette.paper, onPicture: theatre[6], year: palette.paper },
+  gold: { bg: palette.gold, fg: palette.ink, picture: theatre[8], onPicture: palette.paper, year: theatre[8] },
+  mono: { bg: palette.paper, fg: palette.ink, picture: palette.ink, onPicture: palette.paper, year: palette.ink },
+} as const;
+
+export type ShareScheme = keyof typeof shareSchemes;
+
+/*
  * Snapshot scenes: each page of /snapshot/<name>/… has its own solid
  * background, so moving between them feels like a new scene. All from the
  * theatre and ink scales; white text on each (contrast): theatre.8 13.9:1,
@@ -120,6 +141,7 @@ export const fontWeight = {
   regular: '400',
   medium: '500',
   semibold: '600',
+  bold: '700', // the landing page credit lines only
 } as const;
 
 export const lineHeight = {

@@ -5,7 +5,7 @@ import type { MouseEvent, ReactNode } from 'react';
 import { useSceneNav } from './SceneTransition';
 
 /** Clicks on these (and inside them) keep their own meaning. */
-const INTERACTIVE = 'a, button, input, select, textarea, label, figure, [tabindex], [role="button"]';
+const INTERACTIVE = 'a, button, input, select, textarea, label, figure, video, [tabindex], [role="button"], [data-no-tap]';
 
 /**
  * Story-style taps: a click on the left 30% of the scene goes back, anywhere

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, type DragEvent, type KeyboardEvent } from 
 
 import { uploadContent } from '@/content/upload';
 import { createSnapshot, type SnapshotResult } from '@/lib/api/snapshot';
+import { rememberSnapshot } from '@/lib/savedSnapshot';
 import { INSTAGRAM_FILES, type InstagramFileKind } from '@/lib/instagramFiles';
 import { normaliseSnapshotName } from '@/lib/snapshotName';
 
@@ -52,6 +53,7 @@ export function UploadScreen() {
       const result = await createSnapshot(normaliseSnapshotName(name), files);
       setSubmit({ status: 'done', result });
       // First page of the snapshot sequence.
+      rememberSnapshot(result.name); // so the landing page can reopen it without re-uploading
       router.push(`/snapshot/${encodeURIComponent(result.name)}/top-creators`);
     } catch (error) {
       setSubmit({ status: 'error', message: (error as Error).message });

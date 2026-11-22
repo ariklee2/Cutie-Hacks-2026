@@ -2,8 +2,17 @@
 .inner {
   display: flex;
   align-items: center;
+  gap: var(--mantine-spacing-sm);
   justify-content: flex-end;
   height: var(--snapshot-header-height);
+}
+
+/* Landing: the Instagram glyph, alone in the top-left corner (the links stay right). */
+.logo {
+  display: block;
+  width: 2rem;
+  height: 2rem;
+  margin-right: auto;
 }
 
 .inner[data-align='start'] {

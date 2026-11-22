@@ -1,11 +1,19 @@
-/* The screen sits centered in the space under the header. */
+/* The screen sits centered in the space under the header; the
+   "Already made one?" row is pushed to the bottom of the window. */
 .stage {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   min-height: calc(100dvh - var(--snapshot-header-height));
   padding-top: var(--snapshot-space-section);
-  padding-bottom: var(--snapshot-space-page);
+  padding-bottom: var(--mantine-spacing-sm); /* "Already made one?" sits close to the bottom edge */
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: var(--snapshot-space-section);
 }
 
 .visuallyHidden {

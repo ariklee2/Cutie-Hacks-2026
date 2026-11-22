@@ -98,6 +98,7 @@ export const cssVariablesResolver: CSSVariablesResolver = () => ({
     '--snapshot-letter-spacing-heading': letterSpacing.heading,
     '--snapshot-font-weight-medium': fontWeight.medium,
     '--snapshot-font-weight-semibold': fontWeight.semibold,
+    '--snapshot-font-weight-bold': fontWeight.bold,
     '--snapshot-space-section': layout.section,
     '--snapshot-space-page': layout.page,
     '--snapshot-header-height': layout.headerHeight,

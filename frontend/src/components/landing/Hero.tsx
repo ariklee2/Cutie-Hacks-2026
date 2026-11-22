@@ -10,7 +10,7 @@ import classes from './Hero.module.css';
  * fold. The film runs edge to edge sideways; the title sits on it, vertically
  * centered and left-aligned with the page content.
  */
-export function Hero({ title, credit }: { title: string; credit: string }) {
+export function Hero({ title, credit, inspiration }: { title: string; credit: string; inspiration: string }) {
   return (
     <section className={classes.stage}>
       <div className={classes.hero}>
@@ -21,9 +21,14 @@ export function Hero({ title, credit }: { title: string; credit: string }) {
           </Title>
         </Container>
       </div>
-      {/* Just under the film's bottom-left corner, mirroring Get Snapshot
-          above its top-right. */}
-      <p className={classes.credit}>{credit}</p>
+      {/* Under the film's bottom-left corner, mirroring Get Snapshot above
+          its top-right: who made it | what inspired it, on one line. */}
+      <p className={classes.credits}>
+        <span className={classes.credit}>{credit}</span>
+        {/* Not aria-hidden: it keeps the two phrases from running together for screen readers. */}
+        <span className={classes.separator}>|</span>
+        <span className={classes.inspiration}>{inspiration}</span>
+      </p>
     </section>
   );
 }

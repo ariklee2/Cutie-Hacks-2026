@@ -16,12 +16,15 @@ export interface LandingSection {
 
 export const landingContent: {
   title: string;
-  /** Small line just under the film's bottom-left corner. */
+  /** Credit line just under the film's bottom-left corner (large, bold white). */
   credit: string;
+  /** Smaller line under the credit. */
+  inspiration: string;
   sections: LandingSection[];
 } = {
   title: 'Insta Snapshot',
-  credit: 'Made by Arik and Justin',
+  credit: 'Created by Arik Lee & Justin Pun',
+  inspiration: 'Inspired by Spotify Wrapped',
   sections: [
     {
       label: 'Description',

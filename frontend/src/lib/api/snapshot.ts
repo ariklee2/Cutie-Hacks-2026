@@ -39,3 +39,14 @@ export async function createSnapshot(
   }
   return body as SnapshotResult;
 }
+
+/**
+ * GET /api/snapshot?name=… — whether a saved snapshot exists for `name`
+ * (already uploaded and processed), so it can be opened without re-uploading.
+ */
+export async function snapshotExists(name: string): Promise<boolean> {
+  const response = await fetch(`/api/snapshot?name=${encodeURIComponent(name)}`);
+  const body: unknown = await response.json().catch(() => null);
+  if (!response.ok) throw new ApiError('Could not check for a saved snapshot.', response.status, body);
+  return Boolean(body && typeof body === 'object' && 'exists' in body && body.exists);
+}

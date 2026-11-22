@@ -210,17 +210,41 @@ export const snapshotContent = {
     title: 'Your snapshot',
     subtitle: 'Everything from your week, on one card.',
     cardTitle: 'Insta Snapshot',
-    rows: {
-      topCreator: 'Top creator',
-      topHashtag: 'Top hashtag',
-      watchTime: 'Time on reels',
-      busiestDay: 'Busiest day',
-      binge: 'Longest binge',
-      loyalty: 'Loyal or variety',
+    labels: {
+      topCreators: 'Top Creators',
+      topHashtags: 'Top Hashtags',
+      reels: 'Reels Watched',
       club: 'Club',
     },
+    /** Footer, right: the app's name. */
+    footer: 'INSTA SNAPSHOT',
+    /** Card color schemes, in carousel order (colors in theme/tokens.ts shareSchemes). */
+    schemes: {
+      classic: 'Classic',
+      midnight: 'Midnight',
+      cherry: 'Cherry',
+      gold: 'Gold',
+      mono: 'Mono',
+    },
+    schemesLabel: 'Card colors',
+    previousScheme: 'Previous color',
+    nextScheme: 'Next color',
+    schemeOf: (name: string, i: number, n: number) => `${name}, ${i} of ${n}`,
     unavailable: '—',
     shareButton: 'Share',
+    /** Webcam photo for the card's picture spot. It stays in the browser. */
+    camera: {
+      take: 'Take a photo',
+      retake: 'Retake photo',
+      snap: 'Snap',
+      cancel: 'Cancel',
+      remove: 'Remove photo',
+      starting: 'Starting camera…',
+      privacy: 'Your photo stays in this browser. It’s only on the card you save.',
+      denied: 'Camera access was blocked. Allow it in your browser’s site settings, then try again.',
+      unavailable: 'No camera was found, or this browser can’t use it here.',
+      alt: (name: string) => `Photo of @${name}`,
+    },
     saveButton: 'Save image',
     saving: 'Saving…',
     saveFailed: 'Couldn’t save the image. Try a screenshot instead.',
@@ -228,7 +252,7 @@ export const snapshotContent = {
     copied: 'Copied',
     copyFailed: 'Couldn’t copy. Select the card text instead.',
     /** Plain-text version for sharing / the clipboard. */
-    text: (title: string, range: string | null, lines: [string, string][]) =>
-      [`My ${title}${range ? ` (${range})` : ''}`, ...lines.map(([k, v]) => `${k}: ${v}`)].join('\n'),
+    text: (title: string, year: number, range: string | null, sections: [string, string][]) =>
+      [`My ${title} ${year}${range ? ` (${range})` : ''}`, ...sections.map(([k, v]) => `${k}: ${v}`)].join('\n'),
   },
 };

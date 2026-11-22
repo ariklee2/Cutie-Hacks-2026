@@ -52,6 +52,9 @@ as `data/<name>_liked_posts.json` / `_saved_posts.json` /
 (cwd = repo root), producing `data/<name>_reels.parquet` / `.csv`, then runs
 `python3 features/snapshot.py <name>`, producing `data/<name>_snapshot.json`. It only
 works when the Next server runs locally next to the repo (it writes to disk).
+**`GET /api/snapshot?name=<name>`** (same file) answers `{ name, exists }`:
+whether `data/<name>_snapshot.json` is there, so a saved snapshot can be
+reopened without uploading again (`snapshotExists` in `lib/api/snapshot.ts`).
 Env overrides: `SNAPSHOT_PYTHON` (a Python with pandas + pyarrow, default
 `python3`), `SNAPSHOT_REPO_ROOT` (default: `frontend/..`). Names must match
 `src/lib/snapshotName.ts` (lowercase letters, numbers, `-`, `_`; ≤ 40); an
@@ -96,6 +99,16 @@ never with `fetch` inside components.
   `transform.py` and the snapshot file name, or the error under the toolbar
   (including any snapshot sections that failed). On success it goes straight
   to `/snapshot/<name>/top-creators`.
+  At the bottom of the window, above a hairline, **"Already made one?"**
+  (`OpenSavedSnapshot`): a name field and **Open Snapshot** that check
+  `GET /api/snapshot` and go straight to that snapshot's first scene, or
+  say there's no saved snapshot by that name. No files are uploaded.
+- **Saved snapshots**: results are files on the server (`data/`), so they
+  outlive uploads and restarts. The browser remembers the last snapshot it
+  created or opened (`lib/savedSnapshot.ts`, the name only, in
+  `localStorage`); on `/` the header then shows **View @name's snapshot**
+  beside Get Snapshot, once `GET /api/snapshot` confirms it still exists (a
+  stale name is forgotten).
 - `/snapshot/<name>/<step>` — **the snapshot sequence**, a run of full-screen
   **scenes** (Wrapped-style) in the order of `src/lib/snapshotSequence.ts`.
   Every scene is a server component reading `data/<name>_snapshot.json`
@@ -172,11 +185,36 @@ never with `fetch` inside components.
   8. `credits` (ink) — the finale: the highlights as film end credits
      (`CreditsRoll`, role above name — "Starring @f1", "Running time 4h 57m",
      …, "Directed by @<name>", "The End") rolling up once.
-  9. `share` (theatre.8) — `ShareCard`: the highlights on a **story-shaped
-     (9:16)** white card in a black frame (red text). **Save image**
-     downloads it as a PNG (`html-to-image`, 3× pixel ratio); **Share** (the
-     device share sheet, only where `navigator.share` exists) and **Copy
-     text** send the same lines as plain text.
+  9. `share` (theatre.8) — `ShareCard`: a **carousel of color schemes**
+     centered on the scene. The chosen card faces front; the others turn
+     away to either side (3D, solid but dimmed with distance — no
+     see-through overlaps). Switch with ‹ ›, the named swatches below
+     (Classic, Midnight, Cherry, Gold, Mono; `shareSchemes` in tokens), or by
+     clicking a side card; it wraps around. Switching is locked while the
+     camera is on. Save image saves the front card
+     (`<name>-insta-snapshot-<year>-<scheme>.png`). Each card: a
+     **story-shaped (9:16)** card
+     laid out like a year-in-review card, colored by its scheme. Top half
+     (the art): clapperboard stripes (the scheme's text / card colors,
+     hard-edged) along the top and right, the **year** (from the snapshot's
+     week, e.g. 2026) running up the left, and a film frame (always ink with
+     sprocket holes) holding a picture titled
+     **Insta Snapshot** with the week's dates — where a cover image would go.
+     Below: **Top Creators** and **Top Hashtags** 1–5 side by side (long
+     handles end in "…"), then **Reels Watched** (`watch_time.total_reels`)
+     and **Club** (with its emoji) as big numbers, then a footer: `@name` and
+     INSTA SNAPSHOT. No other brand's logo or URL. **Take a photo**
+     (`useWebcamPhoto`) asks for the camera and shows a live, mirrored
+     preview in the frame; **Snap** counts down 3-2-1 (instant under reduced
+     motion), takes a square photo from the middle of the frame (mirrored,
+     like the preview) and turns the camera off; the photo then fills the
+     frame instead of the title (Retake / Remove photo). The photo is a data
+     URL in memory only — never uploaded or stored — and only ends up in the
+     image you save. It shows on every scheme's card. Blocked or missing cameras get a one-line message. The
+     card is `data-no-tap`, so clicks on it never change scene. **Save image** downloads it
+     as `<name>-insta-snapshot-<year>.png` (`html-to-image`, 3× pixel ratio);
+     **Share** (the device share sheet, only where `navigator.share` exists)
+     and **Copy text** send the same content as plain text.
 
 ## Running the frontend
 
@@ -238,6 +276,11 @@ No gradients: the page background is a single solid color. Hard-edged stripe
 patterns (film, clapper) are patterns, not gradients. If the background red
 ever changes, recheck white text contrast (it must stay ≥ 4.5:1).
 
+**Share card schemes** (`shareSchemes` in tokens): five card color sets for
+the share carousel — card, text, picture, title on picture, year — built from
+paper, ink, theatre and gold; contrasts are listed in `tokens.ts` (all ≥ 7:1
+for text). Midnight's gold year is the one use of gold outside chart peaks.
+
 **Snapshot scenes** (`scene` in tokens / `--snapshot-scene-<step>`): each
 scene's solid background, all from existing scales — top creators and share
 theatre.8 (13.9:1 with white), top hashtags theatre.6 (9.4:1), time on reels
@@ -266,7 +309,10 @@ a second family; create hierarchy with size and weight.
 | `xl` | 24px | Section headings (`h2`) |
 | `display` | `clamp(56px, 12vw, 152px)` | Hero title only (`h1`) |
 
-Weights: 400 regular, 500 medium, 600 semibold (headings, labels). Line height:
+Weights: 400 regular, 500 medium, 600 semibold (headings, labels), 700 bold
+(only the landing page's credit lines under the film's bottom-left corner:
+"Created by Arik Lee & Justin Pun" in `xl` | "Inspired by Spotify Wrapped" in
+`lg`, on one line, both white). Line height:
 0.92 display / 1.2 headings / 1.55 body. Letter spacing: −0.045em display,
 −0.015em headings.
 
@@ -382,7 +428,9 @@ card arriving); the landing and upload pages otherwise stay still.
   shows at once, the credits stand still.
 - Don't add other animations. Film art is built from tokens in
   `cinema/filmArt.ts`, never hard-coded colors.
-- The header has no logo. (`public/logo-black.webp` is no longer used.)
+- The header shows the **Instagram glyph** (white, 2rem, `public/instagram-glyph-white.svg`,
+  from Instagram's official brand assets, unmodified) in the window's top-left
+  corner on the landing page only. No other page has a logo.
 
 ### Component conventions
 
@@ -395,9 +443,14 @@ card arriving); the landing and upload pages otherwise stay still.
 - Navigation only links to pages that exist. The header (`AppHeader`, a client
   component because it reads the path) holds one link in a square box
   (copy in `src/content/navigation.ts`):
-  - on `/`: **Get Snapshot** → `/upload`, top right;
-  - on `/upload`: **Go Back** → `/`, top left (a link home, not browser
+  - on `/`: **Get Snapshot** → `/upload`, top right, with **View @name's
+    snapshot** before it when this browser remembers one that still exists;
+  - on `/upload`: **Go Back** → `/`, in the window's top-left corner (full
+    window width, like Get Snapshot in the top-right on `/`) (a link home, not browser
     history, so it works when `/upload` is opened directly).
+  - on the snapshot scenes (`/snapshot/…`): **no link** — the files are
+    already in and the scenes have their own Back / Next. The header stays
+    (empty, same height) so the scenes' full-screen sizing doesn't change.
   Both are square boxes sized like Create Snapshot (`sm` text, xs/sm padding,
   1px border) with the same light-up hover.
 - Visually hidden text (for screen readers) uses a local `.visuallyHidden`

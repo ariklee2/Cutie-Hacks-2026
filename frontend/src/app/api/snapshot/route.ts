@@ -1,4 +1,8 @@
 /**
+ * GET /api/snapshot?name=<name> — whether a saved snapshot exists for that
+ * name (data/<name>_snapshot.json), so a returning visitor can open it
+ * without uploading again: `{ name, exists }`.
+ *
  * POST /api/snapshot — saves the three Instagram export files into the repo's
  * data/ folder, runs the backend's transform on them, then runs every feature
  * and saves the results together:
@@ -33,6 +37,12 @@ const MAX_FILE_BYTES = 100 * 1024 * 1024;
 const TRANSFORM_TIMEOUT_MS = 5 * 60 * 1000;
 
 const fail = (status: number, error: string) => Response.json({ error }, { status });
+
+export async function GET(request: Request) {
+  const name = normaliseSnapshotName(new URL(request.url).searchParams.get('name') ?? '');
+  if (!isValidSnapshotName(name)) return Response.json({ name, exists: false });
+  return Response.json({ name, exists: (await readSnapshot(name)) !== null });
+}
 
 export async function POST(request: Request) {
   let form: FormData;
