@@ -13,7 +13,7 @@
   width: 100%;
   max-width: 28rem;
   padding: var(--mantine-spacing-md);
-  background: var(--snapshot-color-screen-frame);
+  background: var(--snapshot-color-film-edge); /* ink, the movie-screen frame */
   border-radius: var(--snapshot-radius);
 }
 

@@ -1,4 +1,48 @@
-.about {
-  padding-top: var(--snapshot-space-section);
+/* A full-width band in its own shade of red. */
+.band {
+  background: var(--band-color);
+}
+
+/* Large heading on the left, text on the right; stacked on narrow screens. */
+.inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--mantine-spacing-xl);
+  padding-top: var(--snapshot-space-page);
   padding-bottom: var(--snapshot-space-page);
+}
+
+.heading {
+  margin: 0;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: var(--snapshot-line-height-display);
+  letter-spacing: var(--snapshot-letter-spacing-display);
+  font-weight: var(--snapshot-font-weight-semibold);
+  text-wrap: balance;
+}
+
+.text {
+  margin: 0;
+  max-width: 36rem;
+  font-size: var(--mantine-font-size-lg);
+  line-height: var(--mantine-line-height);
+}
+
+/* Unwritten copy: visibly unfinished. */
+.placeholder {
+  margin: 0;
+  padding: var(--mantine-spacing-md);
+  font-size: var(--mantine-font-size-sm);
+  border: var(--snapshot-border-placeholder);
+  border-radius: var(--snapshot-radius);
+}
+
+@media (max-width: $mantine-breakpoint-sm) {
+  .inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--mantine-spacing-md);
+    padding-top: var(--snapshot-space-section);
+    padding-bottom: var(--snapshot-space-section);
+  }
 }

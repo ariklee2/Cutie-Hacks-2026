@@ -46,17 +46,25 @@ never with `fetch` inside components.
 
 ## Pages
 
-- `/` — landing: film hero with the left-aligned title, then the description
-  blocks below the film (white on the deep red).
-- `/upload` — the movie screen on the deep red background: the user adds
+- `/` — landing: the first screen (`Hero` `.stage`, viewport height minus the
+  header) is plain page red with the film near the top — a 24px strip of red
+  between it and the header, the rest of the screen red below — nothing else
+  visible, so the sections start just below the fold.
+  Then one full-width
+  **section band** per copy block (`AboutSection`): large heading on the left,
+  text on the right, each band one shade lighter red than the one above
+  (`band1` = theatre.7 `#6E0F1C` → `band2` = theatre.6 `#8A1626`; white text
+  12.0:1 / 9.4:1). A new section takes the next band token; don't go lighter
+  than theatre.6 behind white text.
+- `/upload` — a **light page** (white background, black text) with the drop zone: the user adds
   `liked_posts.json`, `saved_posts.json` and `videos_watched.json` by dropping
-  them on the screen or clicking it; a counter under it shows how many are in.
+  them on the screen or clicking it; each file's name under the screen turns green once it's in.
   The browser first checks each file (`src/lib/instagramFiles.ts` identifies it
-  by name and checks it's a JSON list of entries with `timestamp`s). Below the
-  counter, a name field and **Create Snapshot** (enabled once all three are in
+  by name and checks it's a JSON list of entries with `timestamp`s). Under the
+  screen, a name field and **Create Snapshot** (enabled once all three are in
   and the name is valid) send them to `POST /api/snapshot`; the screen shows
   "Saving and processing…", then "Snapshot created" with the reel count from
-  `transform.py` and the snapshot file name, or the error under the counter
+  `transform.py` and the snapshot file name, or the error under the toolbar
   (including any snapshot sections that failed). On success it goes straight
   to `/snapshot/<name>/top-creators`.
 - `/snapshot/<name>/<step>` — **the snapshot sequence**, in the order of
@@ -133,12 +141,20 @@ Semantic roles (`color.*` in tokens / `--snapshot-color-*`): `text` = white
 **there is no dimmer text**; make secondary text smaller or lighter-weight
 instead. `border` = white at 40% (decorative hairlines), `borderStrong` = white
 (placeholder outlines, a UI boundary). `filmEdge` = ink, `filmFrame` = white,
-`textOnFilm` = theatre (red copy on white, 13.9:1), `screenFrame` = ink (the
-movie screen's masking frame), `added` = `#4ADE80` — **status green, used only
-for an upload file name once that file is in** (filled green with ink text:
-8.0:1 against the deep red, ink on it 11.4:1); never decoration. There is no
-accent color. Mantine's color scheme is forced to "light", which here means
-red background and white text.
+`textOnFilm` = theatre (red copy on white, 13.9:1), `added` = `#4ADE80` —
+**status green, used only for an upload file name once that file is in**
+(filled green with ink text, 11.4:1); never decoration. There is no accent
+color. Mantine's color scheme is forced to "light", which here means red
+background and white text.
+
+**Light pages** (currently only `/upload`): a page puts
+`data-surface="light"` on its root element, and `globals.css` switches the
+whole `<body>` (so the shared header too) via `body:has([data-surface='light'])`
+to `lightBackground` = white with `lightText` = ink (19.8:1), re-pointing
+`--snapshot-color-text`, `-text-muted`, `-text-on-film`, `-background` and the
+hairline/placeholder borders. `lightAccent` = theatre red (13.9:1 on white) is
+for the drop zone's dashed border and the button outline. Components keep using
+the normal text variables; never hard-code light colors in a component.
 
 No gradients: the page background is a single solid color. Hard-edged stripe
 patterns (film, clapper) are patterns, not gradients. If the background red
@@ -158,8 +174,7 @@ a second family; create hierarchy with size and weight.
 | `xl` | 24px | Section headings (`h2`) |
 | `display` | `clamp(56px, 12vw, 152px)` | Hero title only (`h1`) |
 
-Weights: 400 regular, 500 medium, 600 semibold (headings, labels), 700 bold
-(only for instructions that must read as bold — the upload screen's line). Line height:
+Weights: 400 regular, 500 medium, 600 semibold (headings, labels). Line height:
 0.92 display / 1.2 headings / 1.55 body. Letter spacing: −0.045em display,
 −0.015em headings.
 
@@ -174,7 +189,9 @@ keys). Page rhythm: `--snapshot-space-section` 64 (between sections),
 
 One radius: **4px** for anything with corners (every Mantine radius key is
 4px; `--snapshot-radius`). Layout regions and dividers are square. No pills,
-no large rounded cards.
+no large rounded cards. Exception — **square (0) corners** on the upload
+page's drop zone, its `.json` file labels and name field, and on the buttons: the header link
+(Get Snapshot / Go Back) and Create Snapshot.
 
 ### Lines, depth and motion
 
@@ -192,9 +209,9 @@ The visual motif is **cinema**: film and the clapperboard
 clapperboard, and for **chart entrances** on snapshot pages (below);
 everything else stays still.
 
-- **Film** (`FilmStrip`): fills the whole hero, directly from the header to the
-  description section below, with no rules at either edge —
-  the film's own black edge meets the red background. Full-strength
+- **Film** (`FilmStrip`): fills the film block edge to edge sideways, near the
+  top of the red first screen (red above and below, no rules) — the
+  film's own black edge meets the red background. Full-strength
   ink edges with square paper sprocket holes, paper frames with ink gaps; fixed pixel
   geometry (`film` tokens: 44px edges, 200px frame period, 16px gap), so frames
   stretch vertically like portrait reel frames. Runs right-to-left, one frame
@@ -204,8 +221,8 @@ everything else stays still.
     black on frames, paper on edges/gaps, so it is always readable as the film
     moves. Only neutral colors work with this blend; tinted ones shift hue.
   - The title is vertically centered on the film and left-aligned to the
-    content container (same left edge as the blocks below). Nothing
-    else sits on the film; copy goes below it, in white on the deep red.
+    content container (same left edge as the sections below). Nothing
+    else sits on the film; copy goes below it, in the section bands.
   - If copy ever has to sit on the film, use `textOnFilm` (theatre red) with no
     blend, inside the frame area (clear of the 52px sprocket edges).
 - **Intro** (`IntroClapper` + `Clapperboard`): a full-screen deep-black
@@ -217,16 +234,24 @@ everything else stays still.
   in `motion` / `film` in `tokens.ts`.
 - **Every animation is off under `prefers-reduced-motion`**: the strip stands
   still and the intro never renders.
-- **Movie screen = drop zone** (`upload/UploadScreen`): a white picture inside
-  a black masking frame (`screenFrame`), text in `textOnFilm`, directly on the
-  deep red background (no theatre decor). Dragging files over it marks the picture's
-  edge with a dashed red outline. Inside the screen: **"From your Instagram
-  data export add:"** in bold, then "Click or drag them in". Under it, one row:
-  the three file names as pills on the left (white outline while waiting;
-  **filled green** with ink text once that exact file is in, plus a hidden
-  "added" for screen readers — no check marks), then the counter ("2 of 3
-  files added", regular weight) on the right. Any problem (unreadable file, a
-  file that isn't one of the three) is listed as a short line below that row.
+- **Drop zone** (`upload/UploadScreen`), on the light upload page: a white box
+  with square corners, a **2px dashed dark red border** (`lightAccent`) and no
+  black frame;
+  black text. Dragging files over it turns the dashes solid. Inside while
+  waiting: just
+  "Click or Drag" (regular weight) with the three file names on the line
+  below. Directly under the screen, a toolbar flush
+  with its edges (`SnapshotForm`): the three file names as pills at the
+  bottom-left corner; the name field (placeholder "Name", label for screen
+  readers only) then **Create Snapshot** at the bottom-right — the field is
+  stretched to the button's height so their tops and bottoms line up. Name
+  field and button use the pills' exact sizing (xs/sm padding, `sm` text, 1px
+  border). The button: a square box, white, black text, 1px solid dark red
+  border. Pills: black
+  outline while waiting, **filled green** with ink text once that exact file
+  is in, plus a hidden "added" for screen readers — no check marks, no
+  counter. Any problem (unreadable file, a file that isn't one of the three,
+  a failed run) is listed as a short line below the toolbar.
 - **Charts** (`src/components/snapshot/BarChart`, shared by every snapshot
   page, following the dataviz guidance; `ScoreMeter` uses the same bar spec;
   `ColumnLineChart` on the time-on-reels page is the vertical variant below):
@@ -247,6 +272,13 @@ everything else stays still.
   the line is wiped in left to right (a clip, not a dash animation, which
   breaks with `vector-effect: non-scaling-stroke`); off under
   `prefers-reduced-motion`.
+- **Square buttons** (header Get Snapshot / Go Back, Create Snapshot): on
+  hover / keyboard focus they light up — fill with their accent, text flipping
+  to the page color — and grow slightly. On red pages the accent is white
+  (white border; fills white with red text); on light pages it's dark red
+  (`lightAccent`; fills dark red with white text). They grow by
+  `--snapshot-hover-scale` (1.06) over `--snapshot-hover-duration` (0.15s). Disabled buttons don't react. The transition is off under
+  `prefers-reduced-motion` (the state still changes, instantly).
 - Don't add other animations. Film art is built from tokens in
   `cinema/filmArt.ts`, never hard-coded colors.
 - The header has no logo. (`public/logo-black.webp` is no longer used.)
@@ -256,13 +288,16 @@ everything else stays still.
 - Components live in `src/components/<area>/`, one component per file with a
   co-located `*.module.css`. Shared layout pieces go in `components/layout/`.
 - Page copy lives in `src/content/` (e.g. `landing.ts`), not inside components.
-  A `null` copy value renders a `PlaceholderBlock`; never invent copy, features,
+  A `null` copy value renders a dashed "Placeholder — to be written" box in
+  its section; never invent copy, features,
   stats, testimonials or sample results.
 - Navigation only links to pages that exist. The header (`AppHeader`, a client
-  component because it reads the path) holds one plain white text link, no box
+  component because it reads the path) holds one link in a square box
   (copy in `src/content/navigation.ts`):
   - on `/`: **Get Snapshot** → `/upload`, top right;
   - on `/upload`: **Go Back** → `/`, top left (a link home, not browser
     history, so it works when `/upload` is opened directly).
+  Both are square boxes sized like Create Snapshot (`sm` text, xs/sm padding,
+  1px border) with the same light-up hover.
 - Visually hidden text (for screen readers) uses a local `.visuallyHidden`
   class: absolutely positioned, 1px, clipped.

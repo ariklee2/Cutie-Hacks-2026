@@ -1,21 +1,26 @@
 .wrap {
   display: flex;
   flex-direction: column;
-  gap: var(--mantine-spacing-lg);
+  gap: var(--mantine-spacing-sm); /* toolbar sits right at the screen's bottom edge */
   width: 100%;
   max-width: 60rem;
   margin: 0 auto;
 }
 
-/* The movie screen: a paper picture inside a black masking frame. */
+/* The drop zone: a white, square-cornered box with a dashed dark red border. */
 .screen {
   display: grid;
   aspect-ratio: 2 / 1;
   min-height: 20rem;
-  padding: var(--mantine-spacing-md);
-  background: var(--snapshot-color-screen-frame);
-  border-radius: var(--snapshot-radius);
+  background: var(--snapshot-color-light-background);
+  border: 2px dashed var(--snapshot-color-light-accent);
+  border-radius: 0; /* square corners */
   cursor: pointer;
+}
+
+/* Dragging files over it: the dashes become a solid line. */
+.screen[data-dragging] {
+  border-style: solid;
 }
 
 .screen:focus-visible {
@@ -30,8 +35,7 @@
   justify-content: center;
   gap: var(--mantine-spacing-sm);
   padding: var(--mantine-spacing-xl) var(--mantine-spacing-lg);
-  background: var(--snapshot-color-film-frame);
-  color: var(--snapshot-color-text-on-film);
+  color: var(--snapshot-color-text);
   text-align: center;
 }
 
@@ -39,15 +43,10 @@
   margin: 0;
 }
 
-/* Dragging files over the screen: the picture's edge is marked in red. */
-.screen[data-dragging] .picture {
-  outline: 2px dashed var(--snapshot-color-text-on-film);
-  outline-offset: calc(-1 * var(--mantine-spacing-md));
-}
 
 .title {
   font-size: var(--mantine-font-size-xl);
-  font-weight: var(--snapshot-font-weight-bold);
+  font-weight: var(--snapshot-font-weight-semibold);
   letter-spacing: var(--snapshot-letter-spacing-heading);
   line-height: 1.2;
 }
@@ -56,62 +55,57 @@
   font-size: var(--mantine-font-size-md);
 }
 
-.hint {
-  font-size: var(--mantine-font-size-md);
+/* "Click or drag": the only line while waiting; regular weight. */
+.prompt {
+  font-size: var(--mantine-font-size-xl);
+  letter-spacing: var(--snapshot-letter-spacing-heading);
 }
 
-/* Under the screen: the file names, then the counter, then any problems. */
+/* The three file names, under "Click or Drag". */
+.promptFiles {
+  font-size: var(--mantine-font-size-md);
+  overflow-wrap: anywhere;
+}
+
+/* Any problems, below the toolbar. */
 .status {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--mantine-spacing-sm);
-  text-align: center;
+  gap: var(--mantine-spacing-xs);
+}
+
+.status:empty {
+  display: none;
 }
 
 .status p {
   margin: 0;
 }
 
-/* File names on the left, counter on the right; wraps on narrow screens. */
-.progress {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: var(--mantine-spacing-md);
-}
-
 .fileList {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: var(--mantine-spacing-sm);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-/* Waiting: white outline. Added: filled green with ink text — the change in
-   fill (not just hue) shows it without relying on color. */
+/* Square labels. Waiting: outlined in the text color. Added: filled green
+   with ink text — the change in fill (not just hue) shows it without relying
+   on color. */
 .fileList li {
   padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
   font-size: var(--mantine-font-size-sm);
   font-weight: var(--snapshot-font-weight-semibold);
   border: 1px solid var(--snapshot-color-text);
-  border-radius: var(--snapshot-radius);
+  border-radius: 0;
 }
 
 .fileList li[data-added] {
   color: var(--snapshot-color-film-edge);
   background: var(--snapshot-color-added);
   border-color: var(--snapshot-color-added);
-}
-
-/* How many of the three files are in, e.g. "2 of 3 files added". */
-.counter {
-  font-size: var(--mantine-font-size-md);
-  font-variant-numeric: tabular-nums;
 }
 
 .visuallyHidden {
