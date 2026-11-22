@@ -38,7 +38,13 @@ export default async function BingePage({ params }: { params: Promise<{ name: st
   const end = formatMoment(top.end, tz);
 
   return (
-    <SnapshotPage name={name} step="binge" title={copy.title} subtitle={copy.subtitle}>
+    <SnapshotPage
+      name={name}
+      step="binge"
+      title={copy.title}
+      subtitle={copy.subtitle}
+      backdrop={formatMinutes(top.minutes)}
+    >
       <HeroStat value={formatMinutes(top.minutes)}>
         <p>{copy.longestLabel(start.day, start.time, end.time)}</p>
         <p>{copy.longestReels(top.reels)}</p>

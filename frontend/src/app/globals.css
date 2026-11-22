@@ -25,3 +25,29 @@ body:has([data-surface='light']) {
   background: var(--snapshot-color-text);
   color: var(--snapshot-color-background);
 }
+
+/*
+ * Snapshot scenes: each page puts data-scene="<step>" on its root, and the
+ * whole <body> (header included) takes that scene's color. The body persists
+ * across client navigation, so the color eases from one scene to the next.
+ * --snapshot-color-background follows, so rings and "page color" text match.
+ */
+body:has([data-scene]) {
+  background-color: var(--snapshot-color-background);
+  transition: background-color var(--snapshot-scene-fade) var(--snapshot-ease-in-out);
+}
+
+body:has([data-scene='top-creators']) { --snapshot-color-background: var(--snapshot-scene-top-creators); }
+body:has([data-scene='top-hashtags']) { --snapshot-color-background: var(--snapshot-scene-top-hashtags); }
+body:has([data-scene='watch-time']) { --snapshot-color-background: var(--snapshot-scene-watch-time); }
+body:has([data-scene='binge']) { --snapshot-color-background: var(--snapshot-scene-binge); }
+body:has([data-scene='loyalty']) { --snapshot-color-background: var(--snapshot-scene-loyalty); }
+body:has([data-scene='club']) { --snapshot-color-background: var(--snapshot-scene-club); }
+body:has([data-scene='credits']) { --snapshot-color-background: var(--snapshot-scene-credits); }
+body:has([data-scene='share']) { --snapshot-color-background: var(--snapshot-scene-share); }
+
+@media (prefers-reduced-motion: reduce) {
+  body:has([data-scene]) {
+    transition: none;
+  }
+}

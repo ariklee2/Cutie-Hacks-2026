@@ -9,6 +9,7 @@ export const snapshotSequence = [
   'binge',
   'loyalty',
   'club',
+  'credits',
   'share',
 ] as const;
 

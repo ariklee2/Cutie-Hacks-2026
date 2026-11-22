@@ -62,6 +62,15 @@
   animation: grow 0.7s var(--snapshot-ease-out) calc(0.15s + var(--i) * 0.1s) both;
 }
 
+/*
+ * The top bar is gold (`peak`). Its number stays white: gold text would be
+ * under 4.5:1 on the club scene's lighter red, while the bar itself is
+ * ≥ 3:1 on every scene.
+ */
+.row[data-peak] .bar {
+  background: var(--snapshot-color-peak);
+}
+
 /* Hovered / focused bar lifts with a white outline. */
 .row[data-active] .bar {
   outline: 2px solid var(--snapshot-color-text);

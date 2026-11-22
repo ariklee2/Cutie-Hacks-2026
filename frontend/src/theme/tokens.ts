@@ -18,6 +18,7 @@ export const palette = {
   theatre: '#5C0A14',
   paper: '#FFFFFF',
   added: '#4ADE80', // status green: an upload file that's been added (only use)
+  gold: '#F5C542', // the peak of a chart (busiest day): 12.2:1 on ink, 8.6:1 on theatre.8
   ink: '#0B0A09',
 } as const;
 
@@ -72,6 +73,28 @@ export const color = {
   // A file name on the upload page once that file is in: green fill, ink text.
   // 8.0:1 against the deep red; ink on it 11.4:1. Status only — never decoration.
   added: palette.added,
+  // The one standout data point in a chart (the busiest day's column). Highlight only.
+  peak: palette.gold,
+  // Giant faint word behind each snapshot scene ("#f1", "Sporty"). Decorative.
+  watermark: 'rgb(255 255 255 / 0.07)',
+} as const;
+
+/*
+ * Snapshot scenes: each page of /snapshot/<name>/… has its own solid
+ * background, so moving between them feels like a new scene. All from the
+ * theatre and ink scales; white text on each (contrast): theatre.8 13.9:1,
+ * theatre.6 9.4:1, ink 19.8:1, theatre.9 16.9:1, theatre.7 12.0:1,
+ * theatre.5 7.0:1. Don't go lighter than theatre.5 behind white text.
+ */
+export const scene = {
+  'top-creators': theatre[8],
+  'top-hashtags': theatre[6],
+  'watch-time': palette.ink,
+  binge: theatre[9],
+  loyalty: theatre[7],
+  club: theatre[5],
+  credits: palette.ink,
+  share: theatre[8],
 } as const;
 
 /* ----------------------------------------------------------- Typography --
@@ -154,6 +177,9 @@ export const motion = {
   filmFrameDuration: '3s', // time for the film to advance one frame
   hoverDuration: '0.15s', // square buttons lighting up on hover
   hoverScale: '1.06', // ...and growing slightly
+  sceneWipe: '0.55s', // film sweeping over the screen between snapshot scenes (each half)
+  sceneFade: '0.6s', // a scene's background color easing into the next
+  sceneStagger: '0.12s', // gap between a scene's title, subtitle, content, links appearing
 } as const;
 
 /* ----------------------------------------------------------------- Film --

@@ -23,7 +23,13 @@ export default async function TopHashtagsPage({ params }: { params: Promise<{ na
   const hashtags = snapshot.top_hashtags;
 
   return (
-    <SnapshotPage name={name} step="top-hashtags" title={copy.title} subtitle={copy.subtitle(weekRange(snapshot))}>
+    <SnapshotPage
+      name={name}
+      step="top-hashtags"
+      title={copy.title}
+      subtitle={copy.subtitle(weekRange(snapshot))}
+      backdrop={!isSectionError(hashtags) && hashtags[0] ? `#${hashtags[0].hashtag}` : undefined}
+    >
       {isSectionError(hashtags) ? (
         <SnapshotMessage>{copy.failed}</SnapshotMessage>
       ) : hashtags.length === 0 ? (

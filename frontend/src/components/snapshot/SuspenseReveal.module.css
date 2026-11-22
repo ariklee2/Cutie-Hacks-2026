@@ -1,0 +1,69 @@
+/* The question, big, gently breathing (scale, not fading: there is no dimmer text) while it waits. A button so it can be revealed early. */
+.prompt {
+  display: block;
+  margin: 0 0 var(--snapshot-space-section);
+  padding: 0;
+  font: inherit;
+  font-size: clamp(2.5rem, 8vw, 5.5rem);
+  font-weight: var(--snapshot-font-weight-semibold);
+  line-height: var(--snapshot-line-height-display);
+  letter-spacing: var(--snapshot-letter-spacing-display);
+  text-align: left;
+  color: var(--snapshot-color-text);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.prompt:focus-visible {
+  outline: 2px solid var(--snapshot-color-text);
+  outline-offset: 8px;
+  border-radius: var(--snapshot-radius);
+}
+
+.promptText {
+  display: inline-block;
+  transform-origin: left center;
+  animation: wait 1.2s var(--snapshot-ease-in-out) infinite alternate;
+}
+
+/* The answer snaps in like the clapper stick: fast, then settles. */
+.answer {
+  animation: snap 0.45s var(--snapshot-ease-in) both;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@keyframes wait {
+  to {
+    transform: scale(1.03);
+  }
+}
+
+@keyframes snap {
+  0% {
+    opacity: 0;
+    transform: scale(1.15) rotate(-2deg);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(0.98);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .promptText,
+  .answer {
+    animation: none;
+  }
+}

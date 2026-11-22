@@ -5,6 +5,7 @@ import { HeroStat } from '@/components/snapshot/HeroStat';
 import { ScoreMeter } from '@/components/snapshot/ScoreMeter';
 import { SnapshotMessage, SnapshotPage } from '@/components/snapshot/SnapshotPage';
 import { StatList } from '@/components/snapshot/StatList';
+import { SuspenseReveal } from '@/components/snapshot/SuspenseReveal';
 import { snapshotContent } from '@/content/snapshot';
 import { readSnapshot } from '@/lib/server/snapshotStore';
 import { isSectionError } from '@/lib/snapshotData';
@@ -45,25 +46,27 @@ export default async function LoyaltyPage({ params }: { params: Promise<{ name: 
   ].filter((s): s is { value: string; label: string } => Boolean(s));
 
   return (
-    <SnapshotPage name={name} step="loyalty" title={copy.title} subtitle={copy.subtitle}>
-      <HeroStat value={copy.verdict[loyalty.label]}>
-        <p>{copy.explain[loyalty.label]}</p>
-        {loyalty.score != null && <p>{copy.score(loyalty.score)}</p>}
-      </HeroStat>
+    <SnapshotPage name={name} step="loyalty" title={copy.title} subtitle={copy.subtitle} backdrop="?">
+      <SuspenseReveal prompt={copy.prompt} revealLabel={copy.revealLabel}>
+        <HeroStat value={copy.verdict[loyalty.label]}>
+          <p>{copy.explain[loyalty.label]}</p>
+          {loyalty.score != null && <p>{copy.score(loyalty.score)}</p>}
+        </HeroStat>
 
-      {loyalty.score != null && (
-        <ScoreMeter
-          score={loyalty.score}
-          threshold={LOYAL_THRESHOLD}
-          label={copy.meterLabel}
-          valueText={copy.score(loyalty.score)}
-          thresholdText={copy.threshold}
-          ends={copy.meterEnds}
-        />
-      )}
+        {loyalty.score != null && (
+          <ScoreMeter
+            score={loyalty.score}
+            threshold={LOYAL_THRESHOLD}
+            label={copy.meterLabel}
+            valueText={copy.score(loyalty.score)}
+            thresholdText={copy.threshold}
+            ends={copy.meterEnds}
+          />
+        )}
 
-      {stats.length > 0 && <StatList stats={stats} />}
-      <p>{copy.method}</p>
+        {stats.length > 0 && <StatList stats={stats} />}
+        <p>{copy.method}</p>
+      </SuspenseReveal>
     </SnapshotPage>
   );
 }

@@ -29,7 +29,7 @@ const HEADROOM = 0.82;
  * traces the same values as the columns (no second axis). Columns grow up one
  * after another, then the line draws across them (skipped under
  * prefers-reduced-motion). Hover or focus a column for a tooltip; the
- * `highlight` point gets its value labeled. "View as table" shows the numbers.
+ * `highlight` point (the peak) is gold, with its value labeled. "View as table" shows the numbers.
  */
 export function ColumnLineChart({
   points,
@@ -71,6 +71,7 @@ export function ColumnLineChart({
               tabIndex={0}
               aria-label={`${p.label} ${p.sublabel}: ${p.detail}`}
               data-active={active === i || undefined}
+              data-peak={p.key === highlight || undefined}
               onPointerEnter={() => setActive(i)}
               onPointerLeave={() => setActive((cur) => (cur === i ? null : cur))}
               onFocus={() => setActive(i)}
@@ -91,6 +92,7 @@ export function ColumnLineChart({
             className={classes.dot}
             style={{ '--i': i, '--h': height(p.value) } as CSSProperties}
             data-active={active === i || undefined}
+            data-peak={p.key === highlight || undefined}
             aria-hidden="true"
           >
             {p.key === highlight && active !== i && <span className={classes.peak}>{p.valueText}</span>}

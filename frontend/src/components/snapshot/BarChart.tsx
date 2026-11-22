@@ -21,7 +21,8 @@ export interface BarChartRow {
 
 /**
  * Horizontal bar chart used on every snapshot page: one bar per row, in the
- * order given, each labeled at its tip. Bars grow in on load, one after
+ * order given, each labeled at its tip; the top bar (largest value, ties
+ * included) is gold. Bars grow in on load, one after
  * another (skipped under prefers-reduced-motion). Hover or focus a row for a
  * tooltip; "View as table" (unless `table` is off) shows the same numbers
  * as a table.
@@ -60,6 +61,7 @@ export function BarChart({
             tabIndex={0}
             aria-label={`${r.label}: ${r.detail}`}
             data-active={active === i || undefined}
+            data-peak={r.value === max || undefined}
             onPointerEnter={() => setActive(i)}
             onPointerLeave={() => setActive((cur) => (cur === i ? null : cur))}
             onFocus={() => setActive(i)}

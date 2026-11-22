@@ -55,6 +55,19 @@
   outline-offset: 2px;
 }
 
+/* The peak (busiest day) is gold: column, dot and value. */
+.column[data-peak] .bar {
+  background: var(--snapshot-color-peak);
+}
+
+.dot[data-peak] {
+  background: var(--snapshot-color-peak);
+}
+
+.dot[data-peak] .peak {
+  color: var(--snapshot-color-peak);
+}
+
 /* The line: drawn left to right once the columns are up. */
 .line {
   position: absolute;

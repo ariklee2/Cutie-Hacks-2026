@@ -1,6 +1,67 @@
+/*
+ * A scene fills the screen under the header and progress bar; its content
+ * sits in the middle and the Back / Next links at the bottom. Taller content
+ * (a long chart) just makes the scene taller.
+ */
+.scene {
+  position: relative;
+  overflow: hidden; /* crops the backdrop word */
+  min-height: calc(100svh - var(--snapshot-header-height) - var(--mantine-spacing-xs) - 3px);
+  display: flex;
+}
+
+/* Giant faint word behind the scene, cropped off the bottom-right edge. */
+.backdrop {
+  position: absolute;
+  right: -0.06em;
+  bottom: -0.2em;
+  max-width: 140%;
+  font-size: clamp(8rem, 30vw, 26rem);
+  font-weight: var(--snapshot-font-weight-semibold);
+  line-height: 1;
+  letter-spacing: var(--snapshot-letter-spacing-display);
+  white-space: nowrap;
+  color: var(--snapshot-color-watermark);
+  pointer-events: none;
+  user-select: none;
+  animation: drift 1.4s var(--snapshot-ease-out) both;
+}
+
 .page {
+  position: relative; /* above the backdrop */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   padding-top: var(--snapshot-space-section);
-  padding-bottom: var(--snapshot-space-page);
+  padding-bottom: var(--mantine-spacing-xl);
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Title, subtitle, content, then the links come in one after another. */
+.title,
+.subtitle,
+.content,
+.sequence {
+  animation: enter 0.7s var(--snapshot-ease-out) both;
+}
+
+.subtitle {
+  animation-delay: var(--snapshot-scene-stagger);
+}
+
+.content {
+  animation-delay: calc(2 * var(--snapshot-scene-stagger));
+}
+
+.sequence {
+  animation-delay: calc(4 * var(--snapshot-scene-stagger));
 }
 
 .title {
@@ -14,6 +75,30 @@
 .subtitle {
   margin: var(--mantine-spacing-md) 0 var(--snapshot-space-section);
   font-size: var(--mantine-font-size-lg);
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@keyframes drift {
+  from {
+    opacity: 0;
+    transform: translateX(8%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop,
+  .title,
+  .subtitle,
+  .content,
+  .sequence {
+    animation: none;
+  }
 }
 
 .message {

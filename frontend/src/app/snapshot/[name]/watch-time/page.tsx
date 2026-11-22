@@ -13,6 +13,11 @@ import { formatDate, formatHours, weekRange } from '@/lib/snapshotFormat';
 export const dynamic = 'force-dynamic';
 
 const copy = snapshotContent.watchTime;
+/** An American football field, end zone to end zone excluded: 100 yards. */
+const INCHES_PER_FIELD = 3600;
+const INCHES_PER_MILE = 63360;
+
+const oneDecimal = (n: number) => n.toLocaleString('en-US', { maximumFractionDigits: 1 });
 
 export const metadata: Metadata = { title: `${copy.title} · Insta Snapshot` };
 
@@ -26,7 +31,13 @@ export default async function WatchTimePage({ params }: { params: Promise<{ name
   const days = isSectionError(watch) ? 1 : Math.max(watch.per_day.length, 1);
 
   return (
-    <SnapshotPage name={name} step="watch-time" title={copy.title} subtitle={copy.subtitle(weekRange(snapshot))}>
+    <SnapshotPage
+      name={name}
+      step="watch-time"
+      title={copy.title}
+      subtitle={copy.subtitle(weekRange(snapshot))}
+      backdrop={isSectionError(watch) || watch.total_hours <= 0 ? undefined : formatHours(watch.total_hours)}
+    >
       {isSectionError(watch) ? (
         <SnapshotMessage>{copy.failed}</SnapshotMessage>
       ) : watch.total_hours <= 0 ? (
@@ -35,6 +46,7 @@ export default async function WatchTimePage({ params }: { params: Promise<{ name
         <>
           <HeroStat value={formatHours(watch.total_hours)}>
             <p>{copy.totalLabel}</p>
+            <p>{copy.movies(oneDecimal(watch.total_hours / copy.movieHours))}</p>
             {watch.busiest_day && (
               <p>{copy.busiestDay(watch.busiest_day.weekday, formatHours(watch.busiest_day.hours))}</p>
             )}
@@ -49,13 +61,20 @@ export default async function WatchTimePage({ params }: { params: Promise<{ name
                     },
                     {
                       value: watch.scroll.miles.toLocaleString('en-US', { maximumFractionDigits: 2 }),
-                      label: copy.stats.miles,
+                      label: copy.stats.miles(
+                        watch.scroll.inches < INCHES_PER_MILE
+                          ? oneDecimal(watch.scroll.inches / INCHES_PER_FIELD)
+                          : null,
+                      ),
                     },
                   ]
                 : []),
               ...(watch.total_reels != null
                 ? [
-                    { value: Math.round(watch.total_reels / days).toLocaleString(), label: copy.stats.reelsPerDay },
+                    {
+                      value: Math.round(watch.total_reels / days).toLocaleString(),
+                      label: copy.stats.reelsPerDay,
+                    },
                   ]
                 : []),
               { value: formatHours(watch.total_hours / days), label: copy.stats.timePerDay },

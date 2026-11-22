@@ -4,7 +4,8 @@ import { notFound } from 'next/navigation';
 import { BarChart } from '@/components/snapshot/BarChart';
 import { HeroStat } from '@/components/snapshot/HeroStat';
 import { SnapshotMessage, SnapshotPage } from '@/components/snapshot/SnapshotPage';
-import { snapshotContent } from '@/content/snapshot';
+import { SuspenseReveal } from '@/components/snapshot/SuspenseReveal';
+import { clubLabel, snapshotContent } from '@/content/snapshot';
 import { readSnapshot } from '@/lib/server/snapshotStore';
 import { isSectionError } from '@/lib/snapshotData';
 import { formatPercent } from '@/lib/snapshotFormat';
@@ -35,28 +36,30 @@ export default async function ClubPage({ params }: { params: Promise<{ name: str
   const lead = club.club === 'Hufflepuff' ? null : club.shares.find((s) => s.club === club.club);
 
   return (
-    <SnapshotPage name={name} step="club" title={copy.title} subtitle={copy.subtitle}>
-      <HeroStat value={club.club}>
-        <p>{lead ? copy.lead(formatPercent(lead.share), club.club) : copy.hufflepuff}</p>
-      </HeroStat>
+    <SnapshotPage name={name} step="club" title={copy.title} subtitle={copy.subtitle} backdrop="?">
+      <SuspenseReveal prompt={copy.prompt} revealLabel={copy.revealLabel}>
+        <HeroStat value={clubLabel(club.club)}>
+          <p>{lead ? copy.lead(formatPercent(lead.share), club.club) : copy.hufflepuff}</p>
+        </HeroStat>
 
-      {shares.length > 0 && (
-        <BarChart
-          label={copy.chartLabel}
-          columns={[copy.columnClub, copy.columnShare]}
-          rows={shares.map((s) => ({
-            key: s.club,
-            label: s.club,
-            value: s.share,
-            valueText: formatPercent(s.share),
-            detail: copy.detail(formatPercent(s.share)),
-          }))}
-        />
-      )}
+        {shares.length > 0 && (
+          <BarChart
+            label={copy.chartLabel}
+            columns={[copy.columnClub, copy.columnShare]}
+            rows={shares.map((s) => ({
+              key: s.club,
+              label: clubLabel(s.club),
+              value: s.share,
+              valueText: formatPercent(s.share),
+              detail: copy.detail(formatPercent(s.share)),
+            }))}
+          />
+        )}
 
-      {club.reels_counted != null && club.reels_unclassified != null && (
-        <p>{copy.counted(club.reels_counted, club.reels_unclassified)}</p>
-      )}
+        {club.reels_counted != null && club.reels_unclassified != null && (
+          <p>{copy.counted(club.reels_counted, club.reels_unclassified)}</p>
+        )}
+      </SuspenseReveal>
     </SnapshotPage>
   );
 }

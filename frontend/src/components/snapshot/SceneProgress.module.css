@@ -1,0 +1,49 @@
+.bar {
+  padding-top: var(--mantine-spacing-xs);
+}
+
+.segments {
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  gap: var(--mantine-spacing-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Track: the faint white of hairlines. */
+.segment {
+  height: 3px;
+  overflow: hidden;
+  background: var(--snapshot-color-border);
+  border-radius: var(--snapshot-radius);
+}
+
+.fill {
+  display: block;
+  height: 100%;
+  background: var(--snapshot-color-text);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+.segment[data-state='done'] .fill {
+  transform: none;
+}
+
+.segment[data-state='current'] .fill {
+  transform: none;
+  animation: fill 1.2s var(--snapshot-ease-out) both;
+}
+
+@keyframes fill {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .segment[data-state='current'] .fill {
+    animation: none;
+  }
+}

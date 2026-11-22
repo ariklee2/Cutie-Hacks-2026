@@ -67,40 +67,75 @@ never with `fetch` inside components.
   `transform.py` and the snapshot file name, or the error under the toolbar
   (including any snapshot sections that failed). On success it goes straight
   to `/snapshot/<name>/top-creators`.
-- `/snapshot/<name>/<step>` — **the snapshot sequence**, in the order of
-  `src/lib/snapshotSequence.ts`. Every page is a server component reading
-  `data/<name>_snapshot.json` through `src/lib/server/snapshotStore.ts`
-  (`readSnapshot`; 404 if missing), wrapped in `SnapshotPage` (title,
-  subtitle, then Back / Next links to its neighbours; the last page's Next
-  is "Start over"). The left / right arrow keys do the same (`ArrowKeyNav`),
-  but stop at both ends: no wrap from the share card back to the start;
-  ignored while typing in a field or with a modifier key held. A failed or empty section shows one line of copy
-  (`SnapshotMessage`) instead. Copy lives in `src/content/snapshot.ts`;
-  formatting helpers (week range, "4h 57m", local times) in
-  `src/lib/snapshotFormat.ts`.
-  1. `top-creators` — first page; upload success lands here. `top_creators`
-     (top 10) as a `BarChart` with no table toggle; the subtitle's date range comes from `watch_time.per_day`.
-  2. `top-hashtags` — `top_hashtags` (top 10) as a `BarChart` with no
-     table toggle.
-  3. `watch-time` — total time as a `HeroStat`, the busiest day under it,
-     then a `StatList` (scroll distance in inches and miles from
-     `watch_time.scroll`: one reel = one scroll = one ~6in phone screen,
-     `SCROLL_INCHES_PER_REEL` in `reels_watched_duration.py`; reels and time
-     per day on average), then a `ColumnLineChart`:
+- `/snapshot/<name>/<step>` — **the snapshot sequence**, a run of full-screen
+  **scenes** (Wrapped-style) in the order of `src/lib/snapshotSequence.ts`.
+  Every scene is a server component reading `data/<name>_snapshot.json`
+  through `src/lib/server/snapshotStore.ts` (`readSnapshot`; 404 if missing),
+  wrapped in `SnapshotPage`: at least one screen tall, content centered,
+  title / subtitle / content / links entering one after another, an optional
+  giant faint **backdrop** word (`backdrop` prop, `watermark` color) cropped
+  off the bottom-right, and Back / Next links (the last scene's Next is
+  "Start over"). The shared layout (`app/snapshot/[name]/layout.tsx`) stays
+  mounted between scenes and holds:
+  - **`SceneProgress`** — one thin segment per scene under the header (past
+    full, current filling in, upcoming faint).
+  - **`SceneTransition`** — the **film wipe**: moving to another scene
+    sweeps a wall of film over the screen — `FilmStrip`s stacked at a
+    natural 18rem height (frames about square, like the landing film, never
+    stretched to the full screen) — loads the next scene behind it, then the
+    film carries on out the other side. It always comes **from the side of
+    the destination**: from the right going forward, from the left going
+    back (by sequence order, so "Start over" comes from the left). Each half
+    takes `--snapshot-scene-wipe` (0.55s) with `--snapshot-ease-in-out`.
+    Every way of moving goes through it (`useSceneNav()`): the Back / Next
+    links (`SceneLink`), ← → keys (`ArrowKeyNav`; stop at both ends, ignored
+    while typing or with a modifier key), and **taps** (`SceneTapArea`: a
+    click on the left 30% of a scene goes back, elsewhere forward, unless it
+    lands on a link, button, chart or other control).
+  - **Scene colors**: each scene root has `data-scene="<step>"` and
+    `globals.css` paints the whole body with that scene's `scene.*` token,
+    easing between them (`--snapshot-scene-fade`).
+  Big numbers count up from 0 (`CountUp`, used by `HeroStat` and `StatList`).
+  A failed or empty section shows one line of copy (`SnapshotMessage`)
+  instead. Copy lives in `src/content/snapshot.ts`; formatting helpers
+  (week range, "4h 57m", local times) in `src/lib/snapshotFormat.ts`; the
+  per-scene highlights used by the credits and share card in
+  `src/lib/snapshotHighlights.ts`.
+  1. `top-creators` (theatre.8) — first scene; upload success lands here.
+     `top_creators` (top 10) as a `BarChart` with no table toggle; backdrop
+     is the #1 account. The subtitle's date range comes from
+     `watch_time.per_day`.
+  2. `top-hashtags` (theatre.6) — `top_hashtags` (top 10) as a `BarChart`
+     with no table toggle; backdrop is the #1 hashtag.
+  3. `watch-time` (ink) — total time as a `HeroStat` with a movie comparison
+     (total ÷ 2h films) and the busiest day, then a `StatList` (scroll
+     distance in inches and miles from `watch_time.scroll`: one reel = one
+     scroll = one ~6in phone screen, `SCROLL_INCHES_PER_REEL` in
+     `reels_watched_duration.py`, with a football-field comparison under a
+     mile; reels and time per day on average), then a `ColumnLineChart`:
      one vertical column per day with a line joining the column tops, the
-     busiest day's value labeled (tooltip adds that day's reel count).
-  4. `binge` — the longest session as a `HeroStat` (local day and times,
-     reel count), session count and median in a `StatList`, then the
+     busiest day's column, dot and value in gold (`peak`) (tooltip adds that
+     day's reel count).
+  4. `binge` (theatre.9) — the longest session as a `HeroStat` (local day and
+     times, reel count), session count and median in a `StatList`, then the
      longest sessions as a `BarChart`.
-  5. `loyalty` — the Loyal / Variety verdict as a `HeroStat`, the 0–100
-     score on a `ScoreMeter` (dashed tick at 50, the backend's threshold),
-     then the metrics in a `StatList`.
-  6. `club` — the club as a `HeroStat`, then every club's share as a
-     `BarChart`.
-  7. `share` — `ShareCard`: one line per earlier page on a white card in a
-     black frame (the movie-screen look, red text), with **Share** (the
-     device share sheet, only shown where `navigator.share` exists) and
-     **Copy text** (clipboard) sending the same lines as plain text.
+  5. `loyalty` (theatre.7) — a `SuspenseReveal`: the question first, then
+     (after 1.6s, or on click) the Loyal / Variety verdict snaps in as a
+     `HeroStat`, the 0–100 score on a `ScoreMeter` (dashed tick at 50, the
+     backend's threshold), then the metrics in a `StatList`. Backdrop "?".
+  6. `club` (theatre.5) — a `SuspenseReveal` of the club as a `HeroStat`
+     (every club name, here and in the chart, credits and share card, carries
+     its emoji: `clubEmoji` / `clubLabel` in `content/snapshot.ts`, e.g.
+     "Sporty 🏀"),
+     then every club's share as a `BarChart`. Backdrop "?".
+  7. `credits` (ink) — the finale: the highlights as film end credits
+     (`CreditsRoll`, role above name — "Starring @f1", "Running time 4h 57m",
+     …, "Directed by @<name>", "The End") rolling up once.
+  8. `share` (theatre.8) — `ShareCard`: the highlights on a **story-shaped
+     (9:16)** white card in a black frame (red text). **Save image**
+     downloads it as a PNG (`html-to-image`, 3× pixel ratio); **Share** (the
+     device share sheet, only where `navigator.share` exists) and **Copy
+     text** send the same lines as plain text.
 
 ## Running the frontend
 
@@ -160,6 +195,19 @@ No gradients: the page background is a single solid color. Hard-edged stripe
 patterns (film, clapper) are patterns, not gradients. If the background red
 ever changes, recheck white text contrast (it must stay ≥ 4.5:1).
 
+**Snapshot scenes** (`scene` in tokens / `--snapshot-scene-<step>`): each
+scene's solid background, all from existing scales — top creators and share
+theatre.8 (13.9:1 with white), top hashtags theatre.6 (9.4:1), time on reels
+and credits ink (19.8:1), binge theatre.9 (16.9:1), loyalty theatre.7
+(12.0:1), club theatre.5 (7.0:1). Don't go lighter than theatre.5 behind
+white text. `peak` = gold `#F5C542` — **only for the one standout point in
+a chart**: the top bar of every `BarChart` (top creator, hashtag, binge,
+club; bar only, its number stays white since gold text is 4.3:1 on the
+club scene) and the busiest day's column, dot and value on the
+time-on-reels chart (12.2:1 on ink). Not on the loyalty meter. Never
+decoration. `watermark` = white at 7%, only for the giant backdrop word
+behind a scene (decorative, never text to read).
+
 ### Typography (1 font)
 
 **Instrument Sans** (variable, via `next/font` in `src/app/fonts.ts`). Never add
@@ -205,9 +253,11 @@ page's drop zone, its `.json` file labels and name field, and on the buttons: th
 
 The visual motif is **cinema**: film and the clapperboard
 (`src/components/cinema/`), and the movie screen on the upload page
-(`src/components/upload/`). Motion is allowed only for the film and
-clapperboard, and for **chart entrances** on snapshot pages (below);
-everything else stays still.
+(`src/components/upload/`). Motion is allowed for the film and
+clapperboard, **chart entrances**, and the **snapshot scenes** (film wipe
+between scenes, background color easing, staggered entrances, count-ups,
+the progress bar filling, suspense reveals, the credits roll, the share
+card arriving); the landing and upload pages otherwise stay still.
 
 - **Film** (`FilmStrip`): fills the film block edge to edge sideways, near the
   top of the red first screen (red above and below, no rules) — the
@@ -279,6 +329,13 @@ everything else stays still.
   (`lightAccent`; fills dark red with white text). They grow by
   `--snapshot-hover-scale` (1.06) over `--snapshot-hover-duration` (0.15s). Disabled buttons don't react. The transition is off under
   `prefers-reduced-motion` (the state still changes, instantly).
+- **Snapshot scene motion** (`components/snapshot/`): entrances rise 24px and
+  fade in with `--snapshot-ease-out`, `--snapshot-scene-stagger` (0.12s)
+  apart; the suspense answer snaps in with `--snapshot-ease-in` (the clapper's
+  easing); while waiting, the question breathes by scale, never by fading
+  (there is no dimmer text). All of it is off under `prefers-reduced-motion`:
+  scenes cut instead of wiping, numbers show their final value, the answer
+  shows at once, the credits stand still.
 - Don't add other animations. Film art is built from tokens in
   `cinema/filmArt.ts`, never hard-coded colors.
 - The header has no logo. (`public/logo-black.webp` is no longer used.)

@@ -1,0 +1,57 @@
+/* Centered like film credits: small role above, big name below. */
+.window {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.roll {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-lg);
+  margin: 0;
+  padding: var(--mantine-spacing-xl) 0;
+  animation: roll calc(var(--n) * 0.7s + 1s) var(--snapshot-ease-out) 0.4s both;
+}
+
+.credit {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.role {
+  font-size: var(--mantine-font-size-sm);
+  font-weight: var(--snapshot-font-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.name {
+  margin: 0;
+  font-size: clamp(1.75rem, 5vw, 3rem);
+  font-weight: var(--snapshot-font-weight-semibold);
+  letter-spacing: var(--snapshot-letter-spacing-heading);
+  line-height: var(--snapshot-line-height-display);
+  overflow-wrap: anywhere;
+}
+
+.closing {
+  margin: var(--mantine-spacing-xl) 0 0;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: var(--snapshot-font-weight-semibold);
+  letter-spacing: var(--snapshot-letter-spacing-display);
+  line-height: var(--snapshot-line-height-display);
+}
+
+@keyframes roll {
+  from {
+    transform: translateY(60vh);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roll {
+    animation: none;
+  }
+}

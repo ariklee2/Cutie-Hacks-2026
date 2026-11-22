@@ -1,6 +1,25 @@
 /** Copy for the snapshot sequence pages (/snapshot/<name>/...). */
 import type { SnapshotStep } from '@/lib/snapshotSequence';
 
+/** An emoji per club (features/clubs.py CLUBS, plus Hufflepuff), shown after the club's name. */
+export const clubEmoji: Record<string, string> = {
+  Brainrot: '🤪',
+  Nerd: '🤓',
+  'Gym Bro': '💪',
+  Sporty: '🏀',
+  Looksmaxxer: '💅',
+  Gamer: '🎮',
+  News: '📰',
+  Foodie: '🍔',
+  Music: '🎵',
+  Drama: '🎭',
+  Travel: '✈️',
+  Hufflepuff: '🦡',
+};
+
+/** "Sporty 🏀" — a club's name with its emoji (just the name for an unknown club). */
+export const clubLabel = (club: string) => (clubEmoji[club] ? `${club} ${clubEmoji[club]}` : club);
+
 const reels = (n: number) => `${n.toLocaleString()} ${n === 1 ? 'reel' : 'reels'}`;
 
 export const snapshotContent = {
@@ -12,6 +31,7 @@ export const snapshotContent = {
     binge: 'Longest binge',
     loyalty: 'Loyal or variety',
     club: 'Your club',
+    credits: 'The credits',
     share: 'Share card',
   } satisfies Record<SnapshotStep, string>,
   sequence: {
@@ -21,7 +41,9 @@ export const snapshotContent = {
     /** Shown on the last page, back to the start. */
     restart: 'Start over',
     /** Between the Back and Next links; the arrow keys do the same. */
-    keysHint: 'Use ← → to move between pages',
+    keysHint: 'Tap the sides or use ← →',
+    /** Progress bar, for screen readers. */
+    progress: (current: number, total: number) => `Scene ${current} of ${total}`,
   },
 
   chart: {
@@ -59,6 +81,9 @@ export const snapshotContent = {
     title: 'Your time on reels',
     subtitle: (range: string | null) => `Time spent watching reels, ${range ?? 'this past week'}.`,
     totalLabel: 'in total this week',
+    /** Average film length used for the comparison, in hours. */
+    movieHours: 2,
+    movies: (n: string) => `That’s about ${n} movies back to back.`,
     busiestDay: (weekday: string, time: string) => `${weekday} was your busiest day, with ${time} of reels.`,
     chartLabel: 'Time watching reels per day',
     columnDay: 'Day',
@@ -68,7 +93,8 @@ export const snapshotContent = {
     stats: {
       inches: (reelCount: number, perReel: number) =>
         `inches scrolled (${reels(reelCount)}, about ${perReel} in of screen each)`,
-      miles: 'miles your thumb traveled',
+      miles: (fields: string | null) =>
+        fields ? `miles your thumb traveled (about ${fields} football fields)` : 'miles your thumb traveled',
       reelsPerDay: 'reels a day on average',
       timePerDay: 'on reels a day on average',
     },
@@ -96,6 +122,8 @@ export const snapshotContent = {
 
   loyalty: {
     title: 'Loyal or variety?',
+    prompt: 'So… which one are you?',
+    revealLabel: 'Reveal the answer',
     subtitle:
       'Do you keep coming back to the same creators, or spread your time across lots of new ones?',
     verdict: {
@@ -125,6 +153,8 @@ export const snapshotContent = {
 
   club: {
     title: 'Your club',
+    prompt: 'And your club is…',
+    revealLabel: 'Reveal your club',
     subtitle: 'Based on what the reels you watched, liked and saved were about.',
     hufflepuff: 'No single topic clearly won, so you’re an all-rounder.',
     lead: (pct: string, club: string) => `${pct} of your engagement went to ${club} reels, more than any other club.`,
@@ -135,6 +165,23 @@ export const snapshotContent = {
     counted: (counted: number, unclassified: number) =>
       `${reels(counted)} matched a club; ${reels(unclassified)} didn’t fit any.`,
     failed: "Your club couldn't be worked out from your files.",
+  },
+
+  credits: {
+    title: 'The credits',
+    subtitle: 'Your week on reels, the movie.',
+    /** Credit-roll role for each card row (same order as share.rows). */
+    roles: {
+      topCreator: 'Starring',
+      topHashtag: 'Featuring',
+      watchTime: 'Running time',
+      busiestDay: 'Biggest screening',
+      binge: 'Longest take',
+      loyalty: 'Casting',
+      club: 'Produced by the club',
+    },
+    directedBy: 'Directed by',
+    theEnd: 'The End',
   },
 
   share: {
@@ -152,6 +199,9 @@ export const snapshotContent = {
     },
     unavailable: '—',
     shareButton: 'Share',
+    saveButton: 'Save image',
+    saving: 'Saving…',
+    saveFailed: 'Couldn’t save the image. Try a screenshot instead.',
     copyButton: 'Copy text',
     copied: 'Copied',
     copyFailed: 'Couldn’t copy. Select the card text instead.',

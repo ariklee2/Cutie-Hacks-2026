@@ -23,7 +23,13 @@ export default async function TopCreatorsPage({ params }: { params: Promise<{ na
   const creators = snapshot.top_creators;
 
   return (
-    <SnapshotPage name={name} step="top-creators" title={copy.title} subtitle={copy.subtitle(weekRange(snapshot))}>
+    <SnapshotPage
+      name={name}
+      step="top-creators"
+      title={copy.title}
+      subtitle={copy.subtitle(weekRange(snapshot))}
+      backdrop={!isSectionError(creators) && creators[0] ? `@${creators[0].creator}` : undefined}
+    >
       {isSectionError(creators) ? (
         <SnapshotMessage>{copy.failed}</SnapshotMessage>
       ) : creators.length === 0 ? (

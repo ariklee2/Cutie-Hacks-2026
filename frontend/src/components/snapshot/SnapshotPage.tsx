@@ -1,68 +1,82 @@
 import { Container } from '@mantine/core';
-import Link from 'next/link';
 import type { ReactNode } from 'react';
 
 import { snapshotContent } from '@/content/snapshot';
 import { snapshotHref, snapshotSequence, type SnapshotStep } from '@/lib/snapshotSequence';
 
 import { ArrowKeyNav } from './ArrowKeyNav';
+import { SceneLink } from './SceneLink';
+import { SceneTapArea } from './SceneTapArea';
 import classes from './SnapshotPage.module.css';
 
 const copy = snapshotContent;
 
 /**
- * Layout shared by every snapshot page: title, subtitle, the page's content,
- * then links to the previous and next pages in the sequence.
+ * One snapshot scene: at least a full screen, in its own background color
+ * (`data-scene`, see globals.css), with a giant faint `backdrop` word behind
+ * it. Title, subtitle, content and the Back / Next links come in one after
+ * another. Tap the sides, use ← →, or the links to move (with the film wipe).
  */
 export function SnapshotPage({
   name,
   step,
   title,
   subtitle,
+  backdrop,
   children,
 }: {
   name: string;
   step: SnapshotStep;
   title: string;
   subtitle: string;
+  /** Giant faint word behind the scene, e.g. "#f1". Decorative. */
+  backdrop?: string;
   children: ReactNode;
 }) {
   const index = snapshotSequence.indexOf(step);
   const previous = snapshotSequence[index - 1];
   const next = snapshotSequence[index + 1];
+  const previousHref = previous && snapshotHref(name, previous);
+  const nextHref = next && snapshotHref(name, next);
 
   return (
-    <Container component="section" className={classes.page}>
-      <h1 className={classes.title}>{title}</h1>
-      <p className={classes.subtitle}>{subtitle}</p>
-
-      {children}
-
-      <ArrowKeyNav
-        previous={previous && snapshotHref(name, previous)}
-        next={next && snapshotHref(name, next)}
-      />
-
-      <nav className={classes.sequence} aria-label={copy.sequence.label}>
-        {previous && (
-          <Link href={snapshotHref(name, previous)} className={classes.sequenceLink} data-direction="previous">
-            <span className={classes.sequenceHint}>{copy.sequence.previous}</span>
-            <span className={classes.sequenceName}>{copy.steps[previous]}</span>
-          </Link>
-        )}
-        <span className={classes.keysHint} aria-hidden="true">
-          {copy.sequence.keysHint}
+    <SceneTapArea className={classes.scene} data-scene={step} previous={previousHref} next={nextHref}>
+      {backdrop && (
+        <span className={classes.backdrop} aria-hidden="true">
+          {backdrop}
         </span>
-        <Link
-          href={snapshotHref(name, next ?? snapshotSequence[0])}
-          className={classes.sequenceLink}
-          data-direction="next"
-        >
-          <span className={classes.sequenceHint}>{next ? copy.sequence.next : copy.sequence.restart}</span>
-          <span className={classes.sequenceName}>{copy.steps[next ?? snapshotSequence[0]]}</span>
-        </Link>
-      </nav>
-    </Container>
+      )}
+
+      <Container component="section" className={classes.page}>
+        <div className={classes.body}>
+          <h1 className={classes.title}>{title}</h1>
+          <p className={classes.subtitle}>{subtitle}</p>
+          <div className={classes.content}>{children}</div>
+        </div>
+
+        <ArrowKeyNav previous={previousHref} next={nextHref} />
+
+        <nav className={classes.sequence} aria-label={copy.sequence.label}>
+          {previous && (
+            <SceneLink href={snapshotHref(name, previous)} className={classes.sequenceLink} data-direction="previous">
+              <span className={classes.sequenceHint}>{copy.sequence.previous}</span>
+              <span className={classes.sequenceName}>{copy.steps[previous]}</span>
+            </SceneLink>
+          )}
+          <span className={classes.keysHint} aria-hidden="true">
+            {copy.sequence.keysHint}
+          </span>
+          <SceneLink
+            href={snapshotHref(name, next ?? snapshotSequence[0])}
+            className={classes.sequenceLink}
+            data-direction="next"
+          >
+            <span className={classes.sequenceHint}>{next ? copy.sequence.next : copy.sequence.restart}</span>
+            <span className={classes.sequenceName}>{copy.steps[next ?? snapshotSequence[0]]}</span>
+          </SceneLink>
+        </nav>
+      </Container>
+    </SceneTapArea>
   );
 }
 

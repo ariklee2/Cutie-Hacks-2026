@@ -1,35 +1,36 @@
 /*
- * The share card reads like the upload page's movie screen: a white picture
- * inside a black masking frame, copy in theatre red (textOnFilm, 13.9:1).
+ * The share card: story-shaped (9:16), reading like the movie screen — a
+ * white picture inside a black frame, copy in theatre red (13.9:1). Actions
+ * sit beside it on wide screens, below it on narrow ones.
  */
 .wrap {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--mantine-spacing-lg);
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--mantine-spacing-xl);
 }
 
 .frame {
-  width: 100%;
-  max-width: 28rem;
+  width: min(100%, 20rem);
+  aspect-ratio: 9 / 16;
   padding: var(--mantine-spacing-md);
   background: var(--snapshot-color-film-edge); /* ink, the movie-screen frame */
-  border-radius: var(--snapshot-radius);
+  animation: arrive 0.8s var(--snapshot-ease-out) 0.3s both;
 }
 
 .card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   padding: var(--mantine-spacing-xl) var(--mantine-spacing-lg);
   color: var(--snapshot-color-text-on-film);
   background: var(--snapshot-color-film-frame);
 }
 
-.header {
-  margin-bottom: var(--mantine-spacing-lg);
-}
-
 .title {
   margin: 0;
-  font-size: clamp(2rem, 6vw, 2.75rem);
+  font-size: 2.5rem;
   line-height: var(--snapshot-line-height-display);
   letter-spacing: var(--snapshot-letter-spacing-display);
   font-weight: var(--snapshot-font-weight-semibold);
@@ -57,7 +58,7 @@
 
 .row dt {
   flex: none;
-  font-size: var(--mantine-font-size-sm);
+  font-size: var(--mantine-font-size-xs);
 }
 
 .row dd {
@@ -69,13 +70,19 @@
   overflow-wrap: anywhere;
 }
 
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-sm);
+}
+
 .actions {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   gap: var(--mantine-spacing-md);
 }
 
-/* Outlined white buttons, matching the upload page's plain controls. */
+/* Square buttons like the header's: white outline, light up and grow on hover. */
 .button {
   padding: var(--mantine-spacing-sm) var(--mantine-spacing-lg);
   font: inherit;
@@ -84,20 +91,55 @@
   color: var(--snapshot-color-text);
   background: none;
   border: 1px solid var(--snapshot-color-text);
-  border-radius: var(--snapshot-radius);
+  border-radius: 0;
   cursor: pointer;
+  transition:
+    transform var(--snapshot-hover-duration) var(--snapshot-ease-out),
+    background-color var(--snapshot-hover-duration),
+    color var(--snapshot-hover-duration);
 }
 
-.button:hover {
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
+/* Save image: the main action, already lit. */
+.button[data-primary] {
+  color: var(--snapshot-color-background);
+  background: var(--snapshot-color-text);
+}
+
+.button:hover:not(:disabled),
+.button:focus-visible {
+  color: var(--snapshot-color-background);
+  background: var(--snapshot-color-text);
+  transform: scale(var(--snapshot-hover-scale));
 }
 
 .button:focus-visible {
   outline: 2px solid var(--snapshot-color-text);
-  outline-offset: 4px;
+  outline-offset: 3px;
+}
+
+.button:disabled {
+  cursor: progress;
 }
 
 .status {
+  min-height: 1.5em;
+  margin: 0;
   font-size: var(--mantine-font-size-sm);
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(32px) rotate(-2deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .frame {
+    animation: none;
+  }
+
+  .button {
+    transition: none;
+  }
 }

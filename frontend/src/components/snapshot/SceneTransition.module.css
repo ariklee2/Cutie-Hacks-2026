@@ -1,0 +1,85 @@
+/*
+ * The film wipe between snapshot scenes: strips of the landing page's film
+ * (running as usual), stacked to fill the screen at a natural height so the
+ * frames keep their shape, sweeping across. Going forward the film comes in
+ * from the right and leaves to the left; going back, the reverse — it always
+ * comes from the side of the scene you're going to.
+ */
+.wipe {
+  --wipe-strip-height: 18rem; /* 44px edges + ~184px frames: about square, like the landing film */
+  position: fixed;
+  z-index: 200;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.strip {
+  position: relative; /* FilmStrip fills its nearest positioned ancestor */
+  flex: none;
+  height: var(--wipe-strip-height);
+}
+
+.wipe[data-phase='covering'],
+.wipe[data-phase='revealing'] {
+  visibility: visible;
+}
+
+.wipe[data-phase='covering'] {
+  pointer-events: auto; /* no clicks on the old scene mid-wipe */
+}
+
+.wipe[data-phase='covering'][data-direction='forward'] {
+  animation: in-from-right var(--snapshot-scene-wipe) var(--snapshot-ease-in-out) both;
+}
+
+.wipe[data-phase='revealing'][data-direction='forward'] {
+  animation: out-to-left var(--snapshot-scene-wipe) var(--snapshot-ease-in-out) both;
+}
+
+.wipe[data-phase='covering'][data-direction='back'] {
+  animation: in-from-left var(--snapshot-scene-wipe) var(--snapshot-ease-in-out) both;
+}
+
+.wipe[data-phase='revealing'][data-direction='back'] {
+  animation: out-to-right var(--snapshot-scene-wipe) var(--snapshot-ease-in-out) both;
+}
+
+@keyframes in-from-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes out-to-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes in-from-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes out-to-right {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
