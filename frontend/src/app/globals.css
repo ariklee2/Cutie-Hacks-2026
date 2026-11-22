@@ -43,6 +43,7 @@ body:has([data-scene='watch-time']) { --snapshot-color-background: var(--snapsho
 body:has([data-scene='binge']) { --snapshot-color-background: var(--snapshot-scene-binge); }
 body:has([data-scene='loyalty']) { --snapshot-color-background: var(--snapshot-scene-loyalty); }
 body:has([data-scene='club']) { --snapshot-color-background: var(--snapshot-scene-club); }
+body:has([data-scene='recommendations']) { --snapshot-color-background: var(--snapshot-scene-recommendations); }
 body:has([data-scene='credits']) { --snapshot-color-background: var(--snapshot-scene-credits); }
 body:has([data-scene='share']) { --snapshot-color-background: var(--snapshot-scene-share); }
 

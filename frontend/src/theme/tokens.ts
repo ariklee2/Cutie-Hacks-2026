@@ -93,6 +93,7 @@ export const scene = {
   binge: theatre[9],
   loyalty: theatre[7],
   club: theatre[5],
+  recommendations: theatre[6],
   credits: palette.ink,
   share: theatre[8],
 } as const;

@@ -13,6 +13,24 @@ clubs).
 - `features/*.py` — analysis functions over that table (`top_creators`,
   `top_hashtags`, `watch_hours`, `binge_sessions`, `classify`, `assign_club`).
   Each also runs as a CLI: `python3 features/<name>.py [user]`.
+- `features/recommender.py <user> [--dry-run|--offline|--refresh]` — reels and
+  profiles the user would enjoy → **`data/<user>_recommendations.json`**.
+  Taste profile from the reels table: weight per reel = saved 3, liked 2,
+  watched ≥ 15s 1–2 (scaled by seconds); weighted hashtags (generic ones like
+  #fyp dropped) and a TF-IDF profile of captions + hashtags. Candidates: recent
+  reels under the top 5 hashtags via Apify's `instagram-hashtag-scraper`
+  (12 per hashtag ≈ $0.16 per uncached run at $0.0026/result). Ranking: 80%
+  similarity (rescaled so the best match = 1) + 20% log popularity; reels
+  already seen and reels with zero similarity are dropped; ≤ 2 per creator;
+  each has a `why`. Profiles = unseen creators of the scored reels, by summed
+  score. (Apify's profile scraper no longer returns Instagram's related
+  profiles, so it isn't used.) Raw Apify responses are cached in
+  `data/<user>_apify_*.json` (gitignored) and reused for the same hashtags in
+  any order; `--dry-run` prints the queries and cost without calling anything.
+  Ties sort alphabetically so runs are reproducible.
+- **Secrets:** the Apify token is `APIFY_TOKEN` in the repo-root `.env`
+  (gitignored; template in `.env.example`) or the environment. Never print it,
+  log it, put it in a URL or commit it.
 - `features/snapshot.py <user>` — runs every feature above and writes the
   results to **`data/<user>_snapshot.json`** (plain JSON: ISO times, 0–1
   shares; one section per feature plus `watch_time.busiest_day`). This file is
@@ -128,10 +146,22 @@ never with `fetch` inside components.
      its emoji: `clubEmoji` / `clubLabel` in `content/snapshot.ts`, e.g.
      "Sporty 🏀"),
      then every club's share as a `BarChart`. Backdrop "?".
-  7. `credits` (ink) — the finale: the highlights as film end credits
+  7. `recommendations` (theatre.6) ("For you") — reads `data/<name>_recommendations.json`
+     (`readRecommendations`; shape in `src/lib/recommendationsData.ts`) from
+     `features/recommender.py`: a "based on #…" line, then **Reels** (creator,
+     two-line caption preview, `why`, "Watch on Instagram ↗") and **Accounts**
+     (username · name, `why`, "View on Instagram ↗") side by side, stacked on
+     narrow screens; links open Instagram in a new tab. If the file doesn't
+     exist yet, `FindRecommendations` shows a square **Find recommendations**
+     button that POSTs `/api/recommendations` (`src/app/api/recommendations/
+     route.ts`), which runs the recommender for that name (needs a snapshot;
+     one run per name at a time) and the page refreshes. It's only ever run on
+     click: an uncached run spends ≈ $0.16 of Apify credit and takes up to a
+     minute. The token never leaves the Python process.
+  8. `credits` (ink) — the finale: the highlights as film end credits
      (`CreditsRoll`, role above name — "Starring @f1", "Running time 4h 57m",
      …, "Directed by @<name>", "The End") rolling up once.
-  8. `share` (theatre.8) — `ShareCard`: the highlights on a **story-shaped
+  9. `share` (theatre.8) — `ShareCard`: the highlights on a **story-shaped
      (9:16)** white card in a black frame (red text). **Save image**
      downloads it as a PNG (`html-to-image`, 3× pixel ratio); **Share** (the
      device share sheet, only where `navigator.share` exists) and **Copy
@@ -199,7 +229,8 @@ ever changes, recheck white text contrast (it must stay ≥ 4.5:1).
 scene's solid background, all from existing scales — top creators and share
 theatre.8 (13.9:1 with white), top hashtags theatre.6 (9.4:1), time on reels
 and credits ink (19.8:1), binge theatre.9 (16.9:1), loyalty theatre.7
-(12.0:1), club theatre.5 (7.0:1). Don't go lighter than theatre.5 behind
+(12.0:1), club theatre.5 (7.0:1), recommendations ("For you") theatre.6
+(9.4:1). Don't go lighter than theatre.5 behind
 white text. `peak` = gold `#F5C542` — **only for the one standout point in
 a chart**: the top bar of every `BarChart` (top creator, hashtag, binge,
 club; bar only, its number stays white since gold text is 4.3:1 on the

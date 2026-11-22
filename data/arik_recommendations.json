@@ -1,0 +1,362 @@
+{
+  "user": "arik",
+  "generated_at": "2026-11-22T00:20:05+00:00",
+  "based_on": {
+    "engaged_reels": 106,
+    "saved": 0,
+    "liked": 36,
+    "long_watched": 70,
+    "top_hashtags": [
+      {
+        "hashtag": "bwfworldtour",
+        "weight": 22.51
+      },
+      {
+        "hashtag": "kumamotomasters2026",
+        "weight": 15.02
+      },
+      {
+        "hashtag": "badmintonreels",
+        "weight": 8.47
+      },
+      {
+        "hashtag": "bwfreels",
+        "weight": 8.47
+      },
+      {
+        "hashtag": "minecraft",
+        "weight": 6.93
+      }
+    ],
+    "top_creators": [
+      {
+        "creator": "bwf.official",
+        "weight": 22.51
+      },
+      {
+        "creator": "wealth",
+        "weight": 6.0
+      },
+      {
+        "creator": "socalnation",
+        "weight": 5.49
+      }
+    ]
+  },
+  "apify": {
+    "reel_results": 60,
+    "from_cache": true
+  },
+  "reels": [
+    {
+      "shortcode": "DYoh5v-NOir",
+      "url": "https://www.instagram.com/p/DYoh5v-NOir/",
+      "creator": "bwf.official",
+      "creator_name": "Badminton World Federation",
+      "caption": "That’s what we want 🤩🔥 Give us more!\n\n#MalaysiaMasters2026 #BWFWorldTour #BadmintonReels #BWFreels",
+      "hashtags": [
+        "malaysiamasters2026",
+        "bwfworldtour",
+        "badmintonreels",
+        "bwfreels"
+      ],
+      "likes": 125421,
+      "views": 3217780,
+      "found_via": "#bwfreels",
+      "timestamp": "2026-05-22T08:08:22.000Z",
+      "score": 0.9611,
+      "similarity": 0.1542,
+      "why": "Shares #bwfworldtour, #badmintonreels, #bwfreels with reels you liked or watched"
+    },
+    {
+      "shortcode": "Dawj04SpgP1",
+      "url": "https://www.instagram.com/p/Dawj04SpgP1/",
+      "creator": "bwf.official",
+      "creator_name": "Badminton World Federation",
+      "caption": "RAWR!!! 💪💪\n\n#BWFWorldTour #JapanOpen2026 #BWFreels #BadmintonReels",
+      "hashtags": [
+        "bwfworldtour",
+        "japanopen2026",
+        "bwfreels",
+        "badmintonreels"
+      ],
+      "likes": 12475,
+      "views": 319213,
+      "found_via": "#bwfreels",
+      "timestamp": "2026-07-14T03:49:22.000Z",
+      "score": 0.9363,
+      "similarity": 0.1542,
+      "why": "Shares #bwfworldtour, #badmintonreels, #bwfreels with reels you liked or watched"
+    },
+    {
+      "shortcode": "DeCgalVu9bQ",
+      "url": "https://www.instagram.com/p/DeCgalVu9bQ/",
+      "creator": "ettrickmc",
+      "creator_name": "Ettrick",
+      "caption": "My dog got really serious 😭🥀\n#minecraft #minecraftmemes #minecraftshorts #minecraftreels #viral",
+      "hashtags": [
+        "minecraft",
+        "minecraftmemes",
+        "minecraftshorts",
+        "minecraftreels",
+        "viral"
+      ],
+      "likes": 831507,
+      "views": 10992278,
+      "found_via": "#minecraft",
+      "timestamp": "2026-10-03T16:38:59.000Z",
+      "score": 0.7622,
+      "similarity": 0.1133,
+      "why": "Shares #minecraft, #minecraftmemes with reels you liked or watched"
+    },
+    {
+      "shortcode": "C8Cf0pjBokE",
+      "url": "https://www.instagram.com/p/C8Cf0pjBokE/",
+      "creator": "sereyka12",
+      "creator_name": "Sereyka",
+      "caption": "Minecraft Best Automatic Stairs↗️#minecraft #minecraftbuilds #minecrafttutorial #minecraftbuildings",
+      "hashtags": [
+        "minecraft",
+        "minecraftbuilds",
+        "minecrafttutorial",
+        "minecraftbuildings"
+      ],
+      "likes": 5117565,
+      "views": 0,
+      "found_via": "#minecraft",
+      "timestamp": "2024-06-10T14:46:34.000Z",
+      "score": 0.5968,
+      "similarity": 0.083,
+      "why": "Shares #minecraft, #minecraftbuilds with reels you liked or watched"
+    },
+    {
+      "shortcode": "DfrF-8Vz62l",
+      "url": "https://www.instagram.com/p/DfrF-8Vz62l/",
+      "creator": "lekgor666",
+      "creator_name": "叻哥 LekGor",
+      "caption": "What a defense by Aaron Tai 🔥💪 #KumamotoMasters2026 #badmintonlovers #badminton",
+      "hashtags": [
+        "kumamotomasters2026",
+        "badmintonlovers",
+        "badminton"
+      ],
+      "likes": 1051,
+      "views": 33355,
+      "found_via": "#kumamotomasters2026",
+      "timestamp": "2026-11-13T07:30:20.000Z",
+      "score": 0.5821,
+      "similarity": 0.0906,
+      "why": "Shares #kumamotomasters2026 with reels you liked or watched"
+    },
+    {
+      "shortcode": "DTK6h0TDIYm",
+      "url": "https://www.instagram.com/p/DTK6h0TDIYm/",
+      "creator": "wz_smile",
+      "creator_name": "wz_smile",
+      "caption": "I seem to have been here before. #minecraft #mc",
+      "hashtags": [
+        "minecraft",
+        "mc"
+      ],
+      "likes": 2799662,
+      "views": 20224072,
+      "found_via": "#minecraft",
+      "timestamp": "2026-01-06T13:15:34.000Z",
+      "score": 0.5242,
+      "similarity": 0.0662,
+      "why": "Shares #minecraft with reels you liked or watched"
+    },
+    {
+      "shortcode": "DYzvJzGJoRq",
+      "url": "https://www.instagram.com/p/DYzvJzGJoRq/",
+      "creator": "veio_badminton",
+      "creator_name": "Taveio",
+      "caption": "More than just a sport 🏸\n.\n.\nBadminton is more than just hitting a shuttle. It’s about speed, control, discipline, and the mindset to keep going no matter how tough the rally gets. Every movement on court matters, the footwork, the reaction time, the smashes, the drops, and the pressure during every single point.\n\nWhat people see is the highlights.\nWhat they don’t see is the training, sweat, losses, and consistency behind it all. Every player knows the feeling of chasing impossible shots, playin",
+      "hashtags": [
+        "badminton",
+        "badmintonreels",
+        "badmintonlovers",
+        "sports",
+        "edits"
+      ],
+      "likes": 57739,
+      "views": 832051,
+      "found_via": "#badmintonreels",
+      "timestamp": "2026-05-26T16:32:24.000Z",
+      "score": 0.5219,
+      "similarity": 0.0724,
+      "why": "Shares #badmintonreels with reels you liked or watched"
+    },
+    {
+      "shortcode": "DfyUQ4pvjNi",
+      "url": "https://www.instagram.com/p/DfyUQ4pvjNi/",
+      "creator": "badmintonpb_com",
+      "creator_name": "Badminton PB",
+      "caption": "🏆🇯🇵 KUMAMOTO MASTERS JAPAN 2026 – FINAL RESULTS! 🏸🔥\n\nChampions crowned and unforgettable badminton action in Japan! 👏\n\nCongratulations to all the winners and runners-up! 🥇🥈\n\n📊 Check out all five category results. Which final was your favourite? 👇\n\nFollow @badmintonpb for more badminton updates! ❤️\n\n#KumamotoMasters2026 #Badminton #BWFWorldTour #BadmintonResults #BadmintonPB",
+      "hashtags": [
+        "kumamotomasters2026",
+        "badminton",
+        "bwfworldtour",
+        "badmintonresults",
+        "badmintonpb"
+      ],
+      "likes": 1,
+      "views": 0,
+      "found_via": "#kumamotomasters2026",
+      "timestamp": "2026-11-16T02:47:31.000Z",
+      "score": 0.5085,
+      "similarity": 0.0966,
+      "why": "Shares #bwfworldtour, #kumamotomasters2026 with reels you liked or watched"
+    },
+    {
+      "shortcode": "DTPNxu2E_Lv",
+      "url": "https://www.instagram.com/p/DTPNxu2E_Lv/",
+      "creator": "yozeshgamer",
+      "creator_name": "Yozesh",
+      "caption": "Why I Love 😘 This Game 🔥.\n\n#minecraft #tranding #gaming #shorts #yozesh",
+      "hashtags": [
+        "minecraft",
+        "tranding",
+        "gaming",
+        "shorts",
+        "yozesh"
+      ],
+      "likes": 69901,
+      "views": 0,
+      "found_via": "#minecraft",
+      "timestamp": "2026-01-08T05:21:33.000Z",
+      "score": 0.4563,
+      "similarity": 0.0648,
+      "why": "Shares #minecraft, #gaming with reels you liked or watched"
+    },
+    {
+      "shortcode": "DgAeG0ehFz8",
+      "url": "https://www.instagram.com/p/DgAeG0ehFz8/",
+      "creator": "subhajit.kabasi.5",
+      "creator_name": "Subhajit KabasiⓂ️",
+      "caption": "🏸🔥 HONG KONG OPEN 2026: MALAYSIA, CHINA & THAILAND SHINE! INDIA AND INDONESIA MISS OUT!\n\nThe semifinals of the LI-NING Hong Kong Open 2026 delivered spectacular badminton action across all five categories. 🇭🇰\n\n🇮🇳 INDIA'S CAMPAIGN ENDS\n\nLakshya Sen suffered a straight-games defeat against Denmark's Anders Antonsen (13-21, 13-21).\n\nIndia's men's doubles stars Satwiksairaj Rankireddy and Chirag Shetty also fell to Malaysia's Man Wei Chong and Tee Kai Wun (18-21, 19-21).\n\n🇮🇩 A DISAPPOINTING DAY FOR ",
+      "hashtags": [
+        "hongkongopen2026",
+        "badminton",
+        "bwfworldtour",
+        "indiabadminton",
+        "malaysiabadminton"
+      ],
+      "likes": 55,
+      "views": 29321,
+      "found_via": "#bwfworldtour",
+      "timestamp": "2026-11-21T14:43:40.000Z",
+      "score": 0.4365,
+      "similarity": 0.0628,
+      "why": "Shares #bwfworldtour, #hongkongopen2026 with reels you liked or watched"
+    },
+    {
+      "shortcode": "Dfz6KCGid_t",
+      "url": "https://www.instagram.com/p/Dfz6KCGid_t/",
+      "creator": "mistrycraft.yt",
+      "creator_name": "Mistry Craft",
+      "caption": "The Luckiest Bucket Clutch\n#minecraft #minecraftmemes #minecraftpe #shorts #minecraftedit",
+      "hashtags": [
+        "minecraft",
+        "minecraftmemes",
+        "minecraftpe",
+        "shorts",
+        "minecraftedit"
+      ],
+      "likes": 60987,
+      "views": 1002549,
+      "found_via": "#minecraft",
+      "timestamp": "2026-11-16T17:39:33.000Z",
+      "score": 0.4313,
+      "similarity": 0.0545,
+      "why": "Shares #minecraft, #minecraftmemes with reels you liked or watched"
+    },
+    {
+      "shortcode": "DSfZyJZjRHX",
+      "url": "https://www.instagram.com/p/DSfZyJZjRHX/",
+      "creator": "funnypets0901",
+      "creator_name": "Funny Pets",
+      "caption": "Minecraft edit #funnycats #minecraft #kittylove #fypviralシ゚ #catsofınstagram\nCredits: @upsde.dwn",
+      "hashtags": [
+        "funnycats",
+        "minecraft",
+        "kittylove",
+        "fypviralシ゚",
+        "catsofınstagram"
+      ],
+      "likes": 1670127,
+      "views": 9265440,
+      "found_via": "#minecraft",
+      "timestamp": "2025-12-20T15:42:02.000Z",
+      "score": 0.4113,
+      "similarity": 0.046,
+      "why": "Shares #minecraft with reels you liked or watched"
+    }
+  ],
+  "profiles": [
+    {
+      "username": "ettrickmc",
+      "full_name": "Ettrick",
+      "url": "https://www.instagram.com/ettrickmc/",
+      "matching_reels": 1,
+      "score": 0.7622,
+      "why": "Posts 1 reel matching your taste (#minecraft, #minecraftmemes, #minecraftreels)"
+    },
+    {
+      "username": "subhajit.kabasi.5",
+      "full_name": "Subhajit KabasiⓂ️",
+      "url": "https://www.instagram.com/subhajit.kabasi.5/",
+      "matching_reels": 2,
+      "score": 0.7449,
+      "why": "Posts 2 reels matching your taste (#hongkongopen2026, #bwfworldtour)"
+    },
+    {
+      "username": "hkbadmintonassn",
+      "full_name": "BAHKC",
+      "url": "https://www.instagram.com/hkbadmintonassn/",
+      "matching_reels": 2,
+      "score": 0.6305,
+      "why": "Posts 2 reels matching your taste (#bwfworldtour)"
+    },
+    {
+      "username": "sereyka12",
+      "full_name": "Sereyka",
+      "url": "https://www.instagram.com/sereyka12/",
+      "matching_reels": 1,
+      "score": 0.5968,
+      "why": "Posts 1 reel matching your taste (#minecraft, #minecraftbuilds, #minecrafttutorial)"
+    },
+    {
+      "username": "lekgor666",
+      "full_name": "叻哥 LekGor",
+      "url": "https://www.instagram.com/lekgor666/",
+      "matching_reels": 1,
+      "score": 0.5821,
+      "why": "Posts 1 reel matching your taste (#kumamotomasters2026)"
+    },
+    {
+      "username": "wz_smile",
+      "full_name": "wz_smile",
+      "url": "https://www.instagram.com/wz_smile/",
+      "matching_reels": 1,
+      "score": 0.5242,
+      "why": "Posts 1 reel matching your taste (#mc, #minecraft)"
+    },
+    {
+      "username": "veio_badminton",
+      "full_name": "Taveio",
+      "url": "https://www.instagram.com/veio_badminton/",
+      "matching_reels": 1,
+      "score": 0.5219,
+      "why": "Posts 1 reel matching your taste (#badmintonreels)"
+    },
+    {
+      "username": "badmintonpb_com",
+      "full_name": "Badminton PB",
+      "url": "https://www.instagram.com/badmintonpb_com/",
+      "matching_reels": 1,
+      "score": 0.5085,
+      "why": "Posts 1 reel matching your taste (#bwfworldtour, #kumamotomasters2026)"
+    }
+  ]
+}
