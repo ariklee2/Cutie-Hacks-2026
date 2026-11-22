@@ -1,12 +1,12 @@
-/* The first screen (below the header): plain page red with the film near the
-   top — a thin strip of red between it and the header — and the rest of the
-   screen red below it, so the next section starts just below the fold. */
+/* The first screen (below the header): plain page red with the film starting
+   right under the header — so the header's red strip is the only red above
+   the film, and the logo and Get Snapshot sit centered in it — and the rest
+   of the screen red below, so the next section starts just below the fold. */
 .stage {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   min-height: calc(100svh - var(--snapshot-header-height));
-  padding-top: var(--mantine-spacing-lg);
   padding-bottom: var(--snapshot-space-section);
 }
 
@@ -56,7 +56,7 @@
   flex-wrap: wrap;
   align-items: baseline;
   column-gap: var(--mantine-spacing-sm);
-  margin: var(--mantine-spacing-xl) 0 0;
+  margin: var(--mantine-spacing-sm) 0 0;
   padding-inline: var(--mantine-spacing-lg);
   color: var(--snapshot-color-text);
   font-weight: var(--snapshot-font-weight-bold);
