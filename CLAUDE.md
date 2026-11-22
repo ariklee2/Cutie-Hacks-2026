@@ -77,8 +77,19 @@ never with `fetch` inside components.
 - `/upload` — a **light page** (white background, black text) with the drop zone: the user adds
   `liked_posts.json`, `saved_posts.json` and `videos_watched.json` by dropping
   them on the screen or clicking it; each file's name under the screen turns green once it's in.
-  The browser first checks each file (`src/lib/instagramFiles.ts` identifies it
-  by name and checks it's a JSON list of entries with `timestamp`s). Under the
+  Each file is checked against the real export format
+  (`checkInstagramExport` in `src/lib/instagramFiles.ts`; the same function
+  runs in the browser and again in `POST /api/snapshot`, so nothing unusable
+  reaches `data/`): identified by name, then it must be a top-level JSON list
+  whose every entry has a numeric `timestamp` and `label_values` with a `URL`
+  (exactly what `filter/transform.py` reads — wrapped/other export formats are
+  rejected). `videos_watched` entries carry the ad field "Ad library public
+  URL" and liked/saved ones don't, so a swapped watched ↔ liked/saved file is
+  caught; liked vs saved are identical in content, so their names decide.
+  Rejected files get a plain reason ("liked_posts.json can't be used: it
+  contains videos or posts you viewed, not liked posts…"; "notes.json isn't
+  one of the files Insta Snapshot needs."), followed by "Still needed: …"
+  naming every file not yet added. Under the
   screen, a name field and **Create Snapshot** (enabled once all three are in
   and the name is valid) send them to `POST /api/snapshot`; the screen shows
   "Saving and processing…", then "Snapshot created" with the reel count from
@@ -218,7 +229,9 @@ whole `<body>` (so the shared header too) via `body:has([data-surface='light'])`
 to `lightBackground` = white with `lightText` = ink (19.8:1), re-pointing
 `--snapshot-color-text`, `-text-muted`, `-text-on-film`, `-background` and the
 hairline/placeholder borders. `lightAccent` = theatre red (13.9:1 on white) is
-for the drop zone's dashed border and the button outline. Components keep using
+for the drop zone's dashed border and the button outline. `lightError` =
+theatre.5 `#A82535` (7.0:1 on white) is only for error messages the user must
+act on (the upload page's wrong-file / still-needed lines). Components keep using
 the normal text variables; never hard-code light colors in a component.
 
 No gradients: the page background is a single solid color. Hard-edged stripe
