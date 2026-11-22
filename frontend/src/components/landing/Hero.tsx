@@ -10,7 +10,7 @@ import classes from './Hero.module.css';
  * fold. The film runs edge to edge sideways; the title sits on it, vertically
  * centered and left-aligned with the page content.
  */
-export function Hero({ title }: { title: string }) {
+export function Hero({ title, credit }: { title: string; credit: string }) {
   return (
     <section className={classes.stage}>
       <div className={classes.hero}>
@@ -21,6 +21,9 @@ export function Hero({ title }: { title: string }) {
           </Title>
         </Container>
       </div>
+      {/* Just under the film's bottom-left corner, mirroring Get Snapshot
+          above its top-right. */}
+      <p className={classes.credit}>{credit}</p>
     </section>
   );
 }

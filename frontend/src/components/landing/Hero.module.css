@@ -3,7 +3,8 @@
    screen red below it, so the next section starts just below the fold. */
 .stage {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  justify-content: flex-start;
   min-height: calc(100svh - var(--snapshot-header-height));
   padding-top: var(--mantine-spacing-lg);
   padding-bottom: var(--snapshot-space-section);
@@ -21,6 +22,10 @@
   width: 100%;
   min-height: clamp(22rem, 60vh, 38rem);
   padding-block: var(--snapshot-space-page);
+  /* Wider film frames here only (the snapshot scene wipes keep the default):
+     the FilmStrip inside reads these variables. */
+  --snapshot-film-frame-period: var(--snapshot-landing-film-frame-period);
+  --snapshot-film-frame-duration: var(--snapshot-landing-film-frame-duration);
 }
 
 .inner {
@@ -41,4 +46,12 @@
   line-height: var(--snapshot-line-height-display);
   letter-spacing: var(--snapshot-letter-spacing-display);
   font-weight: var(--snapshot-font-weight-semibold);
+}
+
+/* "Made by …": small, just under the film's bottom-left corner, the same
+   gutter from the window edge as Get Snapshot on the right. */
+.credit {
+  margin: var(--mantine-spacing-sm) 0 0;
+  padding-inline: var(--mantine-spacing-lg);
+  font-size: var(--mantine-font-size-sm);
 }

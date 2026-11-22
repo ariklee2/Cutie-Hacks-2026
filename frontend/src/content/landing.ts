@@ -16,9 +16,12 @@ export interface LandingSection {
 
 export const landingContent: {
   title: string;
+  /** Small line just under the film's bottom-left corner. */
+  credit: string;
   sections: LandingSection[];
 } = {
   title: 'Insta Snapshot',
+  credit: 'Made by Arik and Justin',
   sections: [
     {
       label: 'Description',

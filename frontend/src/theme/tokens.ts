@@ -179,6 +179,9 @@ export const motion = {
   easeIn: 'cubic-bezier(0.6, 0, 0.9, 0.3)', // the clapper stick snapping shut
   easeInOut: 'cubic-bezier(0.7, 0, 0.2, 1)', // the clapperboard lifting away
   filmFrameDuration: '3s', // time for the film to advance one frame
+  // Landing film: its frames are 1.2× wider, so 1.2× the time per frame keeps
+  // the same on-screen speed.
+  landingFilmFrameDuration: '3.6s',
   hoverDuration: '0.15s', // square buttons lighting up on hover
   hoverScale: '1.06', // ...and growing slightly
   sceneWipe: '0.55s', // film sweeping over the screen between snapshot scenes (each half)
@@ -196,6 +199,9 @@ export const motion = {
 export const film = {
   edge: '44px', // height of each sprocket edge
   framePeriod: '200px', // one frame + one gap; the loop shifts by this much
+  // The landing hero's film: wider frames (224px instead of 184px). Still a
+  // multiple of sprocketPeriod so the loop stays seamless.
+  landingFramePeriod: '240px',
   frameGap: '16px', // ink gap between frames
   frameInset: '8px', // ink margin between a frame and the sprocket edges
   sprocketPeriod: 40, // px between sprocket holes (5 per frame)

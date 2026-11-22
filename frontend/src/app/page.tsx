@@ -5,7 +5,7 @@ import { landingContent } from '@/content/landing';
 export default function HomePage() {
   return (
     <>
-      <Hero title={landingContent.title} />
+      <Hero title={landingContent.title} credit={landingContent.credit} />
       <AboutSection sections={landingContent.sections} />
     </>
   );
