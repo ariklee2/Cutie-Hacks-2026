@@ -1,0 +1,85 @@
+.page {
+  padding-top: var(--snapshot-space-section);
+  padding-bottom: var(--snapshot-space-page);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  line-height: var(--snapshot-line-height-display);
+  letter-spacing: var(--snapshot-letter-spacing-display);
+  font-weight: var(--snapshot-font-weight-semibold);
+}
+
+.subtitle {
+  margin: var(--mantine-spacing-md) 0 var(--snapshot-space-section);
+  font-size: var(--mantine-font-size-lg);
+}
+
+.message {
+  margin: 0;
+  font-size: var(--mantine-font-size-lg);
+}
+
+/* Previous / next links between snapshot pages, below a hairline. */
+.sequence {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: var(--mantine-spacing-lg);
+  margin-top: var(--snapshot-space-section);
+  padding-top: var(--mantine-spacing-lg);
+  border-top: var(--snapshot-border-hairline);
+}
+
+.sequenceLink {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: var(--snapshot-color-text);
+  text-decoration: none;
+  text-underline-offset: 0.25em;
+}
+
+.sequenceLink[data-direction='previous'] {
+  grid-column: 1;
+  justify-self: start;
+}
+
+.sequenceLink[data-direction='next'] {
+  grid-column: 3;
+  justify-self: end;
+  text-align: right;
+}
+
+.sequenceLink:hover .sequenceName {
+  text-decoration: underline;
+}
+
+.sequenceLink:focus-visible {
+  outline: 2px solid var(--snapshot-color-text);
+  outline-offset: 4px;
+  border-radius: var(--snapshot-radius);
+}
+
+.sequenceHint {
+  font-size: var(--mantine-font-size-sm);
+}
+
+.sequenceName {
+  font-size: var(--mantine-font-size-lg);
+  font-weight: var(--snapshot-font-weight-semibold);
+  letter-spacing: var(--snapshot-letter-spacing-heading);
+}
+
+/* "Use ← → …": centered between the links; hidden on narrow screens. */
+.keysHint {
+  grid-column: 2;
+  font-size: var(--mantine-font-size-sm);
+}
+
+@media (max-width: $mantine-breakpoint-sm) {
+  .keysHint {
+    display: none;
+  }
+}

@@ -1,28 +1,18 @@
-import { Container } from '@mantine/core';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { TopCreatorsChart } from '@/components/snapshot/TopCreatorsChart';
+import { BarChart } from '@/components/snapshot/BarChart';
+import { SnapshotMessage, SnapshotPage } from '@/components/snapshot/SnapshotPage';
 import { snapshotContent } from '@/content/snapshot';
 import { readSnapshot } from '@/lib/server/snapshotStore';
-import { isSectionError, type SnapshotData } from '@/lib/snapshotData';
-
-import classes from './page.module.css';
+import { isSectionError } from '@/lib/snapshotData';
+import { weekRange } from '@/lib/snapshotFormat';
 
 export const dynamic = 'force-dynamic'; // reads data/<name>_snapshot.json per request
 
 const copy = snapshotContent.topCreators;
 
 export const metadata: Metadata = { title: `${copy.title} · Insta Snapshot` };
-
-/** "Nov 14 – Nov 20" from the snapshot's per-day watch time, if available. */
-function weekRange(snapshot: SnapshotData): string | null {
-  const watch = snapshot.watch_time;
-  if (isSectionError(watch) || watch.per_day.length === 0) return null;
-  const fmt = (date: string) =>
-    new Date(`${date}T12:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
-  return `${fmt(watch.per_day[0].date)} – ${fmt(watch.per_day[watch.per_day.length - 1].date)}`;
-}
 
 /** First page of the snapshot sequence: top creators as a horizontal bar chart. */
 export default async function TopCreatorsPage({ params }: { params: Promise<{ name: string }> }) {
@@ -33,17 +23,25 @@ export default async function TopCreatorsPage({ params }: { params: Promise<{ na
   const creators = snapshot.top_creators;
 
   return (
-    <Container component="section" className={classes.page}>
-      <h1 className={classes.title}>{copy.title}</h1>
-      <p className={classes.subtitle}>{copy.subtitle(weekRange(snapshot))}</p>
-
+    <SnapshotPage name={name} step="top-creators" title={copy.title} subtitle={copy.subtitle(weekRange(snapshot))}>
       {isSectionError(creators) ? (
-        <p className={classes.message}>{copy.failed}</p>
+        <SnapshotMessage>{copy.failed}</SnapshotMessage>
       ) : creators.length === 0 ? (
-        <p className={classes.message}>{copy.empty}</p>
+        <SnapshotMessage>{copy.empty}</SnapshotMessage>
       ) : (
-        <TopCreatorsChart creators={creators} />
+        <BarChart
+          table={false}
+          label={copy.chartLabel}
+          columns={[copy.columnAccount, copy.columnReels]}
+          rows={creators.map((c) => ({
+            key: c.creator,
+            label: `@${c.creator}`,
+            value: c.reels,
+            valueText: c.reels.toLocaleString(),
+            detail: copy.reels(c.reels),
+          }))}
+        />
       )}
-    </Container>
+    </SnapshotPage>
   );
 }

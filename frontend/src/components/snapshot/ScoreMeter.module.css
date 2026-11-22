@@ -1,0 +1,70 @@
+/* Same mark spec as the bar charts: 24px bar, square at the baseline, 4px rounded end. */
+.meter {
+  --bar-thickness: 24px;
+  margin-bottom: var(--snapshot-space-section);
+}
+
+.track {
+  position: relative;
+  height: calc(var(--bar-thickness) + 2 * var(--mantine-spacing-sm));
+  display: flex;
+  align-items: center;
+  border-left: var(--snapshot-border-hairline);
+  border-right: var(--snapshot-border-hairline);
+}
+
+/* The 0–100 baseline under the bar. */
+.track::before {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto;
+  border-top: var(--snapshot-border-hairline);
+}
+
+.bar {
+  position: relative;
+  width: calc(var(--score) * 100%);
+  min-width: 2px;
+  height: var(--bar-thickness);
+  background: var(--snapshot-color-film-frame);
+  border-radius: 0 var(--snapshot-radius) var(--snapshot-radius) 0;
+  transform-origin: left center;
+  animation: grow 0.9s var(--snapshot-ease-out) 0.15s both;
+}
+
+/* Threshold: a full-height white rule. */
+.tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--threshold) * 100%);
+  border-left: 1px dashed var(--snapshot-color-text);
+}
+
+.scale {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--mantine-spacing-sm);
+  font-size: var(--mantine-font-size-sm);
+  font-weight: var(--snapshot-font-weight-semibold);
+}
+
+.thresholdText {
+  position: absolute;
+  left: calc(var(--threshold) * 100%);
+  transform: translateX(-50%);
+  font-weight: var(--snapshot-font-weight-medium);
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    animation: none;
+  }
+}

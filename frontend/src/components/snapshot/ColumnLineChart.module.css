@@ -1,0 +1,241 @@
+/*
+ * Vertical columns + a line over their tops (one series, one axis). Columns
+ * are white at 40% (the `border` token) so the solid white 2px line and its
+ * dots stay readable where they cross a column; dots get a 2px deep-red ring.
+ * Columns ≤ 24px wide, square at the baseline (1px hairline), 4px rounded top.
+ */
+.chart {
+  --plot-height: 18rem;
+  --column-width: 24px;
+  --dot-size: 10px;
+  margin: 0;
+}
+
+.plot {
+  position: relative;
+  height: var(--plot-height);
+  border-bottom: var(--snapshot-border-hairline);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The whole column slot (full height) is the hover / focus target. */
+.column {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-radius: var(--snapshot-radius);
+  cursor: default;
+}
+
+.column:focus-visible {
+  outline: 2px solid var(--snapshot-color-text);
+  outline-offset: 2px;
+}
+
+.bar {
+  width: var(--column-width);
+  height: calc(var(--h) * 100%);
+  min-height: 2px;
+  background: var(--snapshot-color-border);
+  border-radius: var(--snapshot-radius) var(--snapshot-radius) 0 0;
+  transform-origin: bottom center;
+  animation: grow 0.7s var(--snapshot-ease-out) calc(0.15s + var(--i) * 0.08s) both;
+}
+
+.column[data-active] .bar {
+  outline: 2px solid var(--snapshot-color-text);
+  outline-offset: 2px;
+}
+
+/* The line: drawn left to right once the columns are up. */
+.line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  animation: wipe 0.9s var(--snapshot-ease-out) calc(0.3s + var(--n) * 0.08s) both;
+}
+
+.line polyline {
+  fill: none;
+  stroke: var(--snapshot-color-text);
+  stroke-width: 2px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.dot {
+  position: absolute;
+  left: calc((var(--i) + 0.5) / var(--n) * 100%);
+  bottom: calc(var(--h) * 100%);
+  width: var(--dot-size);
+  height: var(--dot-size);
+  transform: translate(-50%, 50%);
+  background: var(--snapshot-color-text);
+  border: 2px solid var(--snapshot-color-background);
+  border-radius: 50%;
+  pointer-events: none;
+  box-sizing: content-box;
+  animation: appear 0.3s ease-out calc(0.3s + var(--n) * 0.08s + var(--i) / var(--n) * 0.9s) both;
+}
+
+.dot[data-active] {
+  --dot-size: 14px;
+}
+
+/* Value over the highlighted point (the busiest day). */
+.peak {
+  position: absolute;
+  bottom: calc(100% + var(--mantine-spacing-sm));
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: var(--mantine-font-size-lg);
+  font-weight: var(--snapshot-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Tooltip above the point: value first (strong), day second. */
+.tooltip {
+  position: absolute;
+  z-index: 1;
+  bottom: calc(100% + var(--mantine-spacing-sm));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  font-size: var(--mantine-font-size-sm);
+  white-space: nowrap;
+  color: var(--snapshot-color-text-on-film);
+  background: var(--snapshot-color-film-frame);
+  border-radius: var(--snapshot-radius);
+}
+
+.tooltip strong {
+  font-size: var(--mantine-font-size-md);
+}
+
+.axis {
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  margin: var(--mantine-spacing-sm) 0 0;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+
+.axis li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.axisLabel {
+  font-size: var(--mantine-font-size-md);
+  font-weight: var(--snapshot-font-weight-semibold);
+}
+
+.axisSublabel {
+  font-size: var(--mantine-font-size-xs);
+}
+
+.tableToggle {
+  margin-top: var(--mantine-spacing-xl);
+  padding: 0;
+  font: inherit;
+  font-size: var(--mantine-font-size-sm);
+  color: var(--snapshot-color-text);
+  background: none;
+  border: none;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  cursor: pointer;
+}
+
+.tableToggle:focus-visible {
+  outline: 2px solid var(--snapshot-color-text);
+  outline-offset: 4px;
+  border-radius: var(--snapshot-radius);
+}
+
+.table {
+  margin-top: var(--mantine-spacing-md);
+  border-collapse: collapse;
+  font-size: var(--mantine-font-size-md);
+}
+
+.table th,
+.table td {
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-lg) var(--mantine-spacing-xs) 0;
+  text-align: left;
+  border-bottom: var(--snapshot-border-hairline);
+}
+
+.table td:last-child,
+.table th:last-child {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@keyframes grow {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+/* The line is revealed left to right (a clip, so the stroke stays solid). */
+@keyframes wipe {
+  from {
+    clip-path: inset(-10% 100% -10% 0);
+  }
+  to {
+    clip-path: inset(-10% 0 -10% 0);
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar,
+  .line,
+  .dot {
+    animation: none;
+  }
+}
+
+/* Narrow screens: shorter plot, weekday only. */
+@media (max-width: $mantine-breakpoint-xs) {
+  .chart {
+    --plot-height: 14rem;
+    --column-width: 16px;
+  }
+
+  .axisSublabel {
+    display: none;
+  }
+}

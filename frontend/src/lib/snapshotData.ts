@@ -21,16 +21,20 @@ export interface SnapshotData {
   user: string;
   schema_version: 1;
   generated_at: string;
-  /** features/top_creators.py — watched reels per creator (3s+ views), top 5. */
+  /** features/top_creators.py — watched reels per creator (3s+ views), top 10. */
   top_creators: Section<{ creator: string; reels: number }[]>;
-  /** features/top_hashtags.py — watched reels per hashtag, top 5. */
+  /** features/top_hashtags.py — watched reels per hashtag, top 10. */
   top_hashtags: Section<{ hashtag: string; reels: number }[]>;
   /** features/reels_watched_duration.py — dates are local to `timezone`. */
   watch_time: Section<{
     timezone: string;
     total_hours: number;
-    per_day: { date: string; weekday: string; hours: number }[];
-    busiest_day: { date: string; weekday: string; hours: number } | null;
+    /** Reels scrolled through this week: one reel = one scroll, each counted once. Missing in older snapshots. */
+    total_reels?: number;
+    /** Thumb distance scrolled: one phone screen (`inches_per_reel`) per reel. Missing in older snapshots. */
+    scroll?: { inches_per_reel: number; inches: number; miles: number };
+    per_day: WatchDay[];
+    busiest_day: WatchDay | null;
   }>;
   /** features/binge_session.py — sessions of 2+ reels, ≤ 2 min apart, longest first. */
   binge_sessions: Section<{
@@ -61,6 +65,14 @@ export interface SnapshotData {
     by_source?: Record<string, number>;
   }>;
   failed_sections: string[];
+}
+
+export interface WatchDay {
+  date: string;
+  weekday: string;
+  hours: number;
+  /** Reels scrolled that day. Missing in older snapshots. */
+  reels?: number;
 }
 
 export interface BingeSession {

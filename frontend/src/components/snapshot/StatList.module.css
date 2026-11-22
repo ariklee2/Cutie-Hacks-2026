@@ -1,0 +1,32 @@
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0 var(--mantine-spacing-xl);
+  margin: 0 0 var(--snapshot-space-section);
+}
+
+/* Centered in its column; every value sits on the same line, whatever its label's length. */
+.row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--mantine-spacing-md) 0;
+  text-align: center;
+  border-top: var(--snapshot-border-hairline);
+}
+
+/* The label is the term (dt, first in the markup), but the value shows first. */
+.value {
+  order: -1;
+  margin: 0;
+  font-size: var(--mantine-font-size-xl);
+  font-weight: var(--snapshot-font-weight-semibold);
+  letter-spacing: var(--snapshot-letter-spacing-heading);
+  font-variant-numeric: tabular-nums;
+}
+
+.label {
+  margin: 0;
+  font-size: var(--mantine-font-size-sm);
+}
