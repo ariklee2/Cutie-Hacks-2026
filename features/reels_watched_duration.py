@@ -1,6 +1,4 @@
-"""
-
-Hours spent watching reels in the past week, in total and per day, and how
+"""Hours spent watching reels in the past week, in total and per day, and how
 many reels were scrolled through (one reel = one scroll).
 
 Usage:
@@ -11,7 +9,6 @@ From other code:
   total, per_day = watch_hours("justin")
   from features.reels_watched_duration import reels_scrolled
   count, per_day_count = reels_scrolled("justin")
-
 """
 
 import sys
@@ -33,16 +30,13 @@ INCHES_PER_MILE = 63_360
 
 
 def watch_hours(user="justin", tz=TIMEZONE):
-    """
-
-    Return (total_hours, per_day) for the reels watched in the past week.
+    """Return (total_hours, per_day) for the reels watched in the past week.
 
     per_day is a pandas Series of hours indexed by local date, oldest first,
     including days with no watching (0 hours). Each reel's estimated
     watch_seconds counts on the day it was watched. Reels with no estimate
     (the last one before a break in scrolling) add nothing, so these totals
     lean slightly low. The reels table only covers the videos_watched week.
-
     """
 
     df = load_reels(user)
@@ -56,9 +50,7 @@ def watch_hours(user="justin", tz=TIMEZONE):
 
 
 def reels_scrolled(user="justin", tz=TIMEZONE):
-    """
-
-    Return (total_reels, per_day) for the reels scrolled through in the past
+    """Return (total_reels, per_day) for the reels scrolled through in the past
     week. Every reel in the viewing history counts as one scroll, however long
     it was watched (unlike top creators, which only count 3s+ views). A reel
     seen more than once counts once (the reels table has one row per reel),
@@ -66,7 +58,6 @@ def reels_scrolled(user="justin", tz=TIMEZONE):
 
     per_day is a pandas Series of reel counts indexed by local date, oldest
     first, with the same days as watch_hours (days with none are 0).
-
     """
 
     df = load_reels(user)

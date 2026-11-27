@@ -202,7 +202,7 @@ export function UploadScreen() {
             return (
               <li key={spec.kind} data-added={added || undefined}>
                 {spec.fileName}
-                {added && <span className={classes.visuallyHidden}> {uploadContent.fileAdded}</span>}
+                {added && <span className="visually-hidden"> {uploadContent.fileAdded}</span>}
               </li>
             );
           })}

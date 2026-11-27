@@ -65,7 +65,7 @@ export function AppHeader() {
             data-variant="instagram"
           >
             {navigation.instagram.label} <span aria-hidden="true">↗</span>
-            <span className={classes.visuallyHidden}> ({navigation.instagram.newTab})</span>
+            <span className="visually-hidden"> ({navigation.instagram.newTab})</span>
           </a>
         )}
         {saved && (

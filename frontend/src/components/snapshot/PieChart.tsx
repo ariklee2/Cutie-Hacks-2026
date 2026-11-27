@@ -2,8 +2,7 @@
 
 import { useId, useState, type CSSProperties } from 'react';
 
-import { snapshotContent } from '@/content/snapshot';
-
+import { ChartTable } from './ChartTable';
 import classes from './PieChart.module.css';
 
 export interface PieChartSlice {
@@ -66,7 +65,6 @@ export function PieChart({
 }) {
   const id = useId();
   const [active, setActive] = useState<number | null>(null);
-  const [showTable, setShowTable] = useState(false);
 
   const total = slices.reduce((sum, s) => sum + s.value, 0) || 1;
   const max = Math.max(...slices.map((s) => s.value));
@@ -91,7 +89,7 @@ export function PieChart({
 
   return (
     <figure className={classes.chart} aria-labelledby={`${id}-label`}>
-      <figcaption id={`${id}-label`} className={classes.visuallyHidden}>
+      <figcaption id={`${id}-label`} className="visually-hidden">
         {label}
       </figcaption>
 
@@ -160,35 +158,11 @@ export function PieChart({
         </ol>
       </div>
 
-      <button
-        type="button"
-        className={classes.tableToggle}
-        aria-expanded={showTable}
-        aria-controls={`${id}-table`}
-        onClick={() => setShowTable((v) => !v)}
-      >
-        {showTable ? snapshotContent.chart.hideTable : snapshotContent.chart.showTable}
-      </button>
-
-      {showTable && (
-        <table id={`${id}-table`} className={classes.table}>
-          <caption className={classes.visuallyHidden}>{label}</caption>
-          <thead>
-            <tr>
-              <th scope="col">{columns[0]}</th>
-              <th scope="col">{columns[1]}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {slices.map((s) => (
-              <tr key={s.key}>
-                <td>{s.label}</td>
-                <td>{s.valueText}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      <ChartTable
+        label={label}
+        columns={columns}
+        rows={slices.map((s) => ({ key: s.key, label: s.label, value: s.valueText }))}
+      />
     </figure>
   );
 }

@@ -17,12 +17,15 @@ clubs).
   in the user's table with Apify's `instagram-scraper` (direct reel URLs,
   ≈ $0.0026 each, batches of 60) and caches the raw items by shortcode in
   `data/<user>_apify_media.json` (gitignored), so no reel is bought twice.
-  Kept per reel: **image objects** parsed from Instagram's own alt text ("May
+  Used per reel: **image objects** parsed from Instagram's own alt text ("May
   be an image of tennis, racket and stadium" → `["tennis", "racket",
-  "stadium"]`, `visual_objects(user)`), plus song/artist and comments, which
-  are cached but **not used**: in testing, song titles tripped the club
-  keywords ("Hurricane" → News) and comments' emoji pushed reels to Brainrot.
-  `features/clubs.py` scores image objects like caption words
+  "stadium"]`, `visual_objects(user)`). The raw items also hold song/artist
+  and comments, which stay **unused**: in testing, song titles tripped the
+  club keywords ("Hurricane" → News) and comments' emoji pushed reels to
+  Brainrot.
+  `features/clubs.py` (whose `WORDS` lists only keywords not already
+  matched by a `STEMS` entry of the same club — a stem matches inside any
+  word) scores image objects like caption words
   (`IMAGE_WEIGHT` 1, `where: "image"`) and adds them to the model's text;
   with no cache they're simply absent. On the test snapshot: unclassified
   reels 58 → 49, top club News → Sporty (the feed is mostly badminton). The
@@ -561,7 +564,10 @@ card arriving); the landing and upload pages otherwise stay still.
   `prefers-reduced-motion`. The whole row is the hover/focus target: the bar
   gets a white outline and a white tooltip at its tip (value first, then the
   row's label). Every chart has a "View as table" toggle with the same numbers, except
-  top creators and top hashtags (`table={false}`).
+  top creators and top hashtags (`table={false}`). Shared chart pieces: the
+  toggle and two-column table are one component, `ChartTable`, and the white
+  tooltip box is `.tooltip` in `snapshot/chartStyles.module.css`, which each
+  chart composes and positions itself.
 - **Pie chart** (`PieChart`, the club scene only — a part-of-a-whole):
   slices clockwise from 12 o'clock, all white with a 2px gap in the scene
   color, the largest gold (`peak`). Identity never rests on color: slices
@@ -579,6 +585,13 @@ card arriving); the landing and upload pages otherwise stay still.
   the line is wiped in left to right (a clip, not a dash animation, which
   breaks with `vector-effect: non-scaling-stroke`); off under
   `prefers-reduced-motion`.
+- **Ticket shape, one place:** `cinema/ticketStyles.module.css` holds
+  `.notched` (the half-circle notch mask, size `--notch`) and `.ticketButton`
+  (a small ticket link/button: poster type, notches, tilt, straighten-and-grow
+  on hover/focus, underline on keyboard focus). The header links, Create
+  Snapshot and Try again `composes: ticketButton` and set only
+  `--ticket-bg`, `--ticket-fg` and `--ticket-tilt`; `Ticket` composes
+  `.notched`. Never copy the mask into another file.
 - **Header tickets** (`AppHeader`): the header links are small cinema
   tickets in poster type (`md`, uppercase), half-circle notches cut into
   both ends, slightly tilted: **Get Snapshot** gold with ink text (12.2:1,
@@ -629,5 +642,21 @@ card arriving); the landing and upload pages otherwise stay still.
   - on the snapshot scenes (`/snapshot/…`): **Go Home** → `/`, a paper
     ticket in the window's top-left corner; the scenes have their own Back /
     Next for moving between scenes.
-- Visually hidden text (for screen readers) uses a local `.visuallyHidden`
-  class: absolutely positioned, 1px, clipped.
+- Visually hidden text (for screen readers) uses the one global
+  `visually-hidden` class in `app/globals.css` (absolutely positioned, 1px,
+  clipped): `className="visually-hidden"`. Don't redefine it in a module.
+- Python scripts are run from the server only through `runPython` /
+  `pythonFailure` in `lib/server/python.ts` (interpreter from
+  `SNAPSHOT_PYTHON`, cwd = repo root).
+
+### Comment style (every file)
+
+- **TypeScript / TSX:** `/** … */` doc comments on files and exported
+  things — one line, or multi-line with ` * ` at the start of every line;
+  `//` (with a space) for inline notes; `{/* … */}` inside JSX only; section
+  banners as `// --- Name ---`. No plain `/* … */` blocks.
+- **CSS:** `/* One line. */`, or multi-line as `/*`, then ` * ` lines, then
+  ` */`.
+- **Python:** module, function and class docstrings with the summary on the
+  opening `"""` line (PEP 257), no blank padding lines at the start or end;
+  `# ` comments; section headers `# --- Name ---`.

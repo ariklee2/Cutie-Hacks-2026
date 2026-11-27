@@ -180,7 +180,7 @@ export function ShareCard({ data }: { data: ShareCardData }) {
           </button>
         ))}
       </div>
-      <p className={classes.visuallyHidden} aria-live="polite">
+      <p className="visually-hidden" aria-live="polite">
         {copy.schemeOf(copy.schemes[scheme], active + 1, n)}
       </p>
 

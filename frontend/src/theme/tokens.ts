@@ -6,8 +6,8 @@
  */
 import type { MantineColorsTuple } from '@mantine/core';
 
-/* ---------------------------------------------------------------- Color --
- * A cinema palette:
+// --- Color ---
+/** * A cinema palette:
  *   theatre — deep red: the solid page background, and red text on white
  *   paper   — pure white: all text on the page, the film's frames
  *   ink     — deep black: the film's edges and the clapperboard
@@ -91,7 +91,7 @@ export const color = {
   vignette: 'rgb(0 0 0 / 0.45)',
 } as const;
 
-/*
+/**
  * Share card color schemes (the carousel on the share scene). Each: card
  * background, text, the picture inside the film frame and its title, and the
  * year. Contrast — text on card / title on picture / year on card:
@@ -112,7 +112,7 @@ export const shareSchemes = {
 
 export type ShareScheme = keyof typeof shareSchemes;
 
-/*
+/**
  * Snapshot scenes: each page of /snapshot/<name>/… has its own solid
  * background, so moving between them feels like a new scene. All from the
  * theatre and ink scales; white text on each (contrast): theatre.8 13.9:1,
@@ -131,8 +131,8 @@ export const scene = {
   share: theatre[8],
 } as const;
 
-/* ----------------------------------------------------------- Typography --
- * One family: Instrument Sans (loaded in app/fonts.ts). Hierarchy comes from
+// --- Typography ---
+/** * One family: Instrument Sans (loaded in app/fonts.ts). Hierarchy comes from
  * size and weight, never from a second typeface.
  */
 export const fontFamily = 'var(--font-instrument-sans), system-ui, sans-serif';
@@ -172,8 +172,8 @@ export const letterSpacing = {
   body: '0',
 } as const;
 
-/* -------------------------------------------------------------- Spacing --
- * 4px base. Component spacing uses xs–xl; page rhythm uses the layout steps.
+// --- Spacing ---
+/** * 4px base. Component spacing uses xs–xl; page rhythm uses the layout steps.
  */
 export const spacing = {
   xs: '0.25rem', // 4
@@ -191,8 +191,8 @@ export const layout = {
   sectionEdge: '1.75rem', // 28 — height of the shadow at the top of a landing section
 } as const;
 
-/* --------------------------------------------------------------- Radius --
- * One radius for everything that has corners: 4px. Full-bleed layout
+// --- Radius ---
+/** * One radius for everything that has corners: 4px. Full-bleed layout
  * regions and dividers are square (0). No pills, no large rounded cards.
  */
 export const radius = {
@@ -200,16 +200,16 @@ export const radius = {
   none: '0',
 } as const;
 
-/* ---------------------------------------------------------------- Lines --
- * Structure comes from 1px rules, not shadows. Shadows are disabled.
+// --- Lines ---
+/** * Structure comes from 1px rules, not shadows. Shadows are disabled.
  */
 export const border = {
   hairline: `1px solid ${color.border}`,
   placeholder: `1px dashed ${color.borderStrong}`,
 } as const;
 
-/* --------------------------------------------------------------- Motion --
- * Motion: the film strip, scene transitions and entrances, cinema pieces. All of it is disabled under
+// --- Motion ---
+/** * Motion: the film strip, scene transitions and entrances, cinema pieces. All of it is disabled under
  * prefers-reduced-motion.
  */
 export const motion = {
@@ -231,8 +231,8 @@ export const motion = {
   flicker: '0.24s', // projector light flickering (one cycle, stepped)
 } as const;
 
-/* ----------------------------------------------------------------- Film --
- * The film running behind the hero: ink edges with paper sprocket holes,
+// --- Film ---
+/** * The film running behind the hero: ink edges with paper sprocket holes,
  * paper frames separated by ink gaps. Fixed pixel geometry; the film is as
  * tall as the hero, so frames stretch vertically (like a reel's portrait
  * frames). framePeriod must be a multiple of sprocketPeriod so the loop is

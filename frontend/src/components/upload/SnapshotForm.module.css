@@ -1,5 +1,7 @@
-/* One row under the screen, flush with its left and right edges:
-   [file names] ...................................... [name] [Create Snapshot] */
+/*
+ * One row under the screen, flush with its left and right edges:
+ * [file names] ...................................... [name] [Create Snapshot]
+ */
 .toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -15,8 +17,10 @@
   gap: var(--mantine-spacing-sm);
 }
 
-/* Name field then the ticket, pinned to the screen's right edge (also when
-   the toolbar wraps on narrow screens), centered on each other. */
+/*
+ * Name field then the ticket, pinned to the screen's right edge (also when
+ * the toolbar wraps on narrow screens), centered on each other.
+ */
 .right {
   display: flex;
   align-items: center;
@@ -24,8 +28,10 @@
   margin-left: auto;
 }
 
-/* Same size as the .json pills beside it (padding, text, 1px border);
-   outlined in the text color (black on the light upload page). */
+/*
+ * Same size as the .json pills beside it (padding, text, 1px border);
+ * outlined in the text color (black on the light upload page).
+ */
 .input {
   width: 8rem;
   padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
@@ -52,65 +58,19 @@
 }
 
 /*
- * Create Snapshot: a cinema ticket like the header's — poster type,
- * half-circle notches cut into both ends, a slight tilt. Dark red with white
- * text (13.9:1) once it can be used; light gray with ink text (13.6:1)
- * while it's waiting for the files and a name. Hover / focus (when enabled):
- * it straightens and grows slightly; keyboard focus also underlines the
- * label (the notch mask would clip an outline).
+ * Create Snapshot: a ticket like the header's (shared shape:
+ * cinema/ticketStyles.module.css). Dark red with white text (13.9:1) once it
+ * can be used; light gray with ink text (13.6:1) while it waits for the
+ * files and a name.
  */
 .submit {
-  --notch: 5px;
-  padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
-  font-family: var(--snapshot-font-display);
-  font-size: var(--mantine-font-size-md);
-  line-height: 1.2;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: var(--snapshot-color-light-background);
-  background: var(--snapshot-color-light-accent);
-  border: none;
-  border-radius: 0;
-  cursor: pointer;
-  transform: rotate(-2deg);
-  -webkit-mask:
-    radial-gradient(circle at 0 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) left / 51% 100% no-repeat,
-    radial-gradient(circle at 100% 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) right / 51% 100% no-repeat;
-  mask:
-    radial-gradient(circle at 0 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) left / 51% 100% no-repeat,
-    radial-gradient(circle at 100% 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) right / 51% 100% no-repeat;
-  transition: transform var(--snapshot-hover-duration) var(--snapshot-ease-out);
-}
-
-.submit:enabled:hover,
-.submit:enabled:focus-visible {
-  transform: rotate(0deg) scale(var(--snapshot-hover-scale));
-}
-
-.submit:focus-visible {
-  outline: none;
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
+  composes: ticketButton from '../cinema/ticketStyles.module.css';
+  --ticket-bg: var(--snapshot-color-light-accent);
+  --ticket-fg: var(--snapshot-color-light-background);
 }
 
 .submit:disabled {
+  --ticket-bg: var(--mantine-color-ink-1);
+  --ticket-fg: var(--snapshot-color-ink);
   cursor: not-allowed;
-  color: var(--snapshot-color-ink);
-  background: var(--mantine-color-ink-1);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .submit {
-    transition: none;
-  }
-}
-
-.visuallyHidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
 }

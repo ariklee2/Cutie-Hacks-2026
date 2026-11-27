@@ -7,84 +7,37 @@
   height: var(--snapshot-header-height);
 }
 
-/* Landing: "Go to Instagram" alone in the top-left corner (the other links stay right). */
-.link[data-variant='instagram'] {
-  margin-right: auto;
-  background: var(--snapshot-color-film-frame);
-  transform: rotate(1.5deg);
-}
-
-.visuallyHidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-
 .inner[data-align='start'] {
   justify-content: flex-start;
 }
 
 /*
- * Header links as small cinema tickets: poster type, half-circle notches cut
- * into both ends, a slight tilt. Hover / focus: they straighten and grow.
+ * Header links as small tickets (shared shape: cinema/ticketStyles.module.css).
  *   - primary (Get Snapshot): gold, ink text (12.2:1)
- *   - secondary (View @name's snapshot): paper, ink text (19.8:1)
+ *   - secondary (View @name's snapshot): paper, ink text (19.8:1), +1.5deg
+ *   - instagram (Go to Instagram): paper, ink text, +1.5deg, top left
+ *   - home (Go Home, on the scenes): paper, ink text
  *   - back (Go Back, on the white upload page): ink, paper text (19.8:1)
  */
 .link {
-  --notch: 5px;
-  display: inline-block;
-  padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
-  font-family: var(--snapshot-font-display);
-  font-size: var(--mantine-font-size-md);
-  line-height: 1.2;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  text-decoration: none;
-  white-space: nowrap;
-  color: var(--snapshot-color-ink);
-  background: var(--snapshot-color-marquee);
-  transform: rotate(-2deg);
-  -webkit-mask:
-    radial-gradient(circle at 0 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) left / 51% 100% no-repeat,
-    radial-gradient(circle at 100% 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) right / 51% 100% no-repeat;
-  mask:
-    radial-gradient(circle at 0 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) left / 51% 100% no-repeat,
-    radial-gradient(circle at 100% 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) right / 51% 100% no-repeat;
-  transition: transform var(--snapshot-hover-duration) var(--snapshot-ease-out);
+  composes: ticketButton from '../cinema/ticketStyles.module.css';
 }
 
-.link[data-variant='secondary'] {
-  background: var(--snapshot-color-film-frame);
-  transform: rotate(1.5deg);
+.link[data-variant='secondary'],
+.link[data-variant='instagram'] {
+  --ticket-bg: var(--snapshot-color-film-frame);
+  --ticket-tilt: 1.5deg;
+}
+
+.link[data-variant='instagram'] {
+  margin-right: auto;
 }
 
 .link[data-variant='home'] {
-  background: var(--snapshot-color-film-frame);
+  --ticket-bg: var(--snapshot-color-film-frame);
 }
 
 .link[data-variant='back'] {
-  color: var(--snapshot-color-film-frame);
-  background: var(--snapshot-color-ink);
-}
-
-.link:hover,
-.link:focus-visible {
-  transform: rotate(0deg) scale(var(--snapshot-hover-scale));
-}
-
-/* The mask would clip an outline, so focus shows as an underline instead. */
-.link:focus-visible {
-  outline: none;
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .link {
-    transition: none;
-  }
+  --ticket-fg: var(--snapshot-color-film-frame);
+  --ticket-bg: var(--snapshot-color-ink);
 }

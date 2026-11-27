@@ -9,14 +9,10 @@
  * same set), and each run takes one of the day's allowance in production
  * (deployPolicy.ts). The Apify token stays in the Python process.
  */
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
-
 import { recommendationsEnabled, takeRecommendationRun } from './deployPolicy';
-import { REPO_ROOT, readRecommendations } from './snapshotStore';
+import { pythonFailure, runPython } from './python';
+import { readRecommendations } from './snapshotStore';
 
-const run = promisify(execFile);
-const PYTHON = process.env.SNAPSHOT_PYTHON ?? 'python3';
 const TIMEOUT_MS = 5 * 60 * 1000;
 
 const store = globalThis as typeof globalThis & { __snapshotRecommendationRuns?: Set<string> };
@@ -41,11 +37,9 @@ export async function runRecommendations(name: string): Promise<RecommendationOu
     if (!(await takeRecommendationRun())) {
       return { ok: false, status: 429, error: 'Today’s recommendations are all used up. Try again tomorrow.' };
     }
-    await run(PYTHON, ['features/recommender.py', name], { cwd: REPO_ROOT, timeout: TIMEOUT_MS });
+    await runPython('features/recommender.py', [name], TIMEOUT_MS);
   } catch (error) {
-    const err = error as { stdout?: string; stderr?: string; message: string };
-    // recommender.py exits with a one-line reason (no token is ever printed).
-    const reason = (err.stderr || err.stdout || '').trim().split('\n').pop() || err.message;
+    const reason = pythonFailure(error);
     console.error('[recommendations] failed:', reason);
     return { ok: false, status: 500, error: `Couldn't find recommendations: ${reason}` };
   } finally {

@@ -27,25 +27,20 @@
  * uploads and the CSV copy are deleted — only the parquet table (needed for
  * recommendations) and the snapshot stay.
  */
-import { execFile } from 'node:child_process';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { promisify } from 'node:util';
 
 import { INSTAGRAM_FILES, checkInstagramExport } from '@/lib/instagramFiles';
 import { MAX_UPLOAD_BYTES, allowSnapshotOverwrite, keepUploads } from '@/lib/server/deployPolicy';
 import { startImageSignalsInBackground } from '@/lib/server/imageSignals';
 import { startRecommendationsInBackground } from '@/lib/server/recommendations';
-import { DATA_DIR, REPO_ROOT, readSnapshot } from '@/lib/server/snapshotStore';
+import { pythonFailure, runPython } from '@/lib/server/python';
+import { DATA_DIR, readSnapshot } from '@/lib/server/snapshotStore';
 import { isValidSnapshotName, normaliseSnapshotName } from '@/lib/snapshotName';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const run = promisify(execFile);
-
-/** Python with pandas + pyarrow installed. */
-const PYTHON = process.env.SNAPSHOT_PYTHON ?? 'python3';
 const TRANSFORM_TIMEOUT_MS = 5 * 60 * 1000;
 
 const fail = (status: number, error: string) => Response.json({ error }, { status });
@@ -107,16 +102,14 @@ export async function POST(request: Request) {
     return fail(500, 'Could not save the files to data/.');
   }
 
-  const python = (script: string) =>
-    run(PYTHON, [script, name], { cwd: REPO_ROOT, timeout: TRANSFORM_TIMEOUT_MS, maxBuffer: 10 * 1024 * 1024 });
+  const python = (script: string) => runPython(script, [name], TRANSFORM_TIMEOUT_MS);
 
   // 1. One row per reel.
   let transformLog: string;
   try {
-    transformLog = (await python('filter/transform.py')).stdout.trim();
+    transformLog = (await python('filter/transform.py')).trim();
   } catch (error) {
-    const err = error as { stderr?: string; message: string };
-    console.error('[snapshot] transform failed', err.stderr ?? err.message);
+    console.error('[snapshot] transform failed:', pythonFailure(error));
     return fail(500, 'The files were saved, but the transform failed. See the server log.');
   }
   // transform.py ends with: "wrote <N> reels to <name>_reels.parquet and <name>_reels.csv ..."
@@ -130,8 +123,7 @@ export async function POST(request: Request) {
     if (!snapshot) throw new Error(`data/${name}_snapshot.json was not written`);
     failedSections = snapshot.failed_sections ?? [];
   } catch (error) {
-    const err = error as { stderr?: string; message: string };
-    console.error('[snapshot] features failed', err.stderr ?? err.message);
+    console.error('[snapshot] features failed:', pythonFailure(error));
     return fail(500, 'The files were saved and transformed, but running the features failed. See the server log.');
   }
 

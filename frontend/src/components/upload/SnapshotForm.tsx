@@ -39,7 +39,7 @@ export function SnapshotForm({ name, onNameChange, ready, submitting, onSubmit, 
     <form className={classes.toolbar} onSubmit={submit}>
       <div className={classes.left}>{children}</div>
       <div className={classes.right}>
-        <label htmlFor={`${id}-name`} className={classes.visuallyHidden}>
+        <label htmlFor={`${id}-name`} className="visually-hidden">
           {form.nameLabel}
         </label>
         <input

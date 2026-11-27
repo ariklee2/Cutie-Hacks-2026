@@ -34,8 +34,10 @@
   perspective: 1600px;
 }
 
-/* Each card's place: front and center at offset 0; the others step out to
-   the sides, turned away, further back and dimmer the further they are. */
+/*
+ * Each card's place: front and center at offset 0; the others step out to
+ * the sides, turned away, further back and dimmer the further they are.
+ */
 .slot {
   position: absolute;
   top: 0;
@@ -202,8 +204,10 @@
   color: var(--card-year);
 }
 
-/* A film frame where a cover image would go: ink with sprocket holes along
-   its top and bottom, a red picture inside. */
+/*
+ * A film frame where a cover image would go: ink with sprocket holes along
+ * its top and bottom, a red picture inside.
+ */
 .frame {
   position: absolute;
   top: 10%;
@@ -457,13 +461,4 @@
   .countdown {
     animation: none;
   }
-}
-
-.visuallyHidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
 }

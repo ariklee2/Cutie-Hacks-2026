@@ -2,8 +2,7 @@
 
 import { useId, useState, type CSSProperties } from 'react';
 
-import { snapshotContent } from '@/content/snapshot';
-
+import { ChartTable } from './ChartTable';
 import classes from './BarChart.module.css';
 
 export interface BarChartRow {
@@ -46,12 +45,11 @@ export function BarChart({
 }) {
   const id = useId();
   const [active, setActive] = useState<number | null>(null);
-  const [showTable, setShowTable] = useState(false);
   const max = Math.max(...rows.map((r) => r.value), Number.MIN_VALUE);
 
   return (
     <figure className={classes.chart} data-ranked={ranked || undefined} aria-labelledby={`${id}-label`}>
-      <figcaption id={`${id}-label`} className={classes.visuallyHidden}>
+      <figcaption id={`${id}-label`} className="visually-hidden">
         {label}
       </figcaption>
 
@@ -93,35 +91,11 @@ export function BarChart({
       </ol>
 
       {table && (
-        <button
-          type="button"
-          className={classes.tableToggle}
-          aria-expanded={showTable}
-          aria-controls={`${id}-table`}
-          onClick={() => setShowTable((v) => !v)}
-        >
-          {showTable ? snapshotContent.chart.hideTable : snapshotContent.chart.showTable}
-        </button>
-      )}
-
-      {table && showTable && (
-        <table id={`${id}-table`} className={classes.table}>
-          <caption className={classes.visuallyHidden}>{label}</caption>
-          <thead>
-            <tr>
-              <th scope="col">{columns[0]}</th>
-              <th scope="col">{columns[1]}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.key}>
-                <td>{r.label}</td>
-                <td>{r.valueText}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ChartTable
+          label={label}
+          columns={columns}
+          rows={rows.map((r) => ({ key: r.key, label: r.label, value: r.valueText }))}
+        />
       )}
     </figure>
   );

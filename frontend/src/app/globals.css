@@ -1,8 +1,12 @@
-/* Global rules only. Component styles live in CSS modules next to components
-   and use the --mantine-* / --snapshot-* variables from the theme. */
+/*
+ * Global rules only. Component styles live in CSS modules next to components
+ * and use the --mantine-* / --snapshot-* variables from the theme.
+ */
 
-/* The page background is a solid deep red: Mantine paints the body with the
-   theme's `white`, which is set to color.background (#5C0A14). */
+/*
+ * The page background is a solid deep red: Mantine paints the body with the
+ * theme's `white`, which is set to color.background (#5C0A14).
+ */
 
 /*
  * "Light" pages (white background, black text): a page opts in by putting
@@ -51,4 +55,14 @@ body:has([data-scene='share']) { --snapshot-color-background: var(--snapshot-sce
   body:has([data-scene]) {
     transition: none;
   }
+}
+
+/* Text for screen readers only: off screen visually, still read aloud. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }

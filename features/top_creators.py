@@ -1,6 +1,4 @@
-"""
-
-Top creators by number of reels watched.
+"""Top creators by number of reels watched.
 
 Usage:
   python3 features/top_creators.py [user]     (default: justin)
@@ -8,7 +6,6 @@ Usage:
 From other code:
   from features.top_creators import top_creators
   top_creators("justin")  # -> [("username", 12), ...]
-
 """
 
 import sys
@@ -23,9 +20,7 @@ MIN_WATCH_SECONDS = 3
 
 
 def top_creators(user="arik", n=5, min_seconds=MIN_WATCH_SECONDS):
-    """
-
-    Return the n creators with the most watched reels, most first.
+    """Return the n creators with the most watched reels, most first.
 
     Each item is (creator username, reels watched). The table has one row per
     reel, so this counts distinct reels; ties are ordered arbitrarily.
@@ -33,7 +28,6 @@ def top_creators(user="arik", n=5, min_seconds=MIN_WATCH_SECONDS):
     Reels with an estimated watch time under min_seconds are skipped. Reels
     with no estimate (the last one before a break in scrolling) are kept, since
     how long they were watched is unknown.
-    
     """
 
     df = load_reels(user)

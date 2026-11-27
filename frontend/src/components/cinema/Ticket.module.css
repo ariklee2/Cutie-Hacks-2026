@@ -1,8 +1,10 @@
 /*
- * Ticket paper with notches: a radial-gradient mask cuts a half circle out
- * of the top and bottom edge where the stub meets the main part.
+ * Ticket paper. Without a stub: notches in the middle of both ends (shared:
+ * cinema/ticketStyles.module.css). With a stub: notches top and bottom where
+ * the stub meets the main part.
  */
 .ticket {
+  composes: notched from './ticketStyles.module.css';
   --notch: 10px;
   --stub-width: 3.25rem;
   position: relative;
@@ -10,13 +12,6 @@
   color: var(--snapshot-color-ink);
   background: var(--snapshot-color-film-frame);
   transform: rotate(var(--tilt, 0deg));
-  /* No stub: half-circle notches in the middle of the left and right ends. */
-  -webkit-mask:
-    radial-gradient(circle at 0 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) left / 51% 100% no-repeat,
-    radial-gradient(circle at 100% 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) right / 51% 100% no-repeat;
-  mask:
-    radial-gradient(circle at 0 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) left / 51% 100% no-repeat,
-    radial-gradient(circle at 100% 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) right / 51% 100% no-repeat;
 }
 
 /* With a stub: notches top and bottom where the stub meets the main part. */

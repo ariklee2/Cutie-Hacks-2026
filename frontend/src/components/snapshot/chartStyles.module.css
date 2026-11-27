@@ -1,0 +1,21 @@
+/* Shared chart pieces, composed by BarChart, PieChart and ColumnLineChart. */
+
+/* The white tooltip box: value first (strong), label second. Each chart places it. */
+.tooltip {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  font-size: var(--mantine-font-size-sm);
+  white-space: nowrap;
+  color: var(--snapshot-color-text-on-film);
+  background: var(--snapshot-color-film-frame);
+  border-radius: var(--snapshot-radius);
+  pointer-events: none;
+}
+
+.tooltip strong {
+  font-size: var(--mantine-font-size-md);
+}

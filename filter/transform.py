@@ -1,5 +1,4 @@
-"""
-Aggregate a user's Instagram activity exports into one reels-only DataFrame.
+"""Aggregate a user's Instagram activity exports into one reels-only DataFrame.
 
 Reads <user>_liked_posts.json, <user>_saved_posts.json and
 <user>_videos_watched.json from data/, keeps only reels (URL path /reel/),
@@ -25,7 +24,6 @@ included since they take screen time too), keep the first time each
 URL appears (the export re-logs items in batches), and take the gap until the
 next item. Items that share a timestamp split that gap evenly. Gaps longer than
 SESSION_GAP_SECONDS are treated as the end of a session and left as NaN.
-
 """
 
 import json

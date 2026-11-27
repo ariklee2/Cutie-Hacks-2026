@@ -66,15 +66,6 @@
   animation: snap 0.45s var(--snapshot-ease-in) both;
 }
 
-.visuallyHidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-
 @keyframes wait {
   to {
     transform: scale(1.03);

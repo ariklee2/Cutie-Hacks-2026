@@ -49,7 +49,7 @@ export function SuspenseReveal({
     >
       <FilmReel />
       <span className={classes.promptText}>{prompt}</span>
-      <span className={classes.visuallyHidden}>{revealLabel}</span>
+      <span className="visually-hidden">{revealLabel}</span>
     </button>
   );
 }

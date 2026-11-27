@@ -1,6 +1,4 @@
-"""
-
-Binge sessions: stretches of continuous reel scrolling in the past week.
+"""Binge sessions: stretches of continuous reel scrolling in the past week.
 
 A session keeps going as long as each reel starts within MAX_GAP_SECONDS of the
 previous one; a longer gap ends it. A session's length runs from its first
@@ -14,7 +12,6 @@ Usage:
 From other code:
   from features.binge_session import binge_sessions
   sessions = binge_sessions("justin")   # DataFrame, longest first
-
 """
 
 import sys
@@ -33,12 +30,9 @@ TIMEZONE = "America/Los_Angeles"  # for printing start/end times
 
 def binge_sessions(user="justin", max_gap=MAX_GAP_SECONDS, min_reels=MIN_REELS):
     
-    """
-
-    Return every scrolling session as a DataFrame, longest first.
+    """Return every scrolling session as a DataFrame, longest first.
 
     Columns: start, end (UTC datetimes), minutes, reels.
-
     """
     df = load_reels(user)
     watched = df[df["watched"]].sort_values("watched_at")

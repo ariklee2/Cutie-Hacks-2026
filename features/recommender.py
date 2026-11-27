@@ -1,6 +1,4 @@
-"""
-
-Recommend reels and profiles a user would enjoy, from what they engaged with.
+"""Recommend reels and profiles a user would enjoy, from what they engaged with.
 
   python3 features/recommender.py <user> [--dry-run] [--refresh] [--offline]
 
@@ -26,7 +24,6 @@ Recommend reels and profiles a user would enjoy, from what they engaged with.
 
 The Apify token is read from the APIFY_TOKEN environment variable or the
 repo-root .env file (gitignored). It is never printed or written elsewhere.
-
 """
 
 import argparse
@@ -78,7 +75,7 @@ GENERIC_TAGS = {
 APIFY_HASHTAG_ACTOR = "apify~instagram-hashtag-scraper"
 
 
-# -- token --
+# --- Token ---
 def apify_token():
     """APIFY_TOKEN from the environment, else from the repo-root .env file."""
     token = os.environ.get("APIFY_TOKEN")
@@ -131,7 +128,7 @@ def cached_actor(user, name, actor, actor_input, *, refresh, offline):
     return items, False
 
 
-# -- taste --
+# --- Taste ---
 URL_RE = re.compile(r"https?://\S+|@\w[\w.]*")
 
 
@@ -184,7 +181,7 @@ def taste_profile(user):
     }
 
 
-# -- candidates --
+# --- Candidates ---
 def top_items(counter, n):
     """Highest weights first; ties broken alphabetically (stable across runs)."""
     return sorted(counter.items(), key=lambda kv: (-kv[1], kv[0]))[:n]
@@ -231,7 +228,7 @@ def candidate_reels(items, profile):
     return list(out.values())
 
 
-# -- ranking --
+# --- Ranking ---
 def score_reels(candidates, profile):
     """Every candidate with score, similarity and a why, best first."""
     if not candidates:
@@ -307,7 +304,7 @@ def rank_profiles(all_scored_reels, profile):
     return out[:TOP_PROFILES]
 
 
-# -- main --
+# --- Main ---
 def recommend(user, *, refresh=False, offline=False, dry_run=False):
     profile = taste_profile(user)
     hashtags = queries(profile)

@@ -1,6 +1,4 @@
-"""
-
-Top hashtags across the reels watched in the past week.
+"""Top hashtags across the reels watched in the past week.
 
 Usage:
   python3 features/top_hashtags.py [user]     (default: justin)
@@ -8,7 +6,6 @@ Usage:
 From other code:
   from features.top_hashtags import top_hashtags
   top_hashtags("justin")  # -> [("hashtag", 12), ...]
-
 """
 
 import sys
@@ -20,16 +17,13 @@ from filter.transform import load_reels  # noqa: E402
 
 
 def top_hashtags(user="justin", n=5, min_seconds=0):
-    """
-
-    Return the n hashtags on the most watched reels, most first.
+    """Return the n hashtags on the most watched reels, most first.
 
     Each item is (hashtag, number of watched reels using it). A hashtag counts
     once per reel; case is ignored. The reels table only covers the
     videos_watched week, so this is the past week. Pass min_seconds (e.g. 3)
     to skip reels scrolled past quickly; reels with no estimate are kept.
     Ties are ordered arbitrarily.
-
     """
     
     df = load_reels(user)

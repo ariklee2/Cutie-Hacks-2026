@@ -1,5 +1,4 @@
-"""
-Run every feature for one user and save the results to a single JSON file:
+"""Run every feature for one user and save the results to a single JSON file:
 
   data/<user>_snapshot.json
 
@@ -57,8 +56,7 @@ def _iso(ts):
 
 
 def _top_n_stable(ranked):
-    """
-    The features break ties arbitrarily (top_hashtags' order even changes
+    """The features break ties arbitrarily (top_hashtags' order even changes
     between Python processes, via set ordering). For a saved file that pages
     read, ties are broken alphabetically so rebuilding gives the same result.
     `ranked` is the feature's full (name, count) list.

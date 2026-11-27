@@ -1,7 +1,9 @@
-/* The first screen (below the header): page red with the film starting
-   right under the header — so the header's red strip is the only red above
-   the film, and the logo and Get Snapshot sit centered in it — and the rest
-   of the screen red below, so the next section starts just below the fold. */
+/*
+ * The first screen (below the header): page red with the film starting
+ * right under the header — so the header's red strip is the only red above
+ * the film, and the logo and Get Snapshot sit centered in it — and the rest
+ * of the screen red below, so the next section starts just below the fold.
+ */
 .stage {
   position: relative;
   isolation: isolate; /* keeps the stage lights behind the film */
@@ -13,9 +15,11 @@
   padding-bottom: var(--snapshot-space-section);
 }
 
-/* The film block: film edge to edge, the title on it vertically centered and
-   left-aligned to the content container (same left edge as the sections
-   below). `isolation` keeps the title's blend inside the film. */
+/*
+ * The film block: film edge to edge, the title on it vertically centered and
+ * left-aligned to the content container (same left edge as the sections
+ * below). `isolation` keeps the title's blend inside the film.
+ */
 .hero {
   position: relative;
   isolation: isolate;
@@ -25,8 +29,10 @@
   width: 100%;
   min-height: clamp(22rem, 60vh, 38rem);
   padding-block: var(--snapshot-space-page);
-  /* Wider film frames here only (the snapshot scene wipes keep the default):
-     the FilmStrip inside reads these variables. */
+  /*
+   * Wider film frames here only (the snapshot scene wipes keep the default):
+   * the FilmStrip inside reads these variables.
+   */
   --snapshot-film-frame-period: var(--snapshot-landing-film-frame-period);
   --snapshot-film-frame-duration: var(--snapshot-landing-film-frame-duration);
 }
@@ -63,8 +69,10 @@
   padding-inline: var(--mantine-spacing-lg);
 }
 
-/* A movie poster's billing block: each credit a small spaced-out role
-   above its name in poster type, a thin white rule between credits. */
+/*
+ * A movie poster's billing block: each credit a small spaced-out role
+ * above its name in poster type, a thin white rule between credits.
+ */
 .credits {
   display: flex;
   flex-wrap: wrap;
@@ -101,8 +109,10 @@
   text-transform: uppercase;
 }
 
-/* The ticket sits a step lower than the credits, so when it wraps under
-   them its tilted top edge clears them by about 24px. */
+/*
+ * The ticket sits a step lower than the credits, so when it wraps under
+ * them its tilted top edge clears them by about 24px.
+ */
 .cta {
   margin-top: var(--mantine-spacing-sm);
 }

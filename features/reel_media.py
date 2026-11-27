@@ -1,16 +1,15 @@
-"""Extra signals about each reel in a user's history, from Apify.
+"""Image objects for each reel in a user's history, from Apify.
 
 The Instagram export only has each reel's link, caption and hashtags. This
 looks every reel up with Apify's `instagram-scraper` (direct reel URLs) and
-keeps three cheap, text-shaped signals per reel:
+reads what Instagram's own image recognition saw in it, from the alt text:
+"May be an image of temple, statue and text" -> ["temple", "statue"]. The
+club classifier (features/clubs.py) uses these like caption words.
 
-  - music:  the song and artist ("Nicole Kidman — ADÉLA"), or "original audio"
-  - visual: Instagram's own image recognition from the alt text
-            ("May be an image of temple and text" -> ["temple"])
-  - comments: the latest comments' text
-
-Raw responses are cached in data/<user>_apify_media.json (gitignored, keyed
-by shortcode), so each reel is only ever bought once (~$0.0026 each).
+The raw responses (which also hold song and comment data, unused: in testing
+they made the club labels worse) are cached in data/<user>_apify_media.json
+(gitignored, keyed by shortcode), so each reel is only ever bought once
+(~$0.0026 each).
 
 Usage:
     python3 features/reel_media.py <user> [--dry-run] [--offline]
@@ -84,20 +83,6 @@ def visual_objects(user):
     return {code: alt_objects(item.get("alt")) for code, item in load_cache(user).items()}
 
 
-def media_signals(item):
-    """The text-shaped signals kept from one scraped reel."""
-    music = item.get("musicInfo") or {}
-    original = bool(music.get("uses_original_audio"))
-    song = "" if original else " ".join(filter(None, [music.get("song_name"), music.get("artist_name")]))
-    comments = " ".join((c.get("text") or "") for c in (item.get("latestComments") or [])[:10])
-    return {
-        "music": song,
-        "original_audio": original,
-        "visual": alt_objects(item.get("alt")),
-        "comments": comments,
-    }
-
-
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("user", nargs="?", default="arik")
@@ -107,11 +92,8 @@ def main():
     cache = fetch_media(args.user, dry_run=args.dry_run, offline=args.offline)
     if args.dry_run:
         return
-    signals = [media_signals(item) for item in cache.values()]
-    print(f"{len(signals)} reels with media info: "
-          f"{sum(bool(s['music']) for s in signals)} with a named song, "
-          f"{sum(bool(s['visual']) for s in signals)} with recognised objects, "
-          f"{sum(bool(s['comments']) for s in signals)} with comments")
+    objects = visual_objects(args.user)
+    print(f"{len(objects)} reels looked up, {sum(bool(v) for v in objects.values())} with recognised image objects")
 
 
 if __name__ == "__main__":

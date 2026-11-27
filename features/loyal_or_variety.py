@@ -1,6 +1,4 @@
-"""
-
-Classify a user as LOYAL (keeps coming back to the same creators) or VARIETY
+"""Classify a user as LOYAL (keeps coming back to the same creators) or VARIETY
 (spreads their attention across lots of different creators).
 
 How it works
@@ -24,7 +22,6 @@ Usage:
 From other code:
   from features.loyal_or_variety import classify
   result = classify("justin")   # dict with label, score and the metrics
-
 """
 
 import sys

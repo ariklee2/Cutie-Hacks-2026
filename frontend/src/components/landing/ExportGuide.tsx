@@ -36,7 +36,7 @@ export function ExportGuide({
       <div className={classes.actions}>
         <a href={link.href} target="_blank" rel="noopener noreferrer" className={classes.link}>
           {link.label} <span aria-hidden="true">↗</span>
-          <span className={classes.visuallyHidden}> ({link.newTab})</span>
+          <span className="visually-hidden"> ({link.newTab})</span>
         </a>
         <TicketCta />
       </div>
