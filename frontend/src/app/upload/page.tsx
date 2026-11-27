@@ -5,8 +5,12 @@ import { Slate } from '@/components/cinema/Slate';
 import { OpenSavedSnapshot } from '@/components/upload/OpenSavedSnapshot';
 import { UploadScreen } from '@/components/upload/UploadScreen';
 import { uploadContent } from '@/content/upload';
+import { keepUploads } from '@/lib/server/deployPolicy';
 
 import classes from './page.module.css';
+
+// Rendered per request: the privacy note reads KEEP_UPLOADS at run time, not build time.
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: `${uploadContent.pageTitle} · Insta Snapshot`,
@@ -24,6 +28,7 @@ export default function UploadPage() {
           <h1 className={classes.heading}>{uploadContent.pageTitle}</h1>
         </div>
         <UploadScreen />
+        <p className={classes.privacy}>{uploadContent.privacy(!keepUploads)}</p>
       </div>
       <OpenSavedSnapshot />
     </Container>

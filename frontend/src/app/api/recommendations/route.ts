@@ -6,12 +6,14 @@
  * This spends Apify credit (≈ $0.16 for an uncached run; cached hashtag
  * queries are free) and takes up to a minute, so it only runs when the user
  * clicks "Find recommendations" on the recommendations page. One run per name
- * at a time. The Apify token stays in the Python process (APIFY_TOKEN in the
+ * at a time, and (in production) a daily cap on runs across all users
+ * (lib/server/deployPolicy.ts). The Apify token stays in the Python process (APIFY_TOKEN in the
  * repo-root .env); it never reaches this route or the browser.
  */
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 
+import { recommendationsEnabled, takeRecommendationRun } from '@/lib/server/deployPolicy';
 import { REPO_ROOT, readRecommendations, readSnapshot } from '@/lib/server/snapshotStore';
 import { isValidSnapshotName, normaliseSnapshotName } from '@/lib/snapshotName';
 
@@ -32,9 +34,14 @@ export async function POST(request: Request) {
   const name = normaliseSnapshotName(String(body?.name ?? ''));
   if (!isValidSnapshotName(name)) return fail(400, 'Invalid name.');
   if (!(await readSnapshot(name))) return fail(404, `No snapshot for ${name}. Upload your files first.`);
+  if (!recommendationsEnabled) return fail(503, 'Recommendations are turned off on this server.');
   if (running.has(name)) return fail(409, 'Recommendations are already being found for this name.');
 
   running.add(name);
+  if (!(await takeRecommendationRun())) {
+    running.delete(name);
+    return fail(429, 'Today’s recommendations are all used up. Try again tomorrow.');
+  }
   try {
     await run(PYTHON, ['features/recommender.py', name], { cwd: REPO_ROOT, timeout: TIMEOUT_MS });
   } catch (error) {

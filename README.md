@@ -82,17 +82,46 @@ features/snapshot.py     → data/<name>_snapshot.json          (every feature b
 
 Each Python file also runs on its own, e.g. `python3 features/top_creators.py <name>`.
 
+## Deploying it
+
+The app needs a host that can run **Node and Python together** and keep files on a **persistent disk** (it runs the Python scripts on each upload and keeps every snapshot in `data/`). Vercel/Netlify-style serverless hosts can't do either, so it ships as one Docker container:
+
+- `Dockerfile`: Node 20 plus Python with `requirements.txt`, builds the site, runs `next start` on `$PORT`. `data/` is `/app/data`, which must be a mounted disk.
+- `render.yaml`: a [Render](https://render.com) Blueprint for exactly that (a Starter web service with a 1 GB disk at `/app/data`, about $7/month plus the disk).
+
+**On Render:**
+1. Push this repo to GitHub.
+2. In Render: **New → Blueprint**, connect GitHub and pick this repo and branch.
+3. When it asks for `APIFY_TOKEN`, paste your Apify token (it's stored by Render, never in the repo). Leave it empty to run without recommendations.
+4. Create it. The first build takes a few minutes; your site is at the `onrender.com` URL it shows. Pushes to the branch redeploy automatically.
+
+Any other Docker host with a volume (Railway, Fly.io, a VPS) works the same way: build the `Dockerfile`, mount a volume at `/app/data`, set `APIFY_TOKEN`.
+
+**What changes on a public server** (`NODE_ENV=production`, set in the image; each can be overridden with an environment variable, see `frontend/src/lib/server/deployPolicy.ts`):
+
+| Rule | Production default | Override |
+| --- | --- | --- |
+| An upload can't replace an existing name | on | `ALLOW_SNAPSHOT_OVERWRITE=true` |
+| The raw JSON uploads and CSV copy are deleted once the snapshot is built | on | `KEEP_UPLOADS=true` |
+| Recommender runs (Apify credit) per day, across all users | 20 | `RECOMMENDATIONS_DAILY_LIMIT` |
+| Find recommendations button | on | `RECOMMENDATIONS_ENABLED=false` |
+| Upload size per file | 30 MB | — |
+
+Snapshots are found by name, so anyone who knows a name can open that snapshot; the upload page says so.
+
 ## Project structure
 
 ```
-data/        your uploaded exports and generated files (local only)
+data/        your uploaded exports and generated files (local only; a disk on a server)
 filter/      transform.py: raw exports → one row per reel
 features/    the analysis behind each snapshot page, plus the recommender
 frontend/    Next.js + Mantine website (landing, upload, snapshot pages)
+Dockerfile   one container with Node + Python, for deploying
+render.yaml  Render Blueprint (web service + disk for data/)
 CLAUDE.md    detailed notes on the design system and how everything fits together
 scope.md     the original project scope
 ```
 
 ## Privacy
 
-Your files stay on the machine running the app: they're saved to `data/` and processed locally. Nothing is sent anywhere, except the hashtag searches made when you ask for recommendations (sent to Apify).
+Your files stay on the machine running the app: they're saved to `data/` and processed there. Nothing is sent anywhere, except the hashtag searches made when you ask for recommendations (sent to Apify). On a deployed server, the raw files are deleted as soon as the snapshot is built; the snapshot and the reels table stay, findable by name.
