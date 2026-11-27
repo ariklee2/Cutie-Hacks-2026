@@ -20,13 +20,13 @@ After you upload your files, the snapshot plays as a sequence of pages (use the 
 
 ## Getting your Instagram files
 
-In Instagram, request a download of your information in **JSON** format. From the **Your activity** section of the download, you need:
+In Instagram, request a download of your information in **JSON** format (include your activity and ads information). Then drop the whole **`.zip`** you get onto the upload page: it finds the three files it needs inside, in your browser, and uploads only those:
 
 - `liked_posts.json`
 - `saved_posts.json`
 - `videos_watched.json`
 
-The upload page checks each file is really that export and tells you what's wrong or still missing.
+You can also drop those three files on their own. The upload page checks each file is really that export and tells you what's wrong or still missing.
 
 ## Running it locally
 

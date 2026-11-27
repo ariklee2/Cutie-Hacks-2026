@@ -30,7 +30,7 @@ type SubmitState =
  * snapshot sequence (/snapshot/<name>/top-creators).
  */
 export function UploadScreen() {
-  const { slots, unrecognised, addFiles: addToSlots, allAdded } = useInstagramFiles();
+  const { slots, unrecognised, unzipping, addFiles: addToSlots, allAdded } = useInstagramFiles();
   const [name, setName] = useState('');
   const [submit, setSubmit] = useState<SubmitState>({ status: 'idle' });
   const router = useRouter();
@@ -145,7 +145,7 @@ export function UploadScreen() {
         <input
           ref={inputRef}
           type="file"
-          accept=".json,application/json"
+          accept=".zip,.json,application/zip,application/json"
           multiple
           hidden
           onChange={(event) => {
@@ -156,6 +156,11 @@ export function UploadScreen() {
         <div className={classes.picture} id="upload-instructions">
           {dragging ? (
             <p className={classes.title}>{screen.dragging}</p>
+          ) : unzipping ? (
+            <>
+              <span className={classes.spinner} aria-hidden="true" />
+              <p className={classes.title}>{uploadContent.unzipping}</p>
+            </>
           ) : submit.status === 'saving' ? (
             <>
               <span className={classes.spinner} aria-hidden="true" />
@@ -175,9 +180,7 @@ export function UploadScreen() {
           ) : (
             <>
               <p className={classes.prompt}>{screen.prompt}</p>
-              <p className={classes.promptFiles}>
-                {INSTAGRAM_FILES.map((spec) => spec.fileName).join(', ')}
-              </p>
+              <p className={classes.promptFiles}>{screen.promptFiles}</p>
             </>
           )}
         </div>

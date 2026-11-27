@@ -13,6 +13,8 @@ export const uploadContent = {
   screen: {
     /** The one line on the screen while waiting for files. */
     prompt: 'Click or Drag',
+    /** Under the prompt: what to drop. */
+    promptFiles: 'Your Instagram download (.zip)',
     dragging: 'Drop to add',
     complete: 'All three files are in',
     completeNote: 'Name your snapshot below, then create it.',
@@ -33,6 +35,13 @@ export const uploadContent = {
   problem: (fileName: string, reason: string) => `${fileName} can't be used: ${reason}`,
   /** A file whose name isn't one of the three. */
   notAFile: (name: string) => `${name} isn't one of the files Insta Snapshot needs.`,
+  /** Instagram's whole download (.zip): while it's opened, and what can go wrong. */
+  unzipping: 'Finding your files in the download…',
+  zipMissing: (zipName: string, fileNames: string[]) =>
+    `${zipName} doesn't contain ${fileNames.join(', ')}. Make sure your download includes your activity and ads information.`,
+  zipHtml: (zipName: string) =>
+    `${zipName} is in HTML format. Download your information again with Format set to JSON.`,
+  zipUnreadable: (zipName: string) => `${zipName} couldn't be opened as a zip file.`,
   /** Shown after any problem, listing what's still missing. */
   stillNeeded: (fileNames: string[]) =>
     `Still needed: ${

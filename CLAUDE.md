@@ -101,7 +101,12 @@ never with `fetch` inside components.
   - Then full-width **bands** (`LandingBand`: grain, a `Slate` eyebrow, a
     poster-type heading, then content), **all the same page red**
     (`color.background`, white text 13.9:1): **The plot** (heading left,
-    description right), **Now showing** (`SceneCards`: one frame of film per
+    description right), **Export your data from Meta** ("Before the show";
+    `ExportGuide`: an intro line, six numbered steps in two columns — big
+    gold numbers in poster type, name, one line — from opening Accounts
+    Center to dropping the .zip in the box, then an "Open Accounts Center ↗"
+    link (new tab) and the Get your snapshot ticket; copy in
+    `landingContent.exportGuide`, kept close to Meta's menu names), **Now showing** (`SceneCards`: one frame of film per
     snapshot scene — ink with sprocket holes top and bottom, a white frame
     with "Scene 01" on a gold tag, the name in poster type and its
     one-liner; each card has its scene's `step`, and once this browser has
@@ -120,9 +125,19 @@ never with `fetch` inside components.
     again.
 - `/upload` — a **light page** (white background, black text): a `Slate`
   ("Box office") and the heading "Add your Instagram files" in poster type
-  above the drop zone, where the user adds
-  `liked_posts.json`, `saved_posts.json` and `videos_watched.json` by dropping
-  them on the screen or clicking it; each file's name under the screen turns green once it's in.
+  above the drop zone, where the user drops (or picks) **Instagram's whole
+  download `.zip`** or the three files themselves (`liked_posts.json`,
+  `saved_posts.json`, `videos_watched.json`). A zip is opened **in the
+  browser** (`lib/instagramZip.ts`, `fflate`): only entries whose file name
+  is exactly one of the three are decompressed — wherever they sit in the
+  download's folders (e.g. `your_instagram_activity/likes/liked_posts.json`,
+  `ads_information/ads_and_topics/videos_watched.json`) — and they go
+  through the same checks as dropped files; nothing else in the download is
+  read or uploaded. While it opens, the screen shows the loading circle and
+  "Finding your files in the download…". A zip missing some files says which
+  ("… doesn't contain saved_posts.json…"), an HTML-format download says to
+  download again as JSON, and a broken zip says it couldn't be opened. Each
+  file's name under the screen turns green once it's in.
   Each file is checked against the real export format
   (`checkInstagramExport` in `src/lib/instagramFiles.ts`; the same function
   runs in the browser and again in `POST /api/snapshot`, so nothing unusable
@@ -494,8 +509,8 @@ card arriving); the landing and upload pages otherwise stay still.
   black frame;
   black text. Dragging files over it turns the dashes solid. Inside while
   waiting: just
-  "CLICK OR DRAG" in poster type with the three file names on the line
-  below. Directly under the screen, a toolbar flush
+  "CLICK OR DRAG" in poster type with "Your Instagram download (.zip)" on the
+  line below. Directly under the screen, a toolbar flush
   with its edges (`SnapshotForm`): the three file names as pills at the
   bottom-left corner; the name field (placeholder "Name", label for screen
   readers only, 8rem wide, the pills' sizing) then **Create Snapshot** at

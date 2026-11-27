@@ -4,8 +4,9 @@ import type { SnapshotStep } from '@/lib/snapshotSequence';
  * Landing page copy. Every line must describe something the app really does.
  *
  * Below the film the page runs like a night at the movies: the plot (what it
- * is), what's showing (one poster card per snapshot scene), how to get in
- * (three ticket steps), then a lit marquee with the way in.
+ * is), how to export your data from Meta (numbered steps), what's showing
+ * (one poster card per snapshot scene), how to get in (three ticket steps),
+ * then a lit marquee with the way in.
  */
 export interface LandingItem {
   name: string;
@@ -37,6 +38,34 @@ export const landingContent = {
     text: 'You scrolled. Instagram kept count. Insta Snapshot plays your last week of reels back like a short film about you: who you couldn’t stop watching, how long you really scrolled, and what your feed says about you.',
   },
 
+  /**
+   * Getting the data: Meta's export, step by step, ending at the upload box.
+   * Meta renames these menus now and then; keep the wording close to theirs.
+   */
+  exportGuide: {
+    eyebrow: 'Before the show',
+    heading: 'Export your data from Meta',
+    intro: 'Insta Snapshot works from the data Instagram keeps about you. Here’s how to get it:',
+    steps: [
+      { name: 'Open Accounts Center', detail: 'In Instagram, go to your profile, tap the menu (☰), then Accounts Center.' },
+      {
+        name: 'Export your information',
+        detail: 'Choose Your information and permissions, then Export your information (or Download your information), and create an export for your Instagram account.',
+      },
+      {
+        name: 'Pick what to include',
+        detail: 'Choose Export to device, customize the information and select Likes, Saved and Ads information.',
+      },
+      { name: 'Choose JSON', detail: 'Set the date range to Last week (or longer) and the format to JSON, then start the export.' },
+      {
+        name: 'Download the .zip',
+        detail: 'Meta lets you know when it’s ready, which can take a while. Download the .zip; there’s no need to unzip it.',
+      },
+      { name: 'Drop it in the box', detail: 'Open Get Snapshot and drop the .zip onto the upload box.' },
+    ] satisfies LandingItem[],
+    link: { label: 'Open Accounts Center', href: 'https://accountscenter.instagram.com/info_and_permissions/', newTab: 'opens in a new tab' },
+  },
+
   showing: {
     eyebrow: 'Now showing',
     heading: 'Eight scenes, all about you',
@@ -56,17 +85,14 @@ export const landingContent = {
     eyebrow: 'How to get in',
     heading: 'Three steps to opening night',
     items: [
-      { name: 'Download your data', detail: 'Request your Instagram information as JSON from your account settings.' },
-      {
-        name: 'Drop in three files',
-        detail: 'liked_posts.json, saved_posts.json and videos_watched.json from that download.',
-      },
+      { name: 'Export your data', detail: 'Export your Instagram information from Meta as JSON (steps above).' },
+      { name: 'Drop in the .zip', detail: 'Drop the whole download on the upload box; it finds the files it needs.' },
       { name: 'Roll the film', detail: 'Watch your snapshot scene by scene, then save your share card.' },
     ] satisfies LandingItem[],
   },
 
   finale: {
     marquee: 'Your week, on the big screen',
-    text: 'Three files in, one short film out.',
+    text: 'One download in, one short film out.',
   },
 };
