@@ -12,8 +12,9 @@ import { forgetSnapshot, savedSnapshotName } from '@/lib/savedSnapshot';
 import classes from './AppHeader.module.css';
 
 /**
- * Site header: one link in a square box that lights up and grows slightly on
- * hover (like Create Snapshot).
+ * Site header: its links are small cinema tickets in poster type (notched
+ * ends) that straighten up and grow slightly on hover: Get Snapshot gold,
+ * View @name's snapshot paper, Go Back ink (on the white upload page).
  *   - Landing page: the Instagram glyph in the window's top-left corner;
  *     "Get Snapshot", at the window's top right, into the upload page;
  *     beside it, "View @name's snapshot" when this browser remembers a
@@ -57,11 +58,11 @@ export function AppHeader() {
           <img src={navigation.logo.src} alt={navigation.logo.alt} className={classes.logo} width={32} height={32} />
         )}
         {saved && (
-          <Link href={navigation.viewSaved.href(saved)} className={classes.link}>
+          <Link href={navigation.viewSaved.href(saved)} className={classes.link} data-variant="secondary">
             {navigation.viewSaved.label(saved)}
           </Link>
         )}
-        <Link href={link.href} className={classes.link}>
+        <Link href={link.href} className={classes.link} data-variant={onUploadPage ? 'back' : 'primary'}>
           {link.label}
         </Link>
       </Container>

@@ -1,8 +1,11 @@
-/* The first screen (below the header): plain page red with the film starting
+/* The first screen (below the header): page red with the film starting
    right under the header — so the header's red strip is the only red above
    the film, and the logo and Get Snapshot sit centered in it — and the rest
    of the screen red below, so the next section starts just below the fold. */
 .stage {
+  position: relative;
+  isolation: isolate; /* keeps the stage lights behind the film */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -42,36 +45,77 @@
   mix-blend-mode: difference;
   color: var(--snapshot-color-text);
   text-align: left;
-  font-size: var(--snapshot-font-size-display);
-  line-height: var(--snapshot-line-height-display);
-  letter-spacing: var(--snapshot-letter-spacing-display);
-  font-weight: var(--snapshot-font-weight-semibold);
+  font-family: var(--snapshot-font-display);
+  font-weight: 400;
+  font-size: clamp(4rem, 15vw, 12rem);
+  line-height: 0.9;
+  text-transform: uppercase;
 }
 
-/* Under the film's bottom-left corner, the same gutter from the window edge
-   as Get Snapshot on the right, on one line (wrapping on narrow screens):
-   "Created by …" (large, bold white) | "Inspired by …" (smaller, bold). */
+/* Under the film: credits at the left gutter, the ticket in at the right. */
+.under {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--mantine-spacing-lg);
+  margin-top: var(--mantine-spacing-sm);
+  padding-inline: var(--mantine-spacing-lg);
+}
+
+/* A movie poster's billing block: each credit a small spaced-out role
+   above its name in poster type, a thin white rule between credits. */
 .credits {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  column-gap: var(--mantine-spacing-sm);
-  margin: var(--mantine-spacing-sm) 0 0;
-  padding-inline: var(--mantine-spacing-lg);
+  row-gap: var(--mantine-spacing-sm);
+  margin: 0;
   color: var(--snapshot-color-text);
-  font-weight: var(--snapshot-font-weight-bold);
 }
 
 .credit {
-  font-size: var(--mantine-font-size-xl);
-  letter-spacing: var(--snapshot-letter-spacing-heading);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-right: var(--mantine-spacing-lg);
 }
 
-.separator {
-  font-size: var(--mantine-font-size-xl);
-  font-weight: var(--snapshot-font-weight-medium);
+.credit + .credit {
+  padding-left: var(--mantine-spacing-lg);
+  border-left: 1px solid var(--snapshot-color-text);
 }
 
-.inspiration {
-  font-size: var(--mantine-font-size-lg);
+.role {
+  font-size: var(--mantine-font-size-xs);
+  font-weight: var(--snapshot-font-weight-semibold);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.name {
+  margin: 0;
+  font-family: var(--snapshot-font-display);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* The ticket sits a step lower than the credits, so when it wraps under
+   them its tilted top edge clears them by about 24px. */
+.cta {
+  margin-top: var(--mantine-spacing-sm);
+}
+
+/* Narrow screens: the credits stack, flush left, with no rule between them. */
+@media (max-width: $mantine-breakpoint-xs) {
+  .credits {
+    flex-direction: column;
+  }
+
+  .credit,
+  .credit + .credit {
+    padding: 0;
+    border-left: none;
+  }
 }

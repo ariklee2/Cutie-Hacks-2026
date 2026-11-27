@@ -1,0 +1,87 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--mantine-spacing-lg);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A frame of film: ink, with a row of square sprocket holes top and bottom. */
+.card {
+  --holes: 22px;
+  position: relative;
+  padding: var(--holes) var(--mantine-spacing-xs);
+  background: var(--snapshot-color-ink);
+  transform: rotate(calc((var(--i) - 3.5) * 0.35deg));
+  transition: transform var(--snapshot-hover-duration) var(--snapshot-ease-out);
+}
+
+.card::before,
+.card::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--holes);
+  background: repeating-linear-gradient(
+    to right,
+    transparent 0 8px,
+    var(--snapshot-color-film-frame) 8px 20px,
+    transparent 20px 28px
+  );
+  -webkit-mask: linear-gradient(transparent 6px, #000 6px, #000 16px, transparent 16px);
+  mask: linear-gradient(transparent 6px, #000 6px, #000 16px, transparent 16px);
+}
+
+.card::before {
+  top: 0;
+}
+
+.card::after {
+  bottom: 0;
+}
+
+.card:hover {
+  transform: rotate(0deg) scale(var(--snapshot-hover-scale));
+}
+
+.frame {
+  height: 100%;
+  padding: var(--mantine-spacing-md);
+  color: var(--snapshot-color-ink);
+  background: var(--snapshot-color-film-frame);
+}
+
+.number {
+  margin: 0;
+  display: inline-block;
+  padding: 0 var(--mantine-spacing-xs);
+  font-family: var(--snapshot-font-display);
+  font-size: var(--mantine-font-size-sm);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--snapshot-color-ink);
+  background: var(--snapshot-color-marquee);
+}
+
+.name {
+  margin: var(--mantine-spacing-sm) 0 var(--mantine-spacing-xs);
+  font-family: var(--snapshot-font-display);
+  font-weight: 400;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.detail {
+  margin: 0;
+  font-size: var(--mantine-font-size-md);
+  line-height: var(--mantine-line-height);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+}

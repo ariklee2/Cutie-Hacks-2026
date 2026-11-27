@@ -1,0 +1,85 @@
+/* Behind the parent's content, filling it. */
+.stage {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/*
+ * A spotlight: a tall soft cone of white light from above the top edge,
+ * swaying slowly. Light, not a background: the scene's color stays solid.
+ */
+.beam {
+  position: absolute;
+  top: -20%;
+  width: 70vmax;
+  height: 140%;
+  background: conic-gradient(
+    from 180deg at 50% 0%,
+    transparent 0deg,
+    transparent 168deg,
+    var(--snapshot-color-spotlight) 176deg,
+    var(--snapshot-color-spotlight) 184deg,
+    transparent 192deg,
+    transparent 360deg
+  );
+  filter: blur(18px);
+  transform-origin: 50% 0;
+  animation: sway var(--snapshot-spotlight-sweep) ease-in-out infinite alternate;
+}
+
+.beam[data-side='left'] {
+  left: -20vmax;
+  --from: -14deg;
+  --to: 10deg;
+}
+
+.beam[data-side='right'] {
+  right: -20vmax;
+  --from: 14deg;
+  --to: -10deg;
+  animation-delay: calc(var(--snapshot-spotlight-sweep) / -2);
+}
+
+/* Darker edges, like the falloff of a projected picture. */
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 40%, transparent 55%, var(--snapshot-color-vignette) 100%);
+}
+
+/* Fine film grain: SVG noise, jittered in steps like a projector. */
+.grain {
+  position: absolute;
+  inset: -50%;
+  opacity: 0.09;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain var(--snapshot-grain-shift) steps(4) infinite;
+}
+
+@keyframes sway {
+  from {
+    transform: rotate(var(--from));
+  }
+  to {
+    transform: rotate(var(--to));
+  }
+}
+
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-3%, 2%); }
+  50% { transform: translate(2%, -3%); }
+  75% { transform: translate(-2%, -1%); }
+  100% { transform: translate(0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beam,
+  .grain {
+    animation: none;
+  }
+}

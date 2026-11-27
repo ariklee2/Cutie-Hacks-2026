@@ -7,7 +7,7 @@ import classes from './HeroStat.module.css';
 export function HeroStat({ value, children }: { value: string; children?: ReactNode }) {
   return (
     <div className={classes.hero}>
-      <p className={classes.value}>
+      <p className={classes.value} data-long={value.length > 10 || undefined}>
         <CountUp text={value} />
       </p>
       {children && <div className={classes.caption}>{children}</div>}

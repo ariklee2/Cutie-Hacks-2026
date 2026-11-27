@@ -9,7 +9,7 @@ import { IntroClapper } from '@/components/cinema/IntroClapper';
 import { introSeenScript } from '@/components/cinema/introSession';
 import { AppHeader } from '@/components/layout/AppHeader';
 import { ThemeProvider } from '@/theme/ThemeProvider';
-import { instrumentSans } from './fonts';
+import { anton, instrumentSans } from './fonts';
 
 export const metadata: Metadata = {
   title: 'Insta Snapshot',
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={instrumentSans.variable} {...mantineHtmlProps}>
+    <html lang="en" className={`${instrumentSans.variable} ${anton.variable}`} {...mantineHtmlProps}>
       <head>
         <ColorSchemeScript forceColorScheme="light" />
         <script dangerouslySetInnerHTML={{ __html: introSeenScript }} />

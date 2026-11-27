@@ -20,44 +20,55 @@
 }
 
 /*
- * The header link (Get Snapshot / Go Back): a square box, sized like Create
- * Snapshot. Hover / focus: lights up (fills with the accent, text flips to the
- * page color) and grows slightly.
- *   - red pages: white border and text; fills white with red text
- *   - light pages (upload): dark red border, black text; fills dark red with
- *     white text
+ * Header links as small cinema tickets: poster type, half-circle notches cut
+ * into both ends, a slight tilt. Hover / focus: they straighten and grow.
+ *   - primary (Get Snapshot): gold, ink text (12.2:1)
+ *   - secondary (View @name's snapshot): paper, ink text (19.8:1)
+ *   - back (Go Back, on the white upload page): ink, paper text (19.8:1)
  */
 .link {
-  --accent: var(--snapshot-color-text);
-  --on-accent: var(--snapshot-color-background);
-  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
-  font-size: var(--mantine-font-size-sm);
-  font-weight: var(--snapshot-font-weight-semibold);
-  color: var(--snapshot-color-text);
+  --notch: 5px;
+  display: inline-block;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
+  font-family: var(--snapshot-font-display);
+  font-size: var(--mantine-font-size-md);
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   text-decoration: none;
-  border: 1px solid var(--accent);
-  border-radius: 0;
-  transition:
-    transform var(--snapshot-hover-duration) var(--snapshot-ease-out),
-    background-color var(--snapshot-hover-duration),
-    color var(--snapshot-hover-duration);
+  white-space: nowrap;
+  color: var(--snapshot-color-ink);
+  background: var(--snapshot-color-marquee);
+  transform: rotate(-2deg);
+  -webkit-mask:
+    radial-gradient(circle at 0 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle at 0 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) right / 51% 100% no-repeat;
+  transition: transform var(--snapshot-hover-duration) var(--snapshot-ease-out);
 }
 
-:global(body:has([data-surface='light'])) .link {
-  --accent: var(--snapshot-color-light-accent);
-  --on-accent: var(--snapshot-color-light-background);
+.link[data-variant='secondary'] {
+  background: var(--snapshot-color-film-frame);
+  transform: rotate(1.5deg);
+}
+
+.link[data-variant='back'] {
+  color: var(--snapshot-color-film-frame);
+  background: var(--snapshot-color-ink);
 }
 
 .link:hover,
 .link:focus-visible {
-  color: var(--on-accent);
-  background: var(--accent);
-  transform: scale(var(--snapshot-hover-scale));
+  transform: rotate(0deg) scale(var(--snapshot-hover-scale));
 }
 
+/* The mask would clip an outline, so focus shows as an underline instead. */
 .link:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
+  outline: none;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 @media (prefers-reduced-motion: reduce) {

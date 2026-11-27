@@ -57,8 +57,10 @@
 
 /* "Click or drag": the only line while waiting; regular weight. */
 .prompt {
-  font-size: var(--mantine-font-size-xl);
-  letter-spacing: var(--snapshot-letter-spacing-heading);
+  font-family: var(--snapshot-font-display);
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 /* The three file names, under "Click or Drag". */

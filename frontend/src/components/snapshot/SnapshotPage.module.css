@@ -5,6 +5,7 @@
  */
 .scene {
   position: relative;
+  isolation: isolate; /* keeps the stage lights behind the content */
   overflow: hidden; /* crops the backdrop word */
   min-height: calc(100svh - var(--snapshot-header-height) - var(--mantine-spacing-xs) - 3px);
   display: flex;
@@ -16,10 +17,10 @@
   right: -0.06em;
   bottom: -0.2em;
   max-width: 140%;
-  font-size: clamp(8rem, 30vw, 26rem);
-  font-weight: var(--snapshot-font-weight-semibold);
+  font-family: var(--snapshot-font-display);
+  font-size: clamp(9rem, 34vw, 30rem);
   line-height: 1;
-  letter-spacing: var(--snapshot-letter-spacing-display);
+  text-transform: uppercase;
   white-space: nowrap;
   color: var(--snapshot-color-watermark);
   pointer-events: none;
@@ -44,36 +45,50 @@
   justify-content: center;
 }
 
-/* Title, subtitle, content, then the links come in one after another. */
-.title,
+/* Slate, title, subtitle, content, then the links come in one after another. */
+.slate,
 .subtitle,
 .content,
 .sequence {
   animation: enter 0.7s var(--snapshot-ease-out) both;
 }
 
+.slate {
+  margin-bottom: var(--mantine-spacing-md);
+}
+
 .subtitle {
-  animation-delay: var(--snapshot-scene-stagger);
+  animation-delay: calc(2 * var(--snapshot-scene-stagger));
 }
 
 .content {
-  animation-delay: calc(2 * var(--snapshot-scene-stagger));
+  animation-delay: calc(3 * var(--snapshot-scene-stagger));
 }
 
 .sequence {
   animation-delay: calc(4 * var(--snapshot-scene-stagger));
 }
 
+/* Poster type, revealed upward from behind its own baseline. */
 .title {
   margin: 0;
-  font-size: clamp(2.5rem, 7vw, 4.5rem);
-  line-height: var(--snapshot-line-height-display);
-  letter-spacing: var(--snapshot-letter-spacing-display);
-  font-weight: var(--snapshot-font-weight-semibold);
+  overflow: hidden;
+  font-family: var(--snapshot-font-display);
+  font-weight: 400;
+  font-size: clamp(3.25rem, 9vw, 7rem);
+  line-height: 1;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.titleLine {
+  display: block;
+  animation: curtain 0.8s var(--snapshot-ease-out) var(--snapshot-scene-stagger) both;
 }
 
 .subtitle {
   margin: var(--mantine-spacing-md) 0 var(--snapshot-space-section);
+  max-width: 40rem;
   font-size: var(--mantine-font-size-lg);
 }
 
@@ -81,6 +96,12 @@
   from {
     opacity: 0;
     transform: translateY(24px);
+  }
+}
+
+@keyframes curtain {
+  from {
+    transform: translateY(105%);
   }
 }
 
@@ -93,7 +114,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .backdrop,
-  .title,
+  .slate,
+  .titleLine,
   .subtitle,
   .content,
   .sequence {
@@ -159,9 +181,10 @@
 }
 
 .sequenceName {
-  font-size: var(--mantine-font-size-lg);
-  font-weight: var(--snapshot-font-weight-semibold);
-  letter-spacing: var(--snapshot-letter-spacing-heading);
+  font-family: var(--snapshot-font-display);
+  font-size: var(--mantine-font-size-xl);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 /* "Use ← → …": centered between the links; hidden on narrow screens. */

@@ -1,0 +1,31 @@
+/* A ticket you can tear: it straightens and grows a little on hover / focus. */
+.link {
+  display: inline-block;
+  color: inherit;
+  text-decoration: none;
+  transition: transform var(--snapshot-hover-duration) var(--snapshot-ease-out);
+}
+
+.link:hover,
+.link:focus-visible {
+  transform: rotate(2deg) scale(var(--snapshot-hover-scale));
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--snapshot-color-text);
+  outline-offset: 6px;
+}
+
+.label {
+  font-family: var(--snapshot-font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link {
+    transition: none;
+  }
+}

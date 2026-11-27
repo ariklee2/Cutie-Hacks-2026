@@ -80,6 +80,15 @@ export const color = {
   peak: palette.gold,
   // Giant faint word behind each snapshot scene ("#f1", "Sporty"). Decorative.
   watermark: 'rgb(255 255 255 / 0.07)',
+  // Marquee gold: hero numbers, poster and ticket fills, marquee bulbs, the
+  // slate's scene number. On every scene it is ≥ 4.3:1 (large text only, so
+  // AA-large passes); ink on gold is 12.2:1. Charts still use it only for
+  // their one standout point.
+  marquee: palette.gold,
+  // Stage lighting: the soft spotlight beams and the vignette at the edges of
+  // scenes and the landing film. Decorative light, never behind small text.
+  spotlight: 'rgb(255 255 255 / 0.10)',
+  vignette: 'rgb(0 0 0 / 0.45)',
 } as const;
 
 /*
@@ -128,6 +137,13 @@ export const scene = {
  */
 export const fontFamily = 'var(--font-instrument-sans), system-ui, sans-serif';
 
+/**
+ * Poster face (Anton, loaded in app/fonts.ts): a tall condensed display type,
+ * always uppercase, for the big moments only — scene and section titles, hero
+ * numbers, ranks, posters, tickets, slates. Never for body copy.
+ */
+export const fontFamilyDisplay = "var(--font-anton), 'Impact', 'Arial Narrow', sans-serif";
+
 export const fontSize = {
   xs: '0.75rem', // 12 — fine print
   sm: '0.875rem', // 14 — labels, meta
@@ -141,7 +157,7 @@ export const fontWeight = {
   regular: '400',
   medium: '500',
   semibold: '600',
-  bold: '700', // the landing page credit lines only
+  bold: '700', // reserved; currently unused
 } as const;
 
 export const lineHeight = {
@@ -209,6 +225,9 @@ export const motion = {
   sceneWipe: '0.55s', // film sweeping over the screen between snapshot scenes (each half)
   sceneFade: '0.6s', // a scene's background color easing into the next
   sceneStagger: '0.12s', // gap between a scene's title, subtitle, content, links appearing
+  marqueeBlink: '1.6s', // marquee bulbs chasing around a sign (one cycle)
+  spotlightSweep: '9s', // spotlight beams swaying across a scene (one cycle)
+  grainShift: '0.8s', // film grain jittering (one cycle, stepped)
 } as const;
 
 /* ----------------------------------------------------------------- Film --

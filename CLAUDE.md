@@ -67,19 +67,34 @@ never with `fetch` inside components.
 
 ## Pages
 
-- `/` — landing: the first screen (`Hero` `.stage`, viewport height minus the
-  header) is plain page red with the film starting right under the header —
-  the header's 64px red strip is the only red above it, with the Instagram
-  glyph and Get Snapshot vertically centered in it — then the credit line 8px
-  (`sm`) under the film's bottom-left corner, the rest of the screen red
-  below, so the sections start just below the fold.
-  Then one full-width
-  **section band** per copy block (`AboutSection`): large heading on the left,
-  text on the right, each band one shade lighter red than the one above
-  (`band1` = theatre.7 `#6E0F1C` → `band2` = theatre.6 `#8A1626`; white text
-  12.0:1 / 9.4:1). A new section takes the next band token; don't go lighter
-  than theatre.6 behind white text.
-- `/upload` — a **light page** (white background, black text) with the drop zone: the user adds
+- `/` — landing, run like a night at the movies (copy in `content/landing.ts`):
+  - **First screen** (`Hero` `.stage`, viewport height minus the header,
+    under `StageLights`): page red with the film starting right under the
+    header — the header's 64px red strip is the only red above it, with the
+    Instagram glyph and Get Snapshot vertically centered in it — and the
+    title **INSTA SNAPSHOT** on it in poster type, starting at the same 24px
+    gutter as the Instagram glyph and the credits (a fluid container, not the
+    centered content width). 8px (`sm`) under the film: the credits at the
+    left as a movie poster's **billing block** (`credits` in
+    `content/landing.ts`: each a small spaced-out uppercase role — "Created
+    by", "Inspired by" — above its name in poster type, a 1px white rule
+    between them; stacked with no rule on phones); the gold **ticket** "Get your snapshot →" (`TicketCta`) at the
+    right, a further 8px lower (`.cta`), so when it wraps under the credits on
+    narrower screens its tilted top edge clears them by about 24px. The bands start just below the fold.
+  - Then full-width **bands** (`LandingBand`: grain, a `Slate` eyebrow, a
+    poster-type heading, then content), each one shade lighter than the one
+    above and then ink: **The plot** (`band1` = theatre.7 `#6E0F1C`; heading
+    left, description right), **Now showing** (`band2` = theatre.6
+    `#8A1626`; `SceneCards`: one frame of film per snapshot scene — ink
+    with sprocket holes top and bottom, a white frame with "Scene 01" on a
+    gold tag, the name in poster type and its one-liner), **How to get in**
+    (ink; `StepTickets`: three tickets "No. 1–3", the last gold). White text
+    12.0:1 / 9.4:1 / 19.8:1. Don't go lighter than theatre.6 behind white text.
+  - **Finale** (page red under spotlights): a `Marquee` sign "Your week, on
+    the big screen" with chasing gold bulbs, one line, then the ticket again.
+- `/upload` — a **light page** (white background, black text): a `Slate`
+  ("Box office") and the heading "Add your Instagram files" in poster type
+  above the drop zone, where the user adds
   `liked_posts.json`, `saved_posts.json` and `videos_watched.json` by dropping
   them on the screen or clicking it; each file's name under the screen turns green once it's in.
   Each file is checked against the real export format
@@ -115,8 +130,20 @@ never with `fetch` inside components.
   **scenes** (Wrapped-style) in the order of `src/lib/snapshotSequence.ts`.
   Every scene is a server component reading `data/<name>_snapshot.json`
   through `src/lib/server/snapshotStore.ts` (`readSnapshot`; 404 if missing),
-  wrapped in `SnapshotPage`: at least one screen tall, content centered,
-  title / subtitle / content / links entering one after another, an optional
+  wrapped in `SnapshotPage`: at least one screen tall, content centered, lit
+  by `StageLights`; a `Slate` eyebrow ("SCENE 03 / 09 | TIME ON REELS"),
+  then the title in poster type rising from behind its baseline, subtitle,
+  content and links entering one after another. Building blocks, all in
+  `components/snapshot/`: `HeroStat` (the headline figure, huge poster type
+  in marquee gold, punching in; phrases over 10 characters a step smaller),
+  `StatList` (supporting numbers as a spread of tilted **tickets**, first
+  gold, no stub, dealt in one after another), `BarChart`
+  (`ranked` adds a 01, 02, … column in poster type, #1 in gold; values at
+  the bar tips in poster type), the #1 `Poster` on the top creators /
+  hashtags scenes, and `SuspenseReveal` (the question in poster type beside
+  a **spinning film reel** — a white disc with five round windows around a
+  hub, cut out so the scene color shows through — just the wheel; it turns once every 1.2s around its hub while the
+  question waits). An optional
   giant faint **backdrop** word (`backdrop` prop, `watermark` color) cropped
   off the bottom-right, and Back / Next links. The last scene (share)
   instead offers **Start over** (middle, back to the first scene) and **Back
@@ -147,11 +174,13 @@ never with `fetch` inside components.
   per-scene highlights used by the credits and share card in
   `src/lib/snapshotHighlights.ts`.
   1. `top-creators` (theatre.8) — first scene; upload success lands here.
-     `top_creators` (top 10) as a `BarChart` with no table toggle; backdrop
+     A `Poster` ("Starring @f1", "36 reels watched. Your leading role this
+     week.") then `top_creators` (top 10) as a ranked `BarChart` with no
+     table toggle; backdrop
      is the #1 account. The subtitle's date range comes from
      `watch_time.per_day`.
-  2. `top-hashtags` (theatre.6) — `top_hashtags` (top 10) as a `BarChart`
-     with no table toggle; backdrop is the #1 hashtag.
+  2. `top-hashtags` (theatre.6) — a `Poster` ("Top billing #…") then
+     `top_hashtags` (top 10) as a ranked `BarChart` with no table toggle; backdrop is the #1 hashtag.
   3. `watch-time` (ink) — total time as a `HeroStat` with a movie comparison
      (total ÷ 2h films) and the busiest day, then a `StatList` (scroll
      distance in inches and miles from `watch_time.scroll`: one reel = one
@@ -234,9 +263,34 @@ Requires Node 20.9+. API base URL goes in `frontend/.env.local` as
 
 ## Frontend design system
 
-The design should read like a cinema: a deep red background, film running
-across the screen, a clapperboard to open, a movie screen to drop files on. Beyond that motif it stays quiet:
-hierarchy comes from type size and 1px rules, not from color, shadows or boxes.
+The design should read like **a night at the movies, told the way Spotify
+Wrapped tells a year**: big, bold, playful moments one after another. Deep red
+velvet and ink, marquee gold, film running across the screen, a clapperboard
+to open, a movie screen to drop files on. The big moments are in **poster
+type** (Anton, uppercase) and are made of cinema objects — slates, posters,
+tickets, a marquee, a film reel — lit by soft spotlights with film
+grain over them. Everything around those moments stays plain: body copy in
+Instrument Sans, 1px rules, no shadows or rounded cards.
+
+**Cinema pieces** (`src/components/cinema/`, reused everywhere):
+- `StageLights` — behind a block's content (parent needs `position:
+  relative; isolation: isolate`): two soft spotlight beams swaying from
+  above (`beams={false}` to drop them), a dark vignette at the edges, and a
+  fine SVG film grain jittering in steps. On every scene, the landing hero,
+  every landing band and the finale.
+- `Slate` — an ink clapper slate (striped arm on top, tilted −2°) used as an
+  eyebrow: "SCENE 03 / 09 | TIME ON REELS" on scenes (number in gold), or
+  just a label ("The plot", "Box office").
+- `Ticket` — a cinema ticket: paper or gold, ink text, an optional tilt.
+  No stub (the default, and the stat and landing tickets): half-circle
+  notches cut into the middle of both ends. With a `stub` (only the "No. 1–3"
+  step tickets): a dashed perforation with notches top and bottom, words
+  running up the stub. No "Admit one" anywhere.
+- `Poster` — a one-sheet for a #1: an ink frame with sprocket holes down
+  both sides, a gold sheet inside with a billing line ("Starring"), the name
+  huge in poster type and a caption. Arrives tilted and settles.
+- `Marquee` — an ink sign ringed with gold bulbs that chase (two offset sets
+  lighting in turn), the words in poster type.
 
 **All values live in `frontend/src/theme/tokens.ts`.** `theme.ts` maps them into
 Mantine and exposes the rest as `--snapshot-*` CSS variables. Components read
@@ -275,9 +329,19 @@ theatre.5 `#A82535` (7.0:1 on white) is only for error messages the user must
 act on (the upload page's wrong-file / still-needed lines). Components keep using
 the normal text variables; never hard-code light colors in a component.
 
-No gradients: the page background is a single solid color. Hard-edged stripe
-patterns (film, clapper) are patterns, not gradients. If the background red
-ever changes, recheck white text contrast (it must stay ≥ 4.5:1).
+The page background is a single solid color. The only gradients are
+**light**: `StageLights`' spotlight beams (white at 10%, `spotlight`) and
+vignette (black at 45%, `vignette`) —
+never behind small text in a way that drops it under 4.5:1, never as a
+fill. Hard-edged stripe patterns (film, clapper, slate) are patterns, not
+gradients. If the background red ever changes, recheck white text contrast
+(it must stay ≥ 4.5:1).
+
+`marquee` = gold `#F5C542` (the same value as `peak`): the scenes' hero
+numbers, poster sheets, gold tickets, marquee bulbs and border, the slate's
+scene number, a #1 rank, and the scene-card tags. As text it's only ever
+large (hero numbers, ranks, slate numbers: ≥ 4.3:1 on every scene, so
+AA-large); ink on gold is 12.2:1.
 
 **Share card schemes** (`shareSchemes` in tokens): five card color sets for
 the share carousel — card, text, picture, title on picture, year — built from
@@ -299,10 +363,15 @@ time-on-reels chart (12.2:1 on ink). Not on the loyalty meter. Never
 decoration. `watermark` = white at 7%, only for the giant backdrop word
 behind a scene (decorative, never text to read).
 
-### Typography (1 font)
+### Typography (2 fonts)
 
-**Instrument Sans** (variable, via `next/font` in `src/app/fonts.ts`). Never add
-a second family; create hierarchy with size and weight.
+**Instrument Sans** (variable, via `next/font` in `src/app/fonts.ts`) for all
+body copy, labels and UI. **Anton** (`--snapshot-font-display`,
+`fontFamilyDisplay`), always uppercase, weight 400, is the **poster type**
+for the big moments only: scene and band titles, the landing title, hero
+numbers, ranks, chart values, posters, tickets, slates, the marquee, the
+suspense question and the upload prompt. Never for running text. Don't add a
+third family.
 
 | Token | Size | Use |
 | --- | --- | --- |
@@ -313,10 +382,8 @@ a second family; create hierarchy with size and weight.
 | `xl` | 24px | Section headings (`h2`) |
 | `display` | `clamp(56px, 12vw, 152px)` | Hero title only (`h1`) |
 
-Weights: 400 regular, 500 medium, 600 semibold (headings, labels), 700 bold
-(only the landing page's credit lines under the film's bottom-left corner:
-"Created by Arik Lee & Justin Pun" in `xl` | "Inspired by Spotify Wrapped" in
-`lg`, on one line, both white). Line height:
+Weights: 400 regular, 500 medium, 600 semibold (headings, labels, the
+billing block's roles), 700 bold (reserved; currently unused). Line height:
 0.92 display / 1.2 headings / 1.55 body. Letter spacing: −0.045em display,
 −0.015em headings.
 
@@ -332,16 +399,16 @@ keys). Page rhythm: `--snapshot-space-section` 64 (between sections),
 One radius: **4px** for anything with corners (every Mantine radius key is
 4px; `--snapshot-radius`). Layout regions and dividers are square. No pills,
 no large rounded cards. Exception — **square (0) corners** on the upload
-page's drop zone, its `.json` file labels and name field, and on the buttons: the header link
-(Get Snapshot / Go Back) and Create Snapshot.
+page's drop zone, its `.json` file labels and name field, and on Create
+Snapshot. (The header links are tickets, below.)
 
 ### Lines, depth and motion
 
 - Structure comes from 1px rules: `--snapshot-border-hairline` (`border`).
 - Unfilled content slots use `--snapshot-border-placeholder` (1px dashed
   `borderStrong`) so placeholders are visibly unfinished.
-- Shadows are disabled (all Mantine shadows are `none`). No glows, gradients or
-  floating decoration.
+- Shadows are disabled (all Mantine shadows are `none`). No glows. Light
+  gradients only as described under Color (`StageLights`).
 
 ### Cinema motif and motion
 
@@ -364,8 +431,9 @@ card arriving); the landing and upload pages otherwise stay still.
   - The hero title uses `mix-blend-mode: difference` with plain paper color:
     black on frames, paper on edges/gaps, so it is always readable as the film
     moves. Only neutral colors work with this blend; tinted ones shift hue.
-  - The title is vertically centered on the film and left-aligned to the
-    content container (same left edge as the sections below). Nothing
+  - The title is vertically centered on the film and left-aligned at the
+    window's 24px gutter (same left edge as the Instagram glyph and the
+    credits). Nothing
     else sits on the film; copy goes below it, in the section bands.
   - If copy ever has to sit on the film, use `textOnFilm` (theatre red) with no
     blend, inside the frame area (clear of the 52px sprocket edges).
@@ -383,7 +451,7 @@ card arriving); the landing and upload pages otherwise stay still.
   black frame;
   black text. Dragging files over it turns the dashes solid. Inside while
   waiting: just
-  "Click or Drag" (regular weight) with the three file names on the line
+  "CLICK OR DRAG" in poster type with the three file names on the line
   below. Directly under the screen, a toolbar flush
   with its edges (`SnapshotForm`): the three file names as pills at the
   bottom-left corner; the name field (placeholder "Name", label for screen
@@ -425,7 +493,14 @@ card arriving); the landing and upload pages otherwise stay still.
   the line is wiped in left to right (a clip, not a dash animation, which
   breaks with `vector-effect: non-scaling-stroke`); off under
   `prefers-reduced-motion`.
-- **Square buttons** (header Get Snapshot / Go Back, Create Snapshot): on
+- **Header tickets** (`AppHeader`): the header links are small cinema
+  tickets in poster type (`md`, uppercase), half-circle notches cut into
+  both ends, slightly tilted: **Get Snapshot** gold with ink text (12.2:1,
+  −2°), **View @name's snapshot** paper with ink text (19.8:1, +1.5°), **Go
+  Back** on the white upload page ink with paper text (19.8:1). Hover /
+  focus: they straighten and grow by `--snapshot-hover-scale`; keyboard
+  focus also underlines the label (the notch mask would clip an outline).
+- **Square buttons** (Create Snapshot, Open Snapshot): on
   hover / keyboard focus they light up — fill with their accent, text flipping
   to the page color — and grow slightly. On red pages the accent is white
   (white border; fills white with red text); on light pages it's dark red
@@ -439,7 +514,13 @@ card arriving); the landing and upload pages otherwise stay still.
   (there is no dimmer text). All of it is off under `prefers-reduced-motion`:
   scenes cut instead of wiping, numbers show their final value, the answer
   shows at once, the credits stand still.
-- Don't add other animations. Film art is built from tokens in
+- Also moving: spotlight beams swaying (`--snapshot-spotlight-sweep` 9s),
+  film grain jittering (`--snapshot-grain-shift`, stepped), marquee bulbs
+  chasing (`--snapshot-marquee-blink` 1.6s), scene titles rising from behind
+  their baseline, hero numbers punching in, stat tickets being dealt in
+  tilted, the #1 poster arriving, the film reel spinning while a reveal waits, and tickets /
+  scene cards straightening and growing on hover. All off under
+  `prefers-reduced-motion`. Film art is built from tokens in
   `cinema/filmArt.ts`, never hard-coded colors.
 - The header shows the **Instagram glyph** (white, 2rem, `public/instagram-glyph-white.svg`,
   from Instagram's official brand assets, unmodified) in the window's top-left
@@ -454,8 +535,8 @@ card arriving); the landing and upload pages otherwise stay still.
   its section; never invent copy, features,
   stats, testimonials or sample results.
 - Navigation only links to pages that exist. The header (`AppHeader`, a client
-  component because it reads the path) holds one link in a square box
-  (copy in `src/content/navigation.ts`):
+  component because it reads the path) holds its links as small tickets
+  (see Header tickets; copy in `src/content/navigation.ts`):
   - on `/`: **Get Snapshot** → `/upload`, top right, with **View @name's
     snapshot** before it when this browser remembers one that still exists;
   - on `/upload`: **Go Back** → `/`, in the window's top-left corner (full
@@ -464,7 +545,5 @@ card arriving); the landing and upload pages otherwise stay still.
   - on the snapshot scenes (`/snapshot/…`): **no link** — the files are
     already in and the scenes have their own Back / Next. The header stays
     (empty, same height) so the scenes' full-screen sizing doesn't change.
-  Both are square boxes sized like Create Snapshot (`sm` text, xs/sm padding,
-  1px border) with the same light-up hover.
 - Visually hidden text (for screen readers) uses a local `.visuallyHidden`
   class: absolutely positioned, 1px, clipped.
