@@ -2,16 +2,20 @@
   display: flex;
   flex-direction: column;
   gap: var(--mantine-spacing-sm); /* toolbar sits right at the screen's bottom edge */
-  width: 100%;
-  max-width: 60rem;
+  /* The page's column width (app/upload/page.module.css), so heading,
+     screen, toolbar and note share their edges. */
+  width: var(--upload-width, 100%);
   margin: 0 auto;
 }
 
 /* The drop zone: a white, square-cornered box with a dashed dark red border. */
 .screen {
   display: grid;
-  aspect-ratio: 2 / 1;
-  min-height: 20rem;
+  /* Near-square where there's room; on shorter windows it gives up height
+     so the heading, toolbar and note still fit without scrolling. */
+  aspect-ratio: 5 / 4;
+  max-height: calc(100dvh - 24rem);
+  min-height: 16rem;
   background: var(--snapshot-color-light-background);
   border: 2px dashed var(--snapshot-color-light-accent);
   border-radius: 0; /* square corners */

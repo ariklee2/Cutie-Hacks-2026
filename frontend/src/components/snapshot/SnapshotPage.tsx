@@ -47,7 +47,8 @@ export function SnapshotPage({
 
   return (
     <SceneTapArea className={classes.scene} data-scene={step} previous={previousHref} next={nextHref}>
-      <StageLights />
+      {/* No projector flicker here: these scenes are for reading numbers. */}
+      <StageLights flicker={false} />
       {backdrop && (
         <span className={classes.backdrop} aria-hidden="true">
           {backdrop}

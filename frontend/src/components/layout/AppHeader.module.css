@@ -7,12 +7,20 @@
   height: var(--snapshot-header-height);
 }
 
-/* Landing: the Instagram glyph, alone in the top-left corner (the links stay right). */
-.logo {
-  display: block;
-  width: 2rem;
-  height: 2rem;
+/* Landing: "Go to Instagram" alone in the top-left corner (the other links stay right). */
+.link[data-variant='instagram'] {
   margin-right: auto;
+  background: var(--snapshot-color-film-frame);
+  transform: rotate(1.5deg);
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 .inner[data-align='start'] {
@@ -52,6 +60,10 @@
 .link[data-variant='secondary'] {
   background: var(--snapshot-color-film-frame);
   transform: rotate(1.5deg);
+}
+
+.link[data-variant='home'] {
+  background: var(--snapshot-color-film-frame);
 }
 
 .link[data-variant='back'] {

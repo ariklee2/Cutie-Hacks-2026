@@ -3,11 +3,9 @@
 import { Container } from '@mantine/core';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
 import { navigation } from '@/content/navigation';
-import { snapshotExists } from '@/lib/api/snapshot';
-import { forgetSnapshot, savedSnapshotName } from '@/lib/savedSnapshot';
+import { useSavedSnapshot } from '@/lib/useSavedSnapshot';
 
 import classes from './AppHeader.module.css';
 
@@ -15,14 +13,15 @@ import classes from './AppHeader.module.css';
  * Site header: its links are small cinema tickets in poster type (notched
  * ends) that straighten up and grow slightly on hover: Get Snapshot gold,
  * View @name's snapshot paper, Go Back ink (on the white upload page).
- *   - Landing page: the Instagram glyph in the window's top-left corner;
+ *   - Landing page: a "Go to Instagram ↗" ticket (paper, new tab) in the
+ *     window's top-left corner;
  *     "Get Snapshot", at the window's top right, into the upload page;
  *     beside it, "View @name's snapshot" when this browser remembers a
  *     snapshot (lib/savedSnapshot.ts) that still exists on the server.
  *   - Upload page: "Go Back", in the window's top-left corner, to the landing page.
- *   - Snapshot scenes (/snapshot/…): no link — the files are already in, and
- *     the scenes have their own Back / Next. The empty header keeps its
- *     height so the scenes' full-screen sizing stays the same.
+ *   - Snapshot scenes (/snapshot/…): a "Go Home" ticket (paper) in the
+ *     top-left corner, back to the landing page; the scenes have their own
+ *     Back / Next.
  * (A client component only because it reads the current path.)
  */
 export function AppHeader() {
@@ -34,7 +33,11 @@ export function AppHeader() {
   if (pathname.startsWith('/snapshot/')) {
     return (
       <header>
-        <div className={classes.inner} />
+        <Container component="nav" fluid className={classes.inner} data-align="start" aria-label="Main">
+          <Link href={navigation.goHome.href} className={classes.link} data-variant="home">
+            {navigation.goHome.label}
+          </Link>
+        </Container>
       </header>
     );
   }
@@ -54,8 +57,16 @@ export function AppHeader() {
         aria-label="Main"
       >
         {onLanding && (
-          // eslint-disable-next-line @next/next/no-img-element -- a tiny static SVG; next/image adds nothing here
-          <img src={navigation.logo.src} alt={navigation.logo.alt} className={classes.logo} width={32} height={32} />
+          <a
+            href={navigation.instagram.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={classes.link}
+            data-variant="instagram"
+          >
+            {navigation.instagram.label} <span aria-hidden="true">↗</span>
+            <span className={classes.visuallyHidden}> ({navigation.instagram.newTab})</span>
+          </a>
         )}
         {saved && (
           <Link href={navigation.viewSaved.href(saved)} className={classes.link} data-variant="secondary">
@@ -68,32 +79,4 @@ export function AppHeader() {
       </Container>
     </header>
   );
-}
-
-/**
- * The snapshot this browser remembers, once the server confirms it still
- * exists (a stale name — deleted or renamed data — is forgotten). Only
- * checked when `enabled`.
- */
-function useSavedSnapshot(enabled: boolean): string | null {
-  const [name, setName] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!enabled) return;
-    const remembered = savedSnapshotName();
-    if (!remembered) return;
-    let cancelled = false;
-    snapshotExists(remembered)
-      .then((exists) => {
-        if (cancelled) return;
-        if (exists) setName(remembered);
-        else forgetSnapshot();
-      })
-      .catch(() => {}); // Offline or server error: just don't offer it.
-    return () => {
-      cancelled = true;
-    };
-  }, [enabled]);
-
-  return enabled ? name : null;
 }

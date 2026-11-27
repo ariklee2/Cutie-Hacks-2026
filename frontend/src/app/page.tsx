@@ -13,15 +13,15 @@ export default function HomePage() {
     <>
       <Hero title={landingContent.title} credits={landingContent.credits} />
 
-      <LandingBand id="plot" band="var(--snapshot-color-band-1)" eyebrow={plot.eyebrow} heading={plot.heading} layout="split">
+      <LandingBand id="plot" eyebrow={plot.eyebrow} heading={plot.heading} layout="split">
         <p className={classes.plot}>{plot.text}</p>
       </LandingBand>
 
-      <LandingBand id="showing" band="var(--snapshot-color-band-2)" eyebrow={showing.eyebrow} heading={showing.heading}>
+      <LandingBand id="showing" eyebrow={showing.eyebrow} heading={showing.heading}>
         <SceneCards scenes={showing.scenes} />
       </LandingBand>
 
-      <LandingBand id="steps" band="var(--snapshot-color-ink)" eyebrow={steps.eyebrow} heading={steps.heading}>
+      <LandingBand id="steps" eyebrow={steps.eyebrow} heading={steps.heading}>
         <StepTickets steps={steps.items} />
       </LandingBand>
 

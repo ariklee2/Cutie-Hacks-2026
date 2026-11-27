@@ -1,3 +1,5 @@
+import type { SnapshotStep } from '@/lib/snapshotSequence';
+
 /**
  * Landing page copy. Every line must describe something the app really does.
  *
@@ -8,6 +10,11 @@
 export interface LandingItem {
   name: string;
   detail: string;
+}
+
+/** A "Now showing" card: the snapshot scene it previews (its link, once you have a snapshot). */
+export interface LandingScene extends LandingItem {
+  step: SnapshotStep;
 }
 
 /** The way into the app: a gold ticket linking to the upload page. */
@@ -34,15 +41,15 @@ export const landingContent = {
     eyebrow: 'Now showing',
     heading: 'Eight scenes, all about you',
     scenes: [
-      { name: 'Top creators', detail: 'The accounts you kept coming back to.' },
-      { name: 'Top hashtags', detail: 'What your feed was really about.' },
-      { name: 'Time on reels', detail: 'Your hours, your busiest day, and how far your thumb traveled.' },
-      { name: 'Longest binge', detail: 'Your most non-stop scroll of the week.' },
-      { name: 'Loyal or variety', detail: 'Creature of habit, or always on to the next creator?' },
-      { name: 'Your club', detail: 'Sporty, Gamer, Brainrot, Nerd… or Hufflepuff, the all-rounder.' },
-      { name: 'For you', detail: 'New reels and accounts picked to match your taste.' },
-      { name: 'The credits', detail: 'Your week’s highlights rolled like the end of a movie, then on one card to share.' },
-    ] satisfies LandingItem[],
+      { step: 'top-creators', name: 'Top creators', detail: 'The accounts you kept coming back to.' },
+      { step: 'top-hashtags', name: 'Top hashtags', detail: 'What your feed was really about.' },
+      { step: 'watch-time', name: 'Time on reels', detail: 'Your hours, your busiest day, and how far your thumb traveled.' },
+      { step: 'binge', name: 'Longest binge', detail: 'Your most non-stop scroll of the week.' },
+      { step: 'loyalty', name: 'Loyal or variety', detail: 'Creature of habit, or always on to the next creator?' },
+      { step: 'club', name: 'Your club', detail: 'Sporty, Gamer, Brainrot, Nerd… or Hufflepuff, the all-rounder.' },
+      { step: 'recommendations', name: 'For you', detail: 'New reels and accounts picked to match your taste.' },
+      { step: 'credits', name: 'The credits', detail: 'Your week’s highlights rolled like the end of a movie, then on one card to share.' },
+    ] satisfies LandingScene[],
   },
 
   steps: {

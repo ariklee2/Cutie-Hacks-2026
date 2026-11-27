@@ -2,7 +2,6 @@ import { Container } from '@mantine/core';
 import type { Metadata } from 'next';
 
 import { Slate } from '@/components/cinema/Slate';
-import { OpenSavedSnapshot } from '@/components/upload/OpenSavedSnapshot';
 import { UploadScreen } from '@/components/upload/UploadScreen';
 import { uploadContent } from '@/content/upload';
 import { keepUploads } from '@/lib/server/deployPolicy';
@@ -16,12 +15,16 @@ export const metadata: Metadata = {
   title: `${uploadContent.pageTitle} · Insta Snapshot`,
 };
 
-/** The upload page: the drop zone on a white ("light") page, then a way to reopen a saved snapshot by name. */
+/**
+ * The upload page: a near-square drop zone on a white ("light") page,
+ * centered in the window under its heading. (A saved snapshot is reopened
+ * from the landing page's header, not here.)
+ */
 export default function UploadPage() {
   return (
     // data-surface="light": white page, black text (see globals.css).
     <Container component="section" className={classes.stage} data-surface="light">
-      {/* The drop zone fills the middle under a poster-type heading; "Already made one?" sits at the bottom. */}
+      {/* Heading, drop zone, toolbar and note: one column, centered both ways. */}
       <div className={classes.main}>
         <div className={classes.head}>
           <Slate label={uploadContent.eyebrow} />
@@ -30,7 +33,6 @@ export default function UploadPage() {
         <UploadScreen />
         <p className={classes.privacy}>{uploadContent.privacy(!keepUploads)}</p>
       </div>
-      <OpenSavedSnapshot />
     </Container>
   );
 }

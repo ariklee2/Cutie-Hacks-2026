@@ -46,6 +46,23 @@
   transform: rotate(0deg) scale(var(--snapshot-hover-scale));
 }
 
+/* With a saved snapshot the whole card is a link to that scene. */
+.link {
+  display: block;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--snapshot-color-text);
+  outline-offset: 6px;
+}
+
+.card:has(.link) {
+  cursor: pointer;
+}
+
 .frame {
   height: 100%;
   padding: var(--mantine-spacing-md);

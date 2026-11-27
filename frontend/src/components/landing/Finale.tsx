@@ -7,7 +7,7 @@ import { landingContent } from '@/content/landing';
 import classes from './Finale.module.css';
 import { TicketCta } from './TicketCta';
 
-/** The last band: a lit marquee sign under spotlights, then the ticket in. */
+/** The last band: a lit marquee screen under spotlights, then the ticket in. */
 export function Finale() {
   const copy = landingContent.finale;
   return (

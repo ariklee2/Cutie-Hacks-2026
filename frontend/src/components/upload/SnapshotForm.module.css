@@ -15,12 +15,11 @@
   gap: var(--mantine-spacing-sm);
 }
 
-/* Name field then the button, pinned to the screen's right edge (also when
-   the toolbar wraps on narrow screens). `stretch` makes the name field the
-   button's height, so their tops (and bottoms) line up. */
+/* Name field then the ticket, pinned to the screen's right edge (also when
+   the toolbar wraps on narrow screens), centered on each other. */
 .right {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   gap: var(--mantine-spacing-sm);
   margin-left: auto;
 }
@@ -28,7 +27,7 @@
 /* Same size as the .json pills beside it (padding, text, 1px border);
    outlined in the text color (black on the light upload page). */
 .input {
-  width: 9.5rem;
+  width: 8rem;
   padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
   font: inherit;
   font-size: var(--mantine-font-size-sm);
@@ -43,8 +42,7 @@
   opacity: 0.6;
 }
 
-.input:focus-visible,
-.submit:focus-visible {
+.input:focus-visible {
   outline: 2px solid var(--snapshot-color-text);
   outline-offset: 2px;
 }
@@ -53,36 +51,53 @@
   border-style: dashed;
 }
 
-/* The one action on the page, sized exactly like the .json pills: a square
-   box, black text, solid dark red border (echoing the drop zone's dashed one).
-   Hover / focus: lights up (fills dark red, white text) and grows slightly —
-   same as the header's Go Back. */
+/*
+ * Create Snapshot: a cinema ticket like the header's — poster type,
+ * half-circle notches cut into both ends, a slight tilt. Dark red with white
+ * text (13.9:1) once it can be used; light gray with ink text (13.6:1)
+ * while it's waiting for the files and a name. Hover / focus (when enabled):
+ * it straightens and grows slightly; keyboard focus also underlines the
+ * label (the notch mask would clip an outline).
+ */
 .submit {
-  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
-  font: inherit;
-  font-size: var(--mantine-font-size-sm);
-  font-weight: var(--snapshot-font-weight-semibold);
-  color: var(--snapshot-color-text);
-  background: var(--snapshot-color-light-background);
-  border: 1px solid var(--snapshot-color-light-accent);
+  --notch: 5px;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
+  font-family: var(--snapshot-font-display);
+  font-size: var(--mantine-font-size-md);
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--snapshot-color-light-background);
+  background: var(--snapshot-color-light-accent);
+  border: none;
   border-radius: 0;
   cursor: pointer;
-  transition:
-    transform var(--snapshot-hover-duration) var(--snapshot-ease-out),
-    background-color var(--snapshot-hover-duration),
-    color var(--snapshot-hover-duration);
+  transform: rotate(-2deg);
+  -webkit-mask:
+    radial-gradient(circle at 0 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle at 0 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) right / 51% 100% no-repeat;
+  transition: transform var(--snapshot-hover-duration) var(--snapshot-ease-out);
 }
 
 .submit:enabled:hover,
 .submit:enabled:focus-visible {
-  color: var(--snapshot-color-light-background);
-  background: var(--snapshot-color-light-accent);
-  transform: scale(var(--snapshot-hover-scale));
+  transform: rotate(0deg) scale(var(--snapshot-hover-scale));
+}
+
+.submit:focus-visible {
+  outline: none;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 .submit:disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  color: var(--snapshot-color-ink);
+  background: var(--mantine-color-ink-1);
 }
 
 @media (prefers-reduced-motion: reduce) {

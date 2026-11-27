@@ -1,7 +1,17 @@
+/*
+ * Shaped like a movie screen: 16:9 and as wide as the content allows (up to
+ * 60rem), the words centered on it. On narrow screens it simply grows
+ * taller to fit the words.
+ */
 .marquee {
   --bulb-gap: 22px;
   --ring: 22px;
   position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 60rem;
+  aspect-ratio: 16 / 9;
   padding: calc(var(--ring) + var(--mantine-spacing-lg)) calc(var(--ring) + var(--mantine-spacing-xl));
   background: var(--snapshot-color-ink);
   border: 3px solid var(--snapshot-color-marquee);

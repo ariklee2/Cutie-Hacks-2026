@@ -68,11 +68,11 @@ export const color = {
   // Error messages on light pages: a clearly red shade of the theatre scale,
   // 7.0:1 on white. Only for problems the user must fix.
   lightError: theatre[5],
-  // Landing page sections below the film, each one step lighter than the
-  // last (shades of the theatre scale, never new hues). White text:
-  // 12.0:1 on band 1, 9.4:1 on band 2.
-  band1: theatre[7], // #6E0F1C — Description
-  band2: theatre[6], // #8A1626 — What's in your snapshot
+  // Landing sections are all the page red; where one ends and the next
+  // begins is marked by a soft shadow edge: a 1px dark line, then black
+  // fading out below it (layout.sectionEdge tall). Decorative.
+  sectionLine: 'rgb(0 0 0 / 0.35)',
+  sectionShadow: 'rgb(0 0 0 / 0.35)',
   // A file name on the upload page once that file is in: green fill, ink text.
   // 8.0:1 against the deep red; ink on it 11.4:1. Status only — never decoration.
   added: palette.added,
@@ -188,6 +188,7 @@ export const layout = {
   page: '6rem', // 96 — top/bottom of major page areas
   containerWidth: '72rem', // 1152 — max content width
   headerHeight: '4rem', // 64
+  sectionEdge: '1.75rem', // 28 — height of the shadow at the top of a landing section
 } as const;
 
 /* --------------------------------------------------------------- Radius --
@@ -227,6 +228,7 @@ export const motion = {
   marqueeBlink: '1.6s', // marquee bulbs chasing around a sign (one cycle)
   spotlightSweep: '9s', // spotlight beams swaying across a scene (one cycle)
   grainShift: '0.8s', // film grain jittering (one cycle, stepped)
+  flicker: '0.24s', // projector light flickering (one cycle, stepped)
 } as const;
 
 /* ----------------------------------------------------------------- Film --

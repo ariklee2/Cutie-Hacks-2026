@@ -88,9 +88,9 @@ never with `fetch` inside components.
   - **First screen** (`Hero` `.stage`, viewport height minus the header,
     under `StageLights`): page red with the film starting right under the
     header — the header's 64px red strip is the only red above it, with the
-    Instagram glyph and Get Snapshot vertically centered in it — and the
+    Go to Instagram and Get Snapshot tickets vertically centered in it — and the
     title **INSTA SNAPSHOT** on it in poster type, starting at the same 24px
-    gutter as the Instagram glyph and the credits (a fluid container, not the
+    gutter as the Go to Instagram ticket and the credits (a fluid container, not the
     centered content width). 8px (`sm`) under the film: the credits at the
     left as a movie poster's **billing block** (`credits` in
     `content/landing.ts`: each a small spaced-out uppercase role — "Created
@@ -99,16 +99,25 @@ never with `fetch` inside components.
     right, a further 8px lower (`.cta`), so when it wraps under the credits on
     narrower screens its tilted top edge clears them by about 24px. The bands start just below the fold.
   - Then full-width **bands** (`LandingBand`: grain, a `Slate` eyebrow, a
-    poster-type heading, then content), each one shade lighter than the one
-    above and then ink: **The plot** (`band1` = theatre.7 `#6E0F1C`; heading
-    left, description right), **Now showing** (`band2` = theatre.6
-    `#8A1626`; `SceneCards`: one frame of film per snapshot scene — ink
-    with sprocket holes top and bottom, a white frame with "Scene 01" on a
-    gold tag, the name in poster type and its one-liner), **How to get in**
-    (ink; `StepTickets`: three tickets "No. 1–3", the last gold). White text
-    12.0:1 / 9.4:1 / 19.8:1. Don't go lighter than theatre.6 behind white text.
-  - **Finale** (page red under spotlights): a `Marquee` sign "Your week, on
-    the big screen" with chasing gold bulbs, one line, then the ticket again.
+    poster-type heading, then content), **all the same page red**
+    (`color.background`, white text 13.9:1): **The plot** (heading left,
+    description right), **Now showing** (`SceneCards`: one frame of film per
+    snapshot scene — ink with sprocket holes top and bottom, a white frame
+    with "Scene 01" on a gold tag, the name in poster type and its
+    one-liner; each card has its scene's `step`, and once this browser has
+    a saved snapshot — `useSavedSnapshot` in `lib/useSavedSnapshot.ts`, the
+    same check as the header's View @name's snapshot — every card links
+    straight to that scene of it, `/snapshot/<name>/<step>`; without one the
+    cards aren't links), **How to get in** (`StepTickets`: three tickets "No. 1–3",
+    the last gold). What marks a new section is a **soft shadow edge** along
+    the top of each band and of the finale: a 1px dark line
+    (`sectionLine`, black at 35%) with black fading out below it
+    (`sectionShadow`, black at 35% → transparent, `--snapshot-section-edge`
+    28px tall), as if the section above sits on top. Keep it subtle; don't
+    reintroduce per-section colors.
+  - **Finale** (page red under spotlights, the same shadow edge on top): a `Marquee` screen "Your week,
+    on the big screen" with chasing gold bulbs, one line, then the ticket
+    again.
 - `/upload` — a **light page** (white background, black text): a `Slate`
   ("Box office") and the heading "Add your Instagram files" in poster type
   above the drop zone, where the user adds
@@ -133,13 +142,22 @@ never with `fetch` inside components.
   `transform.py` and the snapshot file name, or the error under the toolbar
   (including any snapshot sections that failed). On success it goes straight
   to `/snapshot/<name>/top-creators`.
-  At the bottom of the window, above a hairline, **"Already made one?"**
-  (`OpenSavedSnapshot`): a name field and **Open Snapshot** that check
-  `GET /api/snapshot` and go straight to that snapshot's first scene, or
-  say there's no saved snapshot by that name. No files are uploaded.
+  Layout: the heading (slate + one-line poster heading), drop zone,
+  toolbar and privacy note form **one column centered** in the window,
+  set a little above true center (64px extra below it); the heading sits 8px
+  (`sm`) above the drop zone, the same gap as the toolbar below it.
+  `--upload-width` = `min(100%, 48rem)` (`app/upload/page.module.css`):
+  wide enough for the toolbar's three file names, the name field (8rem) and
+  the Create Snapshot ticket **on one line** (it wraps only on phones). The
+  drop zone is **near-square (5:4)** where the window is tall enough; on
+  shorter windows it gives up height (`max-height: calc(100dvh − 24rem)`, at
+  least 16rem) so the page fits without scrolling. The drop zone, toolbar,
+  heading and note share that width, so their edges line up. There is no
+  "open a saved snapshot" form here: a saved snapshot is reopened from the
+  landing page header (**View @name's snapshot**).
 - **Saved snapshots**: results are files on the server (`data/`), so they
   outlive uploads and restarts. The browser remembers the last snapshot it
-  created or opened (`lib/savedSnapshot.ts`, the name only, in
+  created (`lib/savedSnapshot.ts`, the name only, in
   `localStorage`); on `/` the header then shows **View @name's snapshot**
   beside Get Snapshot, once `GET /api/snapshot` confirms it still exists (a
   stale name is forgotten).
@@ -291,9 +309,12 @@ Instrument Sans, 1px rules, no shadows or rounded cards.
 **Cinema pieces** (`src/components/cinema/`, reused everywhere):
 - `StageLights` — behind a block's content (parent needs `position:
   relative; isolation: isolate`): two soft spotlight beams swaying from
-  above (`beams={false}` to drop them), a dark vignette at the edges, and a
-  fine SVG film grain jittering in steps. On every scene, the landing hero,
-  every landing band and the finale.
+  above (`beams={false}` to drop them), a dark vignette at the edges, a
+  fine SVG film grain jittering in steps, and the projector's **flicker** (a
+  faint black veil stepping between 2–7% every `--snapshot-flicker`, 0.24s;
+  off under reduced motion; `flicker={false}` drops it). On every scene,
+  the landing hero, every landing band and the finale — but the flicker
+  only on the landing page: the snapshot scenes pass `flicker={false}`.
 - `Slate` — an ink clapper slate (striped arm on top, tilted −2°) used as an
   eyebrow: "SCENE 03 / 09 | TIME ON REELS" on scenes (number in gold), or
   just a label ("The plot", "Box office").
@@ -305,8 +326,10 @@ Instrument Sans, 1px rules, no shadows or rounded cards.
 - `Poster` — a one-sheet for a #1: an ink frame with sprocket holes down
   both sides, a gold sheet inside with a billing line ("Starring"), the name
   huge in poster type and a caption. Arrives tilted and settles.
-- `Marquee` — an ink sign ringed with gold bulbs that chase (two offset sets
-  lighting in turn), the words in poster type.
+- `Marquee` — an ink board shaped like a movie screen (16:9, up to 60rem
+  wide; taller on phones when the words need it), ringed with gold bulbs
+  that chase (two offset sets lighting in turn), the words centered on it in
+  poster type.
 
 **All values live in `frontend/src/theme/tokens.ts`.** `theme.ts` maps them into
 Mantine and exposes the rest as `--snapshot-*` CSS variables. Components read
@@ -354,7 +377,7 @@ gradients. If the background red ever changes, recheck white text contrast
 (it must stay ≥ 4.5:1).
 
 `marquee` = gold `#F5C542` (the same value as `peak`): the scenes' hero
-numbers, poster sheets, gold tickets, marquee bulbs and border, the slate's
+numbers, poster sheets, gold tickets, the slate's
 scene number, a #1 rank, and the scene-card tags. As text it's only ever
 large (hero numbers, ranks, slate numbers: ≥ 4.3:1 on every scene, so
 AA-large); ink on gold is 12.2:1.
@@ -415,8 +438,8 @@ keys). Page rhythm: `--snapshot-space-section` 64 (between sections),
 One radius: **4px** for anything with corners (every Mantine radius key is
 4px; `--snapshot-radius`). Layout regions and dividers are square. No pills,
 no large rounded cards. Exception — **square (0) corners** on the upload
-page's drop zone, its `.json` file labels and name field, and on Create
-Snapshot. (The header links are tickets, below.)
+page's drop zone, its `.json` file labels and name field. (The header links
+and Create Snapshot are tickets, below.)
 
 ### Lines, depth and motion
 
@@ -447,7 +470,7 @@ card arriving); the landing and upload pages otherwise stay still.
     black on frames, paper on edges/gaps, so it is always readable as the film
     moves. Only neutral colors work with this blend; tinted ones shift hue.
   - The title is vertically centered on the film and left-aligned at the
-    window's 24px gutter (same left edge as the Instagram glyph and the
+    window's 24px gutter (same left edge as the Go to Instagram ticket and the
     credits). Nothing
     else sits on the film; copy goes below it, in the section bands.
   - If copy ever has to sit on the film, use `textOnFilm` (theatre red) with no
@@ -468,11 +491,13 @@ card arriving); the landing and upload pages otherwise stay still.
   below. Directly under the screen, a toolbar flush
   with its edges (`SnapshotForm`): the three file names as pills at the
   bottom-left corner; the name field (placeholder "Name", label for screen
-  readers only) then **Create Snapshot** at the bottom-right — the field is
-  stretched to the button's height so their tops and bottoms line up. Name
-  field and button use the pills' exact sizing (xs/sm padding, `sm` text, 1px
-  border). The button: a square box, white, black text, 1px solid dark red
-  border. Pills: black
+  readers only, 8rem wide, the pills' sizing) then **Create Snapshot** at
+  the bottom-right, vertically centered on the field. Create Snapshot is a
+  **ticket** like the header's: poster type, notched ends, tilted −2°;
+  dark red (`lightAccent`) with white text (13.9:1) once it can be used,
+  light gray (`ink.1`) with ink text (13.6:1) while it waits for the three
+  files and a name. Enabled, it straightens and grows on hover / focus
+  (keyboard focus underlines it). Pills: black
   outline while waiting, **filled green** with ink text once that exact file
   is in, plus a hidden "added" for screen readers — no check marks, no
   counter. Any problem (unreadable file, a file that isn't one of the three,
@@ -513,12 +538,9 @@ card arriving); the landing and upload pages otherwise stay still.
   Back** on the white upload page ink with paper text (19.8:1). Hover /
   focus: they straighten and grow by `--snapshot-hover-scale`; keyboard
   focus also underlines the label (the notch mask would clip an outline).
-- **Square buttons** (Create Snapshot, Open Snapshot): on
-  hover / keyboard focus they light up — fill with their accent, text flipping
-  to the page color — and grow slightly. On red pages the accent is white
-  (white border; fills white with red text); on light pages it's dark red
-  (`lightAccent`; fills dark red with white text). They grow by
-  `--snapshot-hover-scale` (1.06) over `--snapshot-hover-duration` (0.15s). Disabled buttons don't react. The transition is off under
+- **Ticket buttons** (header links, Create Snapshot) grow by
+  `--snapshot-hover-scale` (1.06) over `--snapshot-hover-duration` (0.15s)
+  on hover / focus. Disabled ones don't react. The transition is off under
   `prefers-reduced-motion` (the state still changes, instantly).
 - **Snapshot scene motion** (`components/snapshot/`): entrances rise 24px and
   fade in with `--snapshot-ease-out`, `--snapshot-scene-stagger` (0.12s)
@@ -535,9 +557,9 @@ card arriving); the landing and upload pages otherwise stay still.
   scene cards straightening and growing on hover. All off under
   `prefers-reduced-motion`. Film art is built from tokens in
   `cinema/filmArt.ts`, never hard-coded colors.
-- The header shows the **Instagram glyph** (white, 2rem, `public/instagram-glyph-white.svg`,
-  from Instagram's official brand assets, unmodified) in the window's top-left
-  corner on the landing page only. No other page has a logo.
+- No page has a logo. On the landing page the top-left corner holds a **Go
+  to Instagram ↗** ticket (paper, ink text, +1.5°) linking to
+  instagram.com in a new tab (screen readers hear "opens in a new tab").
 
 ### Component conventions
 
@@ -550,13 +572,14 @@ card arriving); the landing and upload pages otherwise stay still.
 - Navigation only links to pages that exist. The header (`AppHeader`, a client
   component because it reads the path) holds its links as small tickets
   (see Header tickets; copy in `src/content/navigation.ts`):
-  - on `/`: **Get Snapshot** → `/upload`, top right, with **View @name's
+  - on `/`: **Go to Instagram ↗** → instagram.com (new tab), top left;
+    **Get Snapshot** → `/upload`, top right, with **View @name's
     snapshot** before it when this browser remembers one that still exists;
   - on `/upload`: **Go Back** → `/`, in the window's top-left corner (full
     window width, like Get Snapshot in the top-right on `/`) (a link home, not browser
     history, so it works when `/upload` is opened directly).
-  - on the snapshot scenes (`/snapshot/…`): **no link** — the files are
-    already in and the scenes have their own Back / Next. The header stays
-    (empty, same height) so the scenes' full-screen sizing doesn't change.
+  - on the snapshot scenes (`/snapshot/…`): **Go Home** → `/`, a paper
+    ticket in the window's top-left corner; the scenes have their own Back /
+    Next for moving between scenes.
 - Visually hidden text (for screen readers) uses a local `.visuallyHidden`
   class: absolutely positioned, 1px, clipped.

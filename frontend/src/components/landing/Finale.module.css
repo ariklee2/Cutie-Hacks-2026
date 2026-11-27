@@ -5,6 +5,25 @@
   background: var(--snapshot-color-background);
 }
 
+/*
+ * The section edge: a dark 1px line with a soft shadow falling below it, as
+ * if the section above sits on top of this one. Subtle on purpose: the only
+ * thing that marks a new section, since every section is the same color.
+ */
+.finale::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--snapshot-section-edge);
+  border-top: 1px solid var(--snapshot-color-section-line);
+  background: linear-gradient(var(--snapshot-color-section-shadow), transparent);
+  pointer-events: none;
+}
+
+
 .inner {
   display: flex;
   flex-direction: column;
