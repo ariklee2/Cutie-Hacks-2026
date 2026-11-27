@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { BarChart } from '@/components/snapshot/BarChart';
 import { HeroStat } from '@/components/snapshot/HeroStat';
+import { PieChart } from '@/components/snapshot/PieChart';
 import { SnapshotMessage, SnapshotPage } from '@/components/snapshot/SnapshotPage';
 import { SuspenseReveal } from '@/components/snapshot/SuspenseReveal';
-import { clubLabel, snapshotContent } from '@/content/snapshot';
+import { clubEmoji, clubLabel, snapshotContent } from '@/content/snapshot';
 import { readSnapshot } from '@/lib/server/snapshotStore';
 import { isSectionError } from '@/lib/snapshotData';
 import { formatPercent } from '@/lib/snapshotFormat';
@@ -43,12 +43,13 @@ export default async function ClubPage({ params }: { params: Promise<{ name: str
         </HeroStat>
 
         {shares.length > 0 && (
-          <BarChart
+          <PieChart
             label={copy.chartLabel}
             columns={[copy.columnClub, copy.columnShare]}
-            rows={shares.map((s) => ({
+            slices={shares.map((s) => ({
               key: s.club,
               label: clubLabel(s.club),
+              mark: clubEmoji[s.club],
               value: s.share,
               valueText: formatPercent(s.share),
               detail: copy.detail(formatPercent(s.share)),

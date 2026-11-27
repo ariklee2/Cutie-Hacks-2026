@@ -2,7 +2,7 @@
  * Vertical columns + a line over their tops (one series, one axis). Columns
  * are white at 40% (the `border` token) so the solid white 2px line and its
  * dots stay readable where they cross a column; dots get a 2px deep-red ring.
- * Columns ≤ 24px wide, square at the baseline (1px hairline), 4px rounded top.
+ * Columns ≤ 24px wide, square ends, on a 1px hairline baseline.
  */
 .chart {
   --plot-height: 18rem;
@@ -45,7 +45,7 @@
   height: calc(var(--h) * 100%);
   min-height: 2px;
   background: var(--snapshot-color-border);
-  border-radius: var(--snapshot-radius) var(--snapshot-radius) 0 0;
+  border-radius: 0; /* square ends */
   transform-origin: bottom center;
   animation: grow 0.7s var(--snapshot-ease-out) calc(0.15s + var(--i) * 0.08s) both;
 }

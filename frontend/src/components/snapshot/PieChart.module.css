@@ -1,0 +1,194 @@
+/*
+ * Pie chart (the club scene): white slices separated by a 2px gap in the
+ * scene color, the largest gold (`peak`), an emoji in each big slice, and a
+ * legend beside it naming every slice — identity never rests on color.
+ */
+.chart {
+  --pie-size: min(22rem, 80vw);
+  margin: 0;
+}
+
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--mantine-spacing-xl);
+}
+
+.pieBox {
+  position: relative;
+  flex: none;
+  width: var(--pie-size);
+  height: var(--pie-size);
+}
+
+.pie {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.slice {
+  cursor: default;
+  translate: var(--dx) var(--dy);
+  transition: translate var(--snapshot-hover-duration) var(--snapshot-ease-out);
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: pop 0.6s var(--snapshot-ease-out) calc(0.15s + var(--i) * 0.08s) both;
+}
+
+.slice path {
+  fill: var(--snapshot-color-film-frame);
+  stroke: var(--snapshot-color-background);
+  stroke-width: 2px;
+  stroke-linejoin: miter;
+}
+
+.slice[data-peak] path {
+  fill: var(--snapshot-color-peak);
+}
+
+/* The lifted slice also gets a white outline, like a hovered bar. */
+.slice[data-active] path {
+  stroke: var(--snapshot-color-text);
+  stroke-width: 3px;
+}
+
+.mark {
+  font-size: 18px;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+/* Tooltip centered over the active slice: value first (strong), name second. */
+.tooltip {
+  position: absolute;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  font-size: var(--mantine-font-size-sm);
+  white-space: nowrap;
+  color: var(--snapshot-color-text-on-film);
+  background: var(--snapshot-color-film-frame);
+  border-radius: var(--snapshot-radius);
+  pointer-events: none;
+}
+
+.tooltip strong {
+  font-size: var(--mantine-font-size-md);
+}
+
+/* Legend: every slice by name and value, in slice order. */
+.legend {
+  flex: 1 1 14rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legendRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+  padding: 2px var(--mantine-spacing-xs);
+  font-size: var(--mantine-font-size-md);
+  border-bottom: var(--snapshot-border-hairline);
+  cursor: default;
+}
+
+.legendRow:focus-visible {
+  outline: 2px solid var(--snapshot-color-text);
+  outline-offset: 2px;
+}
+
+.legendRow[data-active] .legendLabel {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.swatch {
+  width: 12px;
+  height: 12px;
+  background: var(--snapshot-color-film-frame);
+}
+
+.legendRow[data-peak] .swatch {
+  background: var(--snapshot-color-peak);
+}
+
+.legendLabel {
+  font-weight: var(--snapshot-font-weight-semibold);
+}
+
+.legendValue {
+  font-variant-numeric: tabular-nums;
+}
+
+.tableToggle {
+  margin-top: var(--mantine-spacing-xl);
+  padding: 0;
+  font: inherit;
+  font-size: var(--mantine-font-size-sm);
+  color: var(--snapshot-color-text);
+  background: none;
+  border: none;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  cursor: pointer;
+}
+
+.tableToggle:focus-visible {
+  outline: 2px solid var(--snapshot-color-text);
+  outline-offset: 4px;
+  border-radius: var(--snapshot-radius);
+}
+
+.table {
+  margin-top: var(--mantine-spacing-md);
+  border-collapse: collapse;
+  font-size: var(--mantine-font-size-md);
+}
+
+.table th,
+.table td {
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-lg) var(--mantine-spacing-xs) 0;
+  text-align: left;
+  border-bottom: var(--snapshot-border-hairline);
+}
+
+.table td:last-child,
+.table th:last-child {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@keyframes pop {
+  from {
+    scale: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slice {
+    animation: none;
+    transition: none;
+  }
+}

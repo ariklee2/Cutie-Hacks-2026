@@ -1,0 +1,363 @@
+{
+  "user": "arik",
+  "generated_at": "2026-11-22T01:48:23+00:00",
+  "based_on": {
+    "engaged_reels": 106,
+    "saved": 0,
+    "liked": 36,
+    "long_watched": 70,
+    "top_hashtags": [
+      {
+        "hashtag": "bwfworldtour",
+        "weight": 22.51
+      },
+      {
+        "hashtag": "kumamotomasters2026",
+        "weight": 15.02
+      },
+      {
+        "hashtag": "badmintonreels",
+        "weight": 8.47
+      },
+      {
+        "hashtag": "bwfreels",
+        "weight": 8.47
+      },
+      {
+        "hashtag": "minecraft",
+        "weight": 6.93
+      }
+    ],
+    "top_creators": [
+      {
+        "creator": "bwf.official",
+        "weight": 22.51
+      },
+      {
+        "creator": "wealth",
+        "weight": 6.0
+      },
+      {
+        "creator": "socalnation",
+        "weight": 5.49
+      }
+    ]
+  },
+  "apify": {
+    "reel_results": 60,
+    "from_cache": false
+  },
+  "reels": [
+    {
+      "shortcode": "DYoh5v-NOir",
+      "url": "https://www.instagram.com/p/DYoh5v-NOir/",
+      "creator": "bwf.official",
+      "creator_name": "Badminton World Federation",
+      "caption": "That’s what we want 🤩🔥 Give us more!\n\n#MalaysiaMasters2026 #BWFWorldTour #BadmintonReels #BWFreels",
+      "hashtags": [
+        "malaysiamasters2026",
+        "bwfworldtour",
+        "badmintonreels",
+        "bwfreels"
+      ],
+      "likes": 125420,
+      "views": 3217789,
+      "found_via": "#badmintonreels",
+      "timestamp": "2026-05-22T08:08:22.000Z",
+      "score": 0.9781,
+      "similarity": 0.1603,
+      "why": "Shares #bwfworldtour, #badmintonreels, #bwfreels with reels you liked or watched"
+    },
+    {
+      "shortcode": "DMmqJ7Yyfw_",
+      "url": "https://www.instagram.com/p/DMmqJ7Yyfw_/",
+      "creator": "bwf.official",
+      "creator_name": "Badminton World Federation",
+      "caption": "Call the police! 😂\n\n#ChinaOpen2025 #BWFWorldTour #Badminton #BadmintonReels #BWFreels",
+      "hashtags": [
+        "chinaopen2025",
+        "bwfworldtour",
+        "badminton",
+        "badmintonreels",
+        "bwfreels"
+      ],
+      "likes": 122137,
+      "views": 20242421,
+      "found_via": "#bwfreels",
+      "timestamp": "2025-07-27T08:11:46.000Z",
+      "score": 0.9243,
+      "similarity": 0.1451,
+      "why": "Shares #bwfworldtour, #badmintonreels, #bwfreels with reels you liked or watched"
+    },
+    {
+      "shortcode": "CzoCin8o-xa",
+      "url": "https://www.instagram.com/p/CzoCin8o-xa/",
+      "creator": "badmintonwithu",
+      "creator_name": "BadmintonWithU 羽你同行",
+      "caption": "剛從韓國超級300大師賽奪冠回來的桃田賢斗，在熊本第一屆超級500賽收到當地球迷的熱烈歡迎👏\n\nPosted @withregram • @bwf.official ✍️ and 🤳 with @momota_kento 🤩👍\n\n#KumamotoMasters2023 #BWFWorldTour #BWFReels #BadmintonReels",
+      "hashtags": [
+        "kumamotomasters2023",
+        "bwfworldtour",
+        "bwfreels",
+        "badmintonreels"
+      ],
+      "likes": 1383,
+      "views": 10258,
+      "found_via": "#bwfreels",
+      "timestamp": "2023-11-14T11:58:33.000Z",
+      "score": 0.7179,
+      "similarity": 0.1218,
+      "why": "Shares #bwfworldtour, #badmintonreels, #bwfreels with reels you liked or watched"
+    },
+    {
+      "shortcode": "CzpdBt3Sttz",
+      "url": "https://www.instagram.com/p/CzpdBt3Sttz/",
+      "creator": "zongyenyen",
+      "creator_name": "𝗬𝗘𝗡",
+      "caption": "🎬 That’s the scene we craving for 💥🏸💪\n\n#KentoMomota #桃田賢斗 #KumamotoMasters2023 #BWFWorldTour #BWF #badminton #BWFreels #BadmintonReels",
+      "hashtags": [
+        "kentomomota",
+        "桃田賢斗",
+        "kumamotomasters2023",
+        "bwfworldtour",
+        "bwf",
+        "badminton",
+        "bwfreels",
+        "badmintonreels"
+      ],
+      "likes": 48965,
+      "views": 0,
+      "found_via": "#bwfreels",
+      "timestamp": "2023-11-15T01:10:06.000Z",
+      "score": 0.6552,
+      "similarity": 0.1056,
+      "why": "Shares #bwfworldtour, #badmintonreels, #bwfreels with reels you liked or watched"
+    },
+    {
+      "shortcode": "DZ8b0erAiQF",
+      "url": "https://www.instagram.com/p/DZ8b0erAiQF/",
+      "creator": "featherfamous",
+      "creator_name": "Feather",
+      "caption": "2000 days in\n•\nWORLD DOWNLOAD In Bio\n•\nfollow @featherfamous \n•\n#minecraft #minecraftbuilds #minecraftsurvival",
+      "hashtags": [
+        "minecraft",
+        "minecraftbuilds",
+        "minecraftsurvival"
+      ],
+      "likes": 200362,
+      "views": 2015379,
+      "found_via": "#minecraft",
+      "timestamp": "2026-06-23T21:58:54.000Z",
+      "score": 0.5787,
+      "similarity": 0.0814,
+      "why": "Shares #minecraft, #minecraftbuilds with reels you liked or watched"
+    },
+    {
+      "shortcode": "DTK6h0TDIYm",
+      "url": "https://www.instagram.com/p/DTK6h0TDIYm/",
+      "creator": "wz_smile",
+      "creator_name": "wz_smile",
+      "caption": "I seem to have been here before. #minecraft #mc",
+      "hashtags": [
+        "minecraft",
+        "mc"
+      ],
+      "likes": 2799617,
+      "views": 0,
+      "found_via": "#minecraft",
+      "timestamp": "2026-01-06T13:15:34.000Z",
+      "score": 0.5193,
+      "similarity": 0.0687,
+      "why": "Shares #minecraft with reels you liked or watched"
+    },
+    {
+      "shortcode": "DYAmQAasgU8",
+      "url": "https://www.instagram.com/p/DYAmQAasgU8/",
+      "creator": "mine.life22",
+      "creator_name": "Minelife",
+      "caption": "5 farms you need #viral #minecraft",
+      "hashtags": [
+        "viral",
+        "minecraft"
+      ],
+      "likes": 3145,
+      "views": 0,
+      "found_via": "#minecraft",
+      "timestamp": "2026-05-06T19:44:37.000Z",
+      "score": 0.4991,
+      "similarity": 0.0808,
+      "why": "Shares #minecraft with reels you liked or watched"
+    },
+    {
+      "shortcode": "DgBoX2Ttegy",
+      "url": "https://www.instagram.com/p/DgBoX2Ttegy/",
+      "creator": "lucasblastreal",
+      "creator_name": "Lucas | Games,Photos,Drawings",
+      "caption": "This minecraft spiderman FREAKS ME OUT 😡\n———————————————————————————————\n(🟦Stay tuned for my next post🟥)\n[📱Mobile Play 30📱]\n[😃If you like gaming content follow me for more, I’m here everyday, Monday to Friday😃]\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵\n(Season 13)(Post: 193)\n———————————————————————————————\n#minecraft #spiderman #gamingmemes® #minecraftmemes #fy \n———————————————————————————————\n(2026)",
+      "hashtags": [
+        "minecraft",
+        "spiderman",
+        "gamingmemes",
+        "minecraftmemes",
+        "fy"
+      ],
+      "likes": 0,
+      "views": 0,
+      "found_via": "#minecraft",
+      "timestamp": "2026-11-22T01:35:24.000Z",
+      "score": 0.4938,
+      "similarity": 0.0989,
+      "why": "Shares #minecraft, #minecraftmemes with reels you liked or watched"
+    },
+    {
+      "shortcode": "DfyUQ4pvjNi",
+      "url": "https://www.instagram.com/p/DfyUQ4pvjNi/",
+      "creator": "badmintonpb_com",
+      "creator_name": "Badminton PB",
+      "caption": "🏆🇯🇵 KUMAMOTO MASTERS JAPAN 2026 – FINAL RESULTS! 🏸🔥\n\nChampions crowned and unforgettable badminton action in Japan! 👏\n\nCongratulations to all the winners and runners-up! 🥇🥈\n\n📊 Check out all five category results. Which final was your favourite? 👇\n\nFollow @badmintonpb for more badminton updates! ❤️\n\n#KumamotoMasters2026 #Badminton #BWFWorldTour #BadmintonResults #BadmintonPB",
+      "hashtags": [
+        "kumamotomasters2026",
+        "badminton",
+        "bwfworldtour",
+        "badmintonresults",
+        "badmintonpb"
+      ],
+      "likes": 1,
+      "views": 0,
+      "found_via": "#kumamotomasters2026",
+      "timestamp": "2026-11-16T02:47:31.000Z",
+      "score": 0.4909,
+      "similarity": 0.0967,
+      "why": "Shares #bwfworldtour, #kumamotomasters2026 with reels you liked or watched"
+    },
+    {
+      "shortcode": "DdWf9jFI6_X",
+      "url": "https://www.instagram.com/p/DdWf9jFI6_X/",
+      "creator": "builderleins",
+      "creator_name": "Builderleins | Minecraft building",
+      "caption": "Gothic Castle🏰\nDownload this build on our patreon, link in Bio.🌐\nRate this build from 1-10 (be honest)\n\nThats a new Style we never built before, what do you think about it?\nDo you want to see more of it? 🩶\nLet us know in the comments! 👇\n\nHashtags:\n#minecraft #minecraftbuilds #minecraftbuildings #build #minecrafthouse",
+      "hashtags": [
+        "minecraft",
+        "minecraftbuilds",
+        "minecraftbuildings",
+        "build",
+        "minecrafthouse"
+      ],
+      "likes": 89039,
+      "views": 0,
+      "found_via": "#minecraft",
+      "timestamp": "2026-09-16T14:29:21.000Z",
+      "score": 0.4893,
+      "similarity": 0.0709,
+      "why": "Shares #minecraft, #minecraftbuilds with reels you liked or watched"
+    },
+    {
+      "shortcode": "DPhpPRyDKZr",
+      "url": "https://www.instagram.com/p/DPhpPRyDKZr/",
+      "creator": "gravel.host",
+      "creator_name": "Gravel Host",
+      "caption": "So blue collar 💔\n\n#minecraft #minecraftmemes #memes #meme #explore",
+      "hashtags": [
+        "minecraft",
+        "minecraftmemes",
+        "memes",
+        "meme",
+        "explore"
+      ],
+      "likes": 694619,
+      "views": 0,
+      "found_via": "#minecraft",
+      "timestamp": "2025-10-07T23:01:11.000Z",
+      "score": 0.4614,
+      "similarity": 0.0604,
+      "why": "Shares #minecraft, #minecraftmemes with reels you liked or watched"
+    },
+    {
+      "shortcode": "DSfZyJZjRHX",
+      "url": "https://www.instagram.com/p/DSfZyJZjRHX/",
+      "creator": "funnypets0901",
+      "creator_name": "Funny Pets",
+      "caption": "Minecraft edit #funnycats #minecraft #kittylove #fypviralシ゚ #catsofınstagram\nCredits: @upsde.dwn",
+      "hashtags": [
+        "funnycats",
+        "minecraft",
+        "kittylove",
+        "fypviralシ゚",
+        "catsofınstagram"
+      ],
+      "likes": 1670122,
+      "views": 0,
+      "found_via": "#minecraft",
+      "timestamp": "2025-12-20T15:42:02.000Z",
+      "score": 0.4308,
+      "similarity": 0.0522,
+      "why": "Shares #minecraft with reels you liked or watched"
+    }
+  ],
+  "profiles": [
+    {
+      "username": "zongyenyen",
+      "full_name": "𝗬𝗘𝗡",
+      "url": "https://www.instagram.com/zongyenyen/",
+      "matching_reels": 3,
+      "score": 1.4356,
+      "why": "Posts 3 reels matching your taste (#badmintonreels, #bwfreels, #bwfworldtour)"
+    },
+    {
+      "username": "badmintonwithu",
+      "full_name": "BadmintonWithU 羽你同行",
+      "url": "https://www.instagram.com/badmintonwithu/",
+      "matching_reels": 1,
+      "score": 0.7179,
+      "why": "Posts 1 reel matching your taste (#badmintonreels, #bwfreels, #bwfworldtour)"
+    },
+    {
+      "username": "featherfamous",
+      "full_name": "Feather",
+      "url": "https://www.instagram.com/featherfamous/",
+      "matching_reels": 1,
+      "score": 0.5787,
+      "why": "Posts 1 reel matching your taste (#minecraft, #minecraftbuilds)"
+    },
+    {
+      "username": "wz_smile",
+      "full_name": "wz_smile",
+      "url": "https://www.instagram.com/wz_smile/",
+      "matching_reels": 1,
+      "score": 0.5193,
+      "why": "Posts 1 reel matching your taste (#mc, #minecraft)"
+    },
+    {
+      "username": "mine.life22",
+      "full_name": "Minelife",
+      "url": "https://www.instagram.com/mine.life22/",
+      "matching_reels": 1,
+      "score": 0.4991,
+      "why": "Posts 1 reel matching your taste (#minecraft)"
+    },
+    {
+      "username": "lucasblastreal",
+      "full_name": "Lucas | Games,Photos,Drawings",
+      "url": "https://www.instagram.com/lucasblastreal/",
+      "matching_reels": 1,
+      "score": 0.4938,
+      "why": "Posts 1 reel matching your taste (#minecraft, #minecraftmemes)"
+    },
+    {
+      "username": "badmintonpb_com",
+      "full_name": "Badminton PB",
+      "url": "https://www.instagram.com/badmintonpb_com/",
+      "matching_reels": 1,
+      "score": 0.4909,
+      "why": "Posts 1 reel matching your taste (#bwfworldtour, #kumamotomasters2026)"
+    },
+    {
+      "username": "builderleins",
+      "full_name": "Builderleins | Minecraft building",
+      "url": "https://www.instagram.com/builderleins/",
+      "matching_reels": 1,
+      "score": 0.4893,
+      "why": "Posts 1 reel matching your taste (#minecraft, #minecraftbuilds)"
+    }
+  ]
+}

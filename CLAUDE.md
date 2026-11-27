@@ -68,9 +68,11 @@ never with `fetch` inside components.
 ## Pages
 
 - `/` — landing: the first screen (`Hero` `.stage`, viewport height minus the
-  header) is plain page red with the film near the top — a 24px strip of red
-  between it and the header, the rest of the screen red below — nothing else
-  visible, so the sections start just below the fold.
+  header) is plain page red with the film starting right under the header —
+  the header's 64px red strip is the only red above it, with the Instagram
+  glyph and Get Snapshot vertically centered in it — then the credit line 8px
+  (`sm`) under the film's bottom-left corner, the rest of the screen red
+  below, so the sections start just below the fold.
   Then one full-width
   **section band** per copy block (`AboutSection`): large heading on the left,
   text on the right, each band one shade lighter red than the one above
@@ -170,7 +172,7 @@ never with `fetch` inside components.
      (every club name, here and in the chart, credits and share card, carries
      its emoji: `clubEmoji` / `clubLabel` in `content/snapshot.ts`, e.g.
      "Sporty 🏀"),
-     then every club's share as a `BarChart`. Backdrop "?".
+     then every club's share as a `PieChart`. Backdrop "?".
   7. `recommendations` (theatre.6) ("For you") — reads `data/<name>_recommendations.json`
      (`readRecommendations`; shape in `src/lib/recommendationsData.ts`) from
      `features/recommender.py`: a "based on #…" line, then **Reels** (creator,
@@ -289,9 +291,10 @@ and credits ink (19.8:1), binge theatre.9 (16.9:1), loyalty theatre.7
 (12.0:1), club theatre.5 (7.0:1), recommendations ("For you") theatre.6
 (9.4:1). Don't go lighter than theatre.5 behind
 white text. `peak` = gold `#F5C542` — **only for the one standout point in
-a chart**: the top bar of every `BarChart` (top creator, hashtag, binge,
-club; bar only, its number stays white since gold text is 4.3:1 on the
-club scene) and the busiest day's column, dot and value on the
+a chart**: the top bar of every `BarChart` (top creator, hashtag, binge;
+bar only, its number stays white), the largest slice of the club
+`PieChart` and its legend swatch (gold text would be 4.3:1 on the club
+scene, so labels stay white) and the busiest day's column, dot and value on the
 time-on-reels chart (12.2:1 on ink). Not on the loyalty meter. Never
 decoration. `watermark` = white at 7%, only for the giant backdrop word
 behind a scene (decorative, never text to read).
@@ -397,16 +400,25 @@ card arriving); the landing and upload pages otherwise stay still.
   page, following the dataviz guidance; `ScoreMeter` uses the same bar spec;
   `ColumnLineChart` on the time-on-reels page is the vertical variant below):
   one white series on the deep red (13.9:1), so no legend — the page title
-  names it. Bars ≤ 24px thick, square at the baseline (a 1px hairline), 4px
-  rounded data-end, value at the tip in the text color. Entrance: bars grow
+  names it. Bars ≤ 24px thick, **square ends (no rounding)** on a 1px
+  hairline baseline, value at the tip in the text color. Entrance: bars grow
   from the baseline one after another (0.7s `--snapshot-ease-out`, 0.1s
   stagger), each value fades in as its bar lands; off under
   `prefers-reduced-motion`. The whole row is the hover/focus target: the bar
   gets a white outline and a white tooltip at its tip (value first, then the
   row's label). Every chart has a "View as table" toggle with the same numbers, except
   top creators and top hashtags (`table={false}`).
+- **Pie chart** (`PieChart`, the club scene only — a part-of-a-whole):
+  slices clockwise from 12 o'clock, all white with a 2px gap in the scene
+  color, the largest gold (`peak`). Identity never rests on color: slices
+  of 6% or more carry their club emoji, and a legend beside the pie (square
+  swatch, name, percent, hairline rows) names every slice; stacked under
+  the pie on narrow screens. Slices pop in one after another (0.08s
+  stagger); hovering or focusing a slice or legend row lifts the slice out
+  6 units with a white outline and a white tooltip on it. "View as table"
+  as usual. Off under `prefers-reduced-motion`.
 - **Column + line chart** (`ColumnLineChart`): vertical columns ≤ 24px wide,
-  4px rounded top, in white at 40% (`border`) so the solid white 2px line
+  square ends, in white at 40% (`border`) so the solid white 2px line
   over their tops and its dots (2px deep-red ring) stay readable; one series,
   one axis — the line traces the same values. Only the highlighted point
   (busiest day) is labeled. Entrance: columns grow up (0.08s stagger), then

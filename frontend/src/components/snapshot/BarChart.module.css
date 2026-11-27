@@ -1,6 +1,6 @@
 /*
- * Shared horizontal bar chart for every snapshot page (dataviz mark spec): ≤ 24px thick, square at the baseline,
- * 4px rounded data-end; value at the tip in the text color; one white series on
+ * Shared horizontal bar chart for every snapshot page (dataviz mark spec): ≤ 24px thick, square ends;
+ * value at the tip in the text color; one white series on
  * the deep red (13.9:1), so no legend — the page title names it.
  */
 .chart {
@@ -57,7 +57,7 @@
   min-width: 2px;
   height: var(--bar-thickness);
   background: var(--snapshot-color-film-frame);
-  border-radius: 0 var(--snapshot-radius) var(--snapshot-radius) 0;
+  border-radius: 0; /* square ends */
   transform-origin: left center;
   animation: grow 0.7s var(--snapshot-ease-out) calc(0.15s + var(--i) * 0.1s) both;
 }
