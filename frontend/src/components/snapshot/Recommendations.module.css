@@ -103,33 +103,45 @@
   font-size: var(--mantine-font-size-sm);
 }
 
-/* Square button with the site's light-up hover (white accent on red pages). */
+/*
+ * Try again: a gold cinema ticket like the header's Get Snapshot — poster
+ * type, ink text (12.2:1), half-circle notches cut into both ends, a slight
+ * tilt. Hover / focus: it straightens and grows; keyboard focus also
+ * underlines the label (the notch mask would clip an outline).
+ */
 .findButton {
-  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
-  font: inherit;
-  font-size: var(--mantine-font-size-sm);
-  font-weight: var(--snapshot-font-weight-semibold);
-  color: var(--snapshot-color-text);
-  background: transparent;
-  border: 1px solid var(--snapshot-color-text);
+  --notch: 5px;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
+  font-family: var(--snapshot-font-display);
+  font-size: var(--mantine-font-size-md);
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--snapshot-color-ink);
+  background: var(--snapshot-color-marquee);
+  border: none;
   border-radius: 0;
   cursor: pointer;
-  transition:
-    transform var(--snapshot-hover-duration) var(--snapshot-ease-out),
-    background-color var(--snapshot-hover-duration),
-    color var(--snapshot-hover-duration);
+  transform: rotate(-2deg);
+  -webkit-mask:
+    radial-gradient(circle at 0 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle at 0 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 50%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) right / 51% 100% no-repeat;
+  transition: transform var(--snapshot-hover-duration) var(--snapshot-ease-out);
 }
 
-.findButton:enabled:hover,
-.findButton:enabled:focus-visible {
-  color: var(--snapshot-color-background);
-  background: var(--snapshot-color-text);
-  transform: scale(var(--snapshot-hover-scale));
+.findButton:hover,
+.findButton:focus-visible {
+  transform: rotate(0deg) scale(var(--snapshot-hover-scale));
 }
 
-.findButton:disabled {
-  cursor: progress;
-  opacity: 0.7;
+.findButton:focus-visible {
+  outline: none;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 @media (prefers-reduced-motion: reduce) {

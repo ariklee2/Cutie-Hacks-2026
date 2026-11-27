@@ -54,7 +54,7 @@ The **For you** page uses [Apify](https://apify.com) to find new reels on Instag
 APIFY_TOKEN=your_apify_api_token
 ```
 
-`.env` is ignored by git; never commit your token. Recommendations are only found when you click **Find recommendations** on that page: each new search costs about $0.16 of Apify credit and takes up to a minute (repeat searches for the same interests are cached and free).
+`.env` is ignored by git; never commit your token. Recommendations are found automatically the first time someone opens that page: each new search costs about $0.16 of Apify credit and takes up to a minute (repeat searches for the same interests are cached and free).
 
 ## How it works
 

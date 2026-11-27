@@ -189,12 +189,12 @@ export const snapshotContent = {
     matchingReels: (n: number) => `${reels(n)} matching your taste`,
     noCaption: 'No caption',
     noneFound: 'Nothing new matched your taste closely enough this time.',
-    /** Not generated yet for this name. */
-    missing: 'Your recommendations haven’t been found yet.',
-    find: 'Find recommendations',
-    finding: 'Finding recommendations…',
-    cost: 'This searches Instagram for new reels (via Apify) and takes up to a minute.',
+    /** Not generated yet for this name: the search starts on its own. */
+    finding: 'Finding reels and accounts picked for you…',
+    cost: 'This searches Instagram for new reels and can take up to a minute.',
     failed: (reason: string) => reason,
+    /** After a failed search. */
+    retry: 'Try again',
   },
 
   credits: {

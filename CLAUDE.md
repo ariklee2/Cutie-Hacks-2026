@@ -243,12 +243,18 @@ never with `fetch` inside components.
      two-line caption preview, `why`, "Watch on Instagram ↗") and **Accounts**
      (username · name, `why`, "View on Instagram ↗") side by side, stacked on
      narrow screens; links open Instagram in a new tab. If the file doesn't
-     exist yet, `FindRecommendations` shows a square **Find recommendations**
-     button that POSTs `/api/recommendations` (`src/app/api/recommendations/
-     route.ts`), which runs the recommender for that name (needs a snapshot;
-     one run per name at a time) and the page refreshes. It's only ever run on
-     click: an uncached run spends ≈ $0.16 of Apify credit and takes up to a
-     minute. The token never leaves the Python process.
+     exist yet, `FindRecommendations` **starts the search automatically** when
+     the scene opens (once per visit): "Finding reels and accounts picked for
+     you…" while `findRecommendations` (`lib/api/recommendations.ts`) POSTs
+     `/api/recommendations` (`src/app/api/recommendations/route.ts`), which
+     runs the recommender for that name (needs a snapshot; one run per name at
+     a time — a 409 means another request is running, so the scene keeps
+     refreshing every 5s until the results exist), then the page refreshes.
+     A failure shows the reason and a **Try again** ticket (gold, ink
+     text, notched ends, tilted −2°, like Get Snapshot). An
+     uncached run spends ≈ $0.16 of Apify credit and takes up to a minute;
+     in production the daily cap (20 runs, `deployPolicy.ts`) limits what
+     automatic runs can spend. The token never leaves the Python process.
   8. `credits` (ink) — the finale: the highlights as film end credits
      (`CreditsRoll`, role above name — "Starring @f1", "Running time 4h 57m",
      …, "Directed by @<name>", "The End") rolling up once.

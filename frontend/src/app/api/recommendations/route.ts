@@ -4,9 +4,9 @@
  * data/<name>_recommendations.json. Body: { "name": "<name>" }.
  *
  * This spends Apify credit (≈ $0.16 for an uncached run; cached hashtag
- * queries are free) and takes up to a minute, so it only runs when the user
- * clicks "Find recommendations" on the recommendations page. One run per name
- * at a time, and (in production) a daily cap on runs across all users
+ * queries are free) and takes up to a minute. The recommendations scene calls
+ * it automatically when it opens and there are no results yet. One run per
+ * name at a time, and (in production) a daily cap on runs across all users
  * (lib/server/deployPolicy.ts). The Apify token stays in the Python process (APIFY_TOKEN in the
  * repo-root .env); it never reaches this route or the browser.
  */
