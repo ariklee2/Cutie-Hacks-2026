@@ -10,13 +10,17 @@ outdoors), and Hufflepuff (all-rounder: no single club clearly wins).
 
 How each reel gets a club
 -------------------------
-1. Keyword rules. Every reel's hashtags, caption words, emojis and creator
-   username are matched against a keyword list per club. Hashtags count
-   double (they're the creator's own label for the reel). The club with the
+1. Keyword rules. Every reel's hashtags, caption words, emojis, creator
+   username and image objects are matched against a keyword list per club.
+   Hashtags count double (they're the creator's own label for the reel).
+   Image objects are what Instagram's own image recognition saw in the
+   reel's thumbnail ("tennis, racket, stadium"), fetched with Apify by
+   features/reel_media.py and cached in data/<user>_apify_media.json; when
+   there's no cache they're simply missing and everything else still works. The club with the
    most points wins; a reel with no hits stays unlabeled for now.
 2. Machine learning for the rest. A TF-IDF + logistic regression model
    (scikit-learn) is trained on the reels the rules labeled, then predicts the
-   unlabeled ones from their wording and creator. Predictions under
+   unlabeled ones from their wording, creator and image objects. Predictions under
    MIN_MODEL_CONFIDENCE stay "Unclassified".
 
 How the user gets a club
@@ -47,6 +51,7 @@ from sklearn.linear_model import LogisticRegression
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from filter.transform import load_reels  # noqa: E402
+from features.reel_media import visual_objects  # noqa: E402
 
 CLUBS = [
     "Brainrot", "Nerd", "Gym Bro", "Sporty", 
@@ -64,6 +69,7 @@ HUFFLEPUFF_MIN_LEAD = 0.10   # ...and this lead over 2nd place, else Hufflepuff
 
 HASHTAG_WEIGHT = 2
 CAPTION_WEIGHT = 1
+IMAGE_WEIGHT = 1   # an object Instagram recognised in the thumbnail counts like a caption word
 
 # Whole words / whole hashtags, all lowercase with no spaces or punctuation
 # (captions, hashtags and usernames are split into lowercase words before
@@ -536,7 +542,7 @@ STEMS = {
         "apnews", "foxnews", "msnbc", "abcnews", "nytimes", "washingtonpost",
         "bbc", "political", "election", "president", "congress", "senate",
         "government", "whitehouse", "supremecourt", "democrat", "republican",
-        "trump", "biden", "immigration", "protest", "lawsuit", "court",
+        "biden", "immigration", "protest", "lawsuit", "court",  # "trump" is a whole word only (not "trumpet")
         "investigation", "police", "crime", "arrest", "military", "war",
         "conflict", "tariff", "economy", "inflation", "stockmarket",
         "worldnews", "localnews", "currentevents", "newsupdate",
@@ -651,6 +657,10 @@ def _rule_hits(row):
     # Extract caption words, excluding inline hashtags
     words = _tokens(re.sub(r"#\w+", " ", caption))
 
+    # Objects Instagram recognised in the thumbnail ("tennis", "racket", …)
+    visual = row.get("visual")
+    image_words = _tokens(" ".join(visual)) if isinstance(visual, list) else []
+
     # Extract username tokens
     user_bits = _tokens(
         row["owner_username"].replace(".", " ").replace("_", " ")
@@ -677,6 +687,9 @@ def _rule_hits(row):
             if count:
                 hits.append({"club": club, "kind": "phrase", "keyword": " ".join(phrase),
                              "where": "caption", "points": CAPTION_WEIGHT * count})
+        # Image objects: exact keywords and stems
+        for w in image_words:
+            add(club, _matches(w, club), "image", IMAGE_WEIGHT)
         # Username pieces: exact keywords and stems
         for u in user_bits:
             add(club, _matches(u, club), "username", HASHTAG_WEIGHT)
@@ -698,13 +711,16 @@ def _rule_scores(row):
 
 
 def _model_text(row):
+    visual = row.get("visual")
     return " ".join([row["caption"] or "", " ".join(row["hashtags"]),
-                     f"user_{row['owner_username']}"])
+                     f"user_{row['owner_username']}",
+                     " ".join(visual) if isinstance(visual, list) else ""])
 
 
 def classify_reels(user="arik"):
     """Return the reels table with a `club` and `club_source` (rules/model) column."""
     df = load_reels(user).copy()
+    df["visual"] = df["shortcode"].map(visual_objects(user)).apply(lambda v: v if isinstance(v, list) else [])
     scores = pd.DataFrame([_rule_scores(r) for _, r in df.iterrows()], index=df.index)
     best = scores.max(axis=1)
     df["club"] = scores.idxmax(axis=1).where(best > 0, UNCLASSIFIED)

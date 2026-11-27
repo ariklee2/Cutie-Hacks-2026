@@ -17,6 +17,11 @@
  * and `videos_watched`. The Python code is run unchanged, exactly as from the
  * command line. Runs on a Node server next to the repo (it writes to disk).
  *
+ * Once the snapshot is written, two jobs start in the background without
+ * holding up the response: the recommender (lib/server/recommendations.ts)
+ * and the image-signal fetch, which rebuilds the snapshot with image objects
+ * for the club classifier (lib/server/imageSignals.ts).
+ *
  * In production (lib/server/deployPolicy.ts): an existing name is refused
  * rather than overwritten, and once the snapshot is built the raw JSON
  * uploads and the CSV copy are deleted — only the parquet table (needed for
@@ -29,6 +34,8 @@ import { promisify } from 'node:util';
 
 import { INSTAGRAM_FILES, checkInstagramExport } from '@/lib/instagramFiles';
 import { MAX_UPLOAD_BYTES, allowSnapshotOverwrite, keepUploads } from '@/lib/server/deployPolicy';
+import { startImageSignalsInBackground } from '@/lib/server/imageSignals';
+import { startRecommendationsInBackground } from '@/lib/server/recommendations';
 import { DATA_DIR, REPO_ROOT, readSnapshot } from '@/lib/server/snapshotStore';
 import { isValidSnapshotName, normaliseSnapshotName } from '@/lib/snapshotName';
 
@@ -89,6 +96,9 @@ export async function POST(request: Request) {
   try {
     // data/ isn't in git (uploads are personal), so a fresh clone may not have it.
     await mkdir(DATA_DIR, { recursive: true });
+    // A new upload for a name (development allows overwriting) gets new
+    // recommendations: don't show the old ones while those are found.
+    await rm(path.join(DATA_DIR, `${name}_recommendations.json`), { force: true });
     await Promise.all(
       contents.map(({ fileName, text }) => writeFile(path.join(DATA_DIR, fileName), text, 'utf8')),
     );
@@ -133,6 +143,13 @@ export async function POST(request: Request) {
       console.error('[snapshot] removing uploads failed', error),
     );
   }
+
+  // Start finding recommendations now, in the background, so they're usually
+  // ready by the time the person reaches the For you scene.
+  startRecommendationsInBackground(name);
+  // And fetch the reels' image objects, then rebuild the snapshot so the club
+  // classifier can use them (the text-only snapshot is already there).
+  startImageSignalsInBackground(name);
 
   return Response.json({
     name,

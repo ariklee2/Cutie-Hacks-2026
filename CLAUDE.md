@@ -13,6 +13,24 @@ clubs).
 - `features/*.py` — analysis functions over that table (`top_creators`,
   `top_hashtags`, `watch_hours`, `binge_sessions`, `classify`, `assign_club`).
   Each also runs as a CLI: `python3 features/<name>.py [user]`.
+- `features/reel_media.py <user> [--dry-run|--offline]` — looks up every reel
+  in the user's table with Apify's `instagram-scraper` (direct reel URLs,
+  ≈ $0.0026 each, batches of 60) and caches the raw items by shortcode in
+  `data/<user>_apify_media.json` (gitignored), so no reel is bought twice.
+  Kept per reel: **image objects** parsed from Instagram's own alt text ("May
+  be an image of tennis, racket and stadium" → `["tennis", "racket",
+  "stadium"]`, `visual_objects(user)`), plus song/artist and comments, which
+  are cached but **not used**: in testing, song titles tripped the club
+  keywords ("Hurricane" → News) and comments' emoji pushed reels to Brainrot.
+  `features/clubs.py` scores image objects like caption words
+  (`IMAGE_WEIGHT` 1, `where: "image"`) and adds them to the model's text;
+  with no cache they're simply absent. On the test snapshot: unclassified
+  reels 58 → 49, top club News → Sporty (the feed is mostly badminton). The
+  `"trump"` News keyword is a whole word only (it matched "angel's trumpet").
+  After each upload, `POST /api/snapshot` runs `startImageSignalsInBackground`
+  (`frontend/src/lib/server/imageSignals.ts`): fetch, then rebuild
+  `data/<name>_snapshot.json`, so the club shown improves a minute or two
+  after the upload (the text-only result shows until then).
 - `features/recommender.py <user> [--dry-run|--offline|--refresh]` — reels and
   profiles the user would enjoy → **`data/<user>_recommendations.json`**.
   Taste profile from the reels table: weight per reel = saved 3, liked 2,
@@ -71,9 +89,11 @@ builds out of the image. In production (`NODE_ENV=production`)
 `src/lib/server/deployPolicy.ts` turns on: no overwriting an existing name
 (409), deleting the raw JSON uploads and the CSV after the snapshot is built
 (parquet + snapshot kept), a daily cap on recommender runs across all users
-(20, counted in `data/_recommendation_runs.json`, 429 when used up), and a
+(20, counted in `data/_recommendation_runs.json`, 429 when used up), the
+same cap on image-signal fetches (20, `data/_image_signal_runs.json`), and a
 30 MB per-file upload limit. Env overrides: `ALLOW_SNAPSHOT_OVERWRITE`,
-`KEEP_UPLOADS`, `RECOMMENDATIONS_ENABLED`, `RECOMMENDATIONS_DAILY_LIMIT`. The
+`KEEP_UPLOADS`, `RECOMMENDATIONS_ENABLED`, `RECOMMENDATIONS_DAILY_LIMIT`,
+`IMAGE_SIGNALS_ENABLED`, `IMAGE_SIGNALS_DAILY_LIMIT`. The
 upload page (rendered per request) states that snapshots are found by name
 and whether uploads are deleted.
 
@@ -258,8 +278,14 @@ never with `fetch` inside components.
      `features/recommender.py`: a "based on #…" line, then **Reels** (creator,
      two-line caption preview, `why`, "Watch on Instagram ↗") and **Accounts**
      (username · name, `why`, "View on Instagram ↗") side by side, stacked on
-     narrow screens; links open Instagram in a new tab. If the file doesn't
-     exist yet, `FindRecommendations` **starts the search automatically** when
+     narrow screens; links open Instagram in a new tab. **The search starts at
+     upload**: once `POST /api/snapshot` has written the snapshot it calls
+     `startRecommendationsInBackground` (`lib/server/recommendations.ts`, the
+     one place the recommender is run; its per-name "running" set lives on
+     `globalThis` so both routes share it) without waiting, and clears any
+     old `<name>_recommendations.json` first — so results are usually ready
+     by the time the person gets here. If the file still doesn't exist,
+     `FindRecommendations` **starts the search automatically** when
      the scene opens (once per visit): "Finding reels and accounts picked for
      you…" while `findRecommendations` (`lib/api/recommendations.ts`) POSTs
      `/api/recommendations` (`src/app/api/recommendations/route.ts`), which

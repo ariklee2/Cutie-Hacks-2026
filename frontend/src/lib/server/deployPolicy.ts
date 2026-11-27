@@ -13,6 +13,11 @@
  *   RECOMMENDATIONS_DAILY_LIMIT  recommender runs allowed per UTC day across all
  *                             users, each of which may spend Apify credit
  *                             (default: 20 in production, unlimited otherwise)
+ *   IMAGE_SIGNALS_ENABLED     "false" stops fetching image objects for the club
+ *                             classifier after uploads
+ *   IMAGE_SIGNALS_DAILY_LIMIT  image-signal fetches allowed per UTC day (each
+ *                             ≈ $0.65 of Apify credit for ~250 reels; default
+ *                             20 in production, unlimited otherwise)
  */
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -29,35 +34,46 @@ const flag = (name: string, fallback: boolean) => {
 export const allowSnapshotOverwrite = flag('ALLOW_SNAPSHOT_OVERWRITE', !production);
 export const keepUploads = flag('KEEP_UPLOADS', !production);
 export const recommendationsEnabled = flag('RECOMMENDATIONS_ENABLED', true);
+export const imageSignalsEnabled = flag('IMAGE_SIGNALS_ENABLED', true);
 
 /** Upload limit per file. Real exports are a few MB; this leaves plenty of room. */
 export const MAX_UPLOAD_BYTES = 30 * 1024 * 1024;
 
-const dailyLimit = (() => {
-  const raw = process.env.RECOMMENDATIONS_DAILY_LIMIT;
-  if (raw === undefined || raw.trim() === '') return production ? 20 : Infinity;
+/** A daily limit from an env var: unset → 20 in production, unlimited otherwise. */
+const limitFrom = (name: string) => {
+  const raw = process.env[name];
+  const fallback = production ? 20 : Infinity;
+  if (raw === undefined || raw.trim() === '') return fallback;
   const n = Number(raw);
-  return Number.isFinite(n) && n >= 0 ? Math.floor(n) : production ? 20 : Infinity;
-})();
+  return Number.isFinite(n) && n >= 0 ? Math.floor(n) : fallback;
+};
 
-/** Run counts live in data/ so they survive restarts (data/ is the persistent disk). */
-const USAGE_FILE = path.join(DATA_DIR, '_recommendation_runs.json');
 const today = () => new Date().toISOString().slice(0, 10);
 
 /**
- * Takes one recommender run from today's allowance. Returns false (and
- * takes nothing) when today's limit is used up.
+ * Takes one run from today's allowance in `file` (in data/, so counts
+ * survive restarts). Returns false, taking nothing, when it's used up.
  */
-export async function takeRecommendationRun(): Promise<boolean> {
-  if (dailyLimit === Infinity) return true;
+async function takeDailyRun(file: string, limit: number): Promise<boolean> {
+  if (limit === Infinity) return true;
+  const usageFile = path.join(DATA_DIR, file);
   let usage = { date: today(), runs: 0 };
   try {
-    const saved = JSON.parse(await readFile(USAGE_FILE, 'utf8')) as typeof usage;
+    const saved = JSON.parse(await readFile(usageFile, 'utf8')) as typeof usage;
     if (saved.date === usage.date && Number.isFinite(saved.runs)) usage = saved;
   } catch {
     // No file yet (or unreadable): today starts at zero.
   }
-  if (usage.runs >= dailyLimit) return false;
-  await writeFile(USAGE_FILE, JSON.stringify({ date: usage.date, runs: usage.runs + 1 }), 'utf8');
+  if (usage.runs >= limit) return false;
+  await writeFile(usageFile, JSON.stringify({ date: usage.date, runs: usage.runs + 1 }), 'utf8');
   return true;
 }
+
+const recommendationLimit = limitFrom('RECOMMENDATIONS_DAILY_LIMIT');
+const imageSignalLimit = limitFrom('IMAGE_SIGNALS_DAILY_LIMIT');
+
+/** One recommender run (Apify hashtag searches) from today's allowance. */
+export const takeRecommendationRun = () => takeDailyRun('_recommendation_runs.json', recommendationLimit);
+
+/** One image-signal fetch (Apify lookups of a user's reels) from today's allowance. */
+export const takeImageSignalRun = () => takeDailyRun('_image_signal_runs.json', imageSignalLimit);

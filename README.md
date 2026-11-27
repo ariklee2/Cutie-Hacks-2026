@@ -54,7 +54,7 @@ The **For you** page uses [Apify](https://apify.com) to find new reels on Instag
 APIFY_TOKEN=your_apify_api_token
 ```
 
-`.env` is ignored by git; never commit your token. Recommendations are found automatically the first time someone opens that page: each new search costs about $0.16 of Apify credit and takes up to a minute (repeat searches for the same interests are cached and free).
+`.env` is ignored by git; never commit your token. Recommendations start being found in the background as soon as an upload is processed (and the page starts a search itself if there are still none when someone gets there): each new search costs about $0.16 of Apify credit and takes up to a minute (repeat searches for the same interests are cached and free).
 
 ## How it works
 
@@ -105,6 +105,8 @@ Any other Docker host with a volume (Railway, Fly.io, a VPS) works the same way:
 | The raw JSON uploads and CSV copy are deleted once the snapshot is built | on | `KEEP_UPLOADS=true` |
 | Recommender runs (Apify credit) per day, across all users | 20 | `RECOMMENDATIONS_DAILY_LIMIT` |
 | Find recommendations button | on | `RECOMMENDATIONS_ENABLED=false` |
+| Image-signal fetches for the club classifier (≈ $0.65 each) per day | 20 | `IMAGE_SIGNALS_DAILY_LIMIT` |
+| Fetch image signals after uploads | on | `IMAGE_SIGNALS_ENABLED=false` |
 | Upload size per file | 30 MB | — |
 
 Snapshots are found by name, so anyone who knows a name can open that snapshot; the upload page says so.
