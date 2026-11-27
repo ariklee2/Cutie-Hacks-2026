@@ -138,7 +138,8 @@ never with `fetch` inside components.
   naming every file not yet added. Under the
   screen, a name field and **Create Snapshot** (enabled once all three are in
   and the name is valid) send them to `POST /api/snapshot`; the screen shows
-  "Saving and processing…", then "Snapshot created" with the reel count from
+  a loading circle (a light gray ring with a dark red arc turning every
+  0.9s; still under reduced motion) above "Saving and processing…", then "Snapshot created" with the reel count from
   `transform.py` and the snapshot file name, or the error under the toolbar
   (including any snapshot sections that failed). On success it goes straight
   to `/snapshot/<name>/top-creators`.

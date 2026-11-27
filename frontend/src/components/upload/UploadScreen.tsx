@@ -158,6 +158,7 @@ export function UploadScreen() {
             <p className={classes.title}>{screen.dragging}</p>
           ) : submit.status === 'saving' ? (
             <>
+              <span className={classes.spinner} aria-hidden="true" />
               <p className={classes.title}>{screen.saving}</p>
               <p className={classes.note}>{screen.savingNote}</p>
             </>

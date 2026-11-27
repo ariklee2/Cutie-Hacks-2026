@@ -59,6 +59,29 @@
   font-size: var(--mantine-font-size-md);
 }
 
+/* Saving and processing: a loading circle — a light gray ring with a dark red
+   arc turning once every 0.9s. Under reduced motion it stands still. */
+.spinner {
+  width: 3rem;
+  height: 3rem;
+  border: 4px solid var(--mantine-color-ink-1);
+  border-top-color: var(--snapshot-color-light-accent);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}
+
 /* "Click or drag": the only line while waiting; regular weight. */
 .prompt {
   font-family: var(--snapshot-font-display);
