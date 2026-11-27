@@ -1,8 +1,8 @@
 # Insta Snapshot
 
-**A Wrapped for your Instagram Reels.** Upload three files from your Instagram data export and get a snapshot of your last week of reels: who you watched most, what you watched, how long you scrolled, your longest binge, whether you're a loyal or variety watcher, your club, and reels and accounts you might like next.
+**A Wrapped for your Instagram Reels.** Upload your Instagram data download (the .zip) and get a snapshot of your last week of reels: who you watched most, what you watched, how long you scrolled, your longest binge, whether you're a loyal or variety watcher, your club, and reels and accounts you might like next.
 
-Built for Cutie Hacks 2026. The original project scope is in [scope.md](scope.md).
+Built for Cutie Hacks 2026.
 
 ## What's in your snapshot
 
@@ -42,7 +42,7 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:3000, click **Get Snapshot**, drop in your three files, enter a name, and click **Create Snapshot**.
+Then open http://localhost:3000, click **Get Snapshot**, drop in your Instagram download (.zip), enter a name, and click **Create Snapshot**.
 
 The website runs the Python backend on your machine, so it has to run from this repository (it reads and writes the `data/` folder). If `python3` on your PATH doesn't have the packages above, point it at one that does with `SNAPSHOT_PYTHON=/path/to/python3` in `frontend/.env.local`.
 
@@ -116,12 +116,11 @@ Snapshots are found by name, so anyone who knows a name can open that snapshot; 
 ```
 data/        your uploaded exports and generated files (local only; a disk on a server)
 filter/      transform.py: raw exports → one row per reel
-features/    the analysis behind each snapshot page, plus the recommender
+features/    the analysis behind each snapshot page, the recommender, and reel_media.py (image objects via Apify)
 frontend/    Next.js + Mantine website (landing, upload, snapshot pages)
 Dockerfile   one container with Node + Python, for deploying
-render.yaml  Render Blueprint (web service + disk for data/)
+render.yaml  Render Blueprint (free web service; a paid plan + disk keeps snapshots)
 CLAUDE.md    detailed notes on the design system and how everything fits together
-scope.md     the original project scope
 ```
 
 ## Privacy
