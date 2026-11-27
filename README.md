@@ -86,12 +86,12 @@ Each Python file also runs on its own, e.g. `python3 features/top_creators.py <n
 
 The app needs a host that can run **Node and Python together** and keep files on a **persistent disk** (it runs the Python scripts on each upload and keeps every snapshot in `data/`). Vercel/Netlify-style serverless hosts can't do either, so it ships as one Docker container:
 
-- `Dockerfile`: Node 20 plus Python with `requirements.txt`, builds the site, runs `next start` on `$PORT`. `data/` is `/app/data`, which must be a mounted disk.
-- `render.yaml`: a [Render](https://render.com) Blueprint for exactly that (a Starter web service with a 1 GB disk at `/app/data`, about $7/month plus the disk).
+- `Dockerfile`: Node 20 plus Python with `requirements.txt`, builds the site, runs `next start` on `$PORT`. `data/` is `/app/data`; mount a disk there for snapshots that survive restarts.
+- `render.yaml`: a [Render](https://render.com) Blueprint on the **free plan**. Free means no disk: every snapshot is wiped when the service restarts, redeploys, or wakes from sleep (it sleeps after ~15 minutes without visitors, and the first visit after that takes 30–60 seconds). Fine for a demo; for snapshots that last, switch to `plan: starter` with a disk (about $7/month; the lines are in the file's comments).
 
 **On Render:**
 1. Push this repo to GitHub.
-2. In Render: **New → Blueprint**, connect GitHub and pick this repo and branch.
+2. In Render: **New → Blueprint**, connect GitHub and pick this repo and the `main` branch.
 3. When it asks for `APIFY_TOKEN`, paste your Apify token (it's stored by Render, never in the repo). Leave it empty to run without recommendations.
 4. Create it. The first build takes a few minutes; your site is at the `onrender.com` URL it shows. Pushes to the branch redeploy automatically.
 

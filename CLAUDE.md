@@ -63,7 +63,10 @@ existing name is overwritten.
 **Deploying** (`Dockerfile`, `.dockerignore`, `render.yaml`, `requirements.txt`
 at the repo root; steps in README): one container with Node 20 + Python
 (venv at `/opt/venv`, `SNAPSHOT_PYTHON` set), `next start` on `$PORT`,
-`/app/data` a persistent disk. `.dockerignore` keeps `data/`, `.env` and
+`/app/data` for snapshots (`render.yaml` is Render's **free plan**: no disk, so
+`data/` — snapshots and the daily recommender count — is wiped on every
+restart, redeploy or wake from sleep; its comments show the paid `starter`
+plan + disk for snapshots that last). `.dockerignore` keeps `data/`, `.env` and
 builds out of the image. In production (`NODE_ENV=production`)
 `src/lib/server/deployPolicy.ts` turns on: no overwriting an existing name
 (409), deleting the raw JSON uploads and the CSV after the snapshot is built

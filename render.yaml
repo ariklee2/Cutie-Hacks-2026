@@ -1,16 +1,23 @@
-# Render Blueprint: one Docker web service with a persistent disk for data/.
-# In Render: New → Blueprint → pick this repo. You'll be asked for APIFY_TOKEN
-# (it's never stored in the repo). A disk needs a paid instance (Starter).
+# Render Blueprint: one Docker web service on the FREE plan.
+# In Render: New → Blueprint → pick this repo (branch main). You'll be asked
+# for APIFY_TOKEN (it's never stored in the repo; leave it empty to run
+# without recommendations).
+#
+# The free plan has no persistent disk: data/ (every snapshot) is wiped
+# whenever the service restarts, redeploys, or wakes from sleeping after
+# ~15 minutes without visitors. For snapshots that last, switch to a paid
+# plan and add a disk:
+#     plan: starter
+#     disk:
+#       name: snapshot-data
+#       mountPath: /app/data
+#       sizeGB: 1
 services:
   - type: web
     name: insta-snapshot
     runtime: docker
-    plan: starter
+    plan: free
     autoDeploy: true
-    disk:
-      name: snapshot-data
-      mountPath: /app/data
-      sizeGB: 1
     envVars:
       - key: APIFY_TOKEN
         sync: false

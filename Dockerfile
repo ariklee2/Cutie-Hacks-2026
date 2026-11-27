@@ -1,6 +1,7 @@
 # Insta Snapshot: the Next.js app and the Python backend in one container.
 # The app runs the Python scripts as subprocesses and keeps its files in
-# /app/data, which must be a persistent disk / volume on the host.
+# /app/data: mount a persistent disk / volume there for snapshots that survive
+# restarts (without one, e.g. on Render's free plan, they're wiped on restart).
 FROM node:20-bookworm-slim
 
 # Python with the backend's packages, in a virtualenv.
