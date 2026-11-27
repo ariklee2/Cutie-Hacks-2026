@@ -16,11 +16,22 @@
   padding-bottom: var(--snapshot-space-section);
 }
 
-.visuallyHidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
+/* Slate and poster-type heading, aligned with the screen's left edge. */
+.head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--mantine-spacing-md);
+  width: 100%;
+  max-width: 60rem;
+  margin: 0 auto var(--mantine-spacing-lg);
+}
+
+.heading {
+  margin: 0;
+  font-family: var(--snapshot-font-display);
+  font-weight: 400;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1;
+  text-transform: uppercase;
 }

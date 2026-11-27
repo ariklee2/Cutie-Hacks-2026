@@ -1,0 +1,88 @@
+/* Ink frame with square sprocket holes down both sides (film stood on end). */
+.poster {
+  --holes: 28px;
+  position: relative;
+  margin: 0 0 var(--snapshot-space-section);
+  padding: var(--mantine-spacing-md) var(--holes);
+  max-width: 34rem;
+  background-color: var(--snapshot-color-ink);
+  transform: rotate(-1.5deg);
+  animation: arrive 0.8s var(--snapshot-ease-out) 0.25s both;
+}
+
+/* Two columns of holes: each layer is clipped to its own edge strip. */
+.poster::before,
+.poster::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--holes);
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 8px,
+    var(--snapshot-color-film-frame) 8px 22px,
+    transparent 22px 30px
+  );
+  -webkit-mask: linear-gradient(to right, transparent 8px, #000 8px, #000 20px, transparent 20px);
+  mask: linear-gradient(to right, transparent 8px, #000 8px, #000 20px, transparent 20px);
+}
+
+.poster::before {
+  left: 0;
+}
+
+.poster::after {
+  right: 0;
+}
+
+.sheet {
+  padding: var(--mantine-spacing-lg) var(--mantine-spacing-lg) var(--mantine-spacing-md);
+  color: var(--snapshot-color-ink);
+  background: var(--snapshot-color-marquee);
+}
+
+.billing {
+  margin: 0;
+  font-family: var(--snapshot-font-display);
+  font-size: var(--mantine-font-size-lg);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.name {
+  margin: var(--mantine-spacing-xs) 0 var(--mantine-spacing-sm);
+  font-family: var(--snapshot-font-display);
+  font-size: clamp(3rem, 9vw, 5.5rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.name[data-size='medium'] {
+  font-size: clamp(2.25rem, 6.5vw, 4rem);
+}
+
+.name[data-size='small'] {
+  font-size: clamp(1.75rem, 5vw, 3rem);
+}
+
+.caption {
+  padding-top: var(--mantine-spacing-sm);
+  font-size: var(--mantine-font-size-md);
+  font-weight: var(--snapshot-font-weight-semibold);
+  border-top: 2px solid var(--snapshot-color-ink);
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: rotate(-8deg) translateY(40px) scale(0.92);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poster {
+    animation: none;
+  }
+}

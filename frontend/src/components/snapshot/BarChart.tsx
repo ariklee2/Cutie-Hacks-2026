@@ -25,13 +25,14 @@ export interface BarChartRow {
  * included) is gold. Bars grow in on load, one after
  * another (skipped under prefers-reduced-motion). Hover or focus a row for a
  * tooltip; "View as table" (unless `table` is off) shows the same numbers
- * as a table.
+ * as a table. `ranked` numbers the rows 01, 02, … in poster type.
  */
 export function BarChart({
   rows,
   label,
   columns,
   table = true,
+  ranked = false,
 }: {
   rows: BarChartRow[];
   /** Accessible chart name (the page title names it visually). */
@@ -40,6 +41,8 @@ export function BarChart({
   columns: [string, string];
   /** Show the "View as table" toggle (default on). */
   table?: boolean;
+  /** Number the rows 01, 02, … in poster type (a top-N list). */
+  ranked?: boolean;
 }) {
   const id = useId();
   const [active, setActive] = useState<number | null>(null);
@@ -47,7 +50,7 @@ export function BarChart({
   const max = Math.max(...rows.map((r) => r.value), Number.MIN_VALUE);
 
   return (
-    <figure className={classes.chart} aria-labelledby={`${id}-label`}>
+    <figure className={classes.chart} data-ranked={ranked || undefined} aria-labelledby={`${id}-label`}>
       <figcaption id={`${id}-label`} className={classes.visuallyHidden}>
         {label}
       </figcaption>
@@ -67,6 +70,11 @@ export function BarChart({
             onFocus={() => setActive(i)}
             onBlur={() => setActive((cur) => (cur === i ? null : cur))}
           >
+            {ranked && (
+              <span className={classes.rank} aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+            )}
             <span className={classes.account} aria-hidden="true">
               {r.label}
             </span>

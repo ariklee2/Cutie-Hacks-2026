@@ -1,13 +1,15 @@
 /* The question, big, gently breathing (scale, not fading: there is no dimmer text) while it waits. A button so it can be revealed early. */
 .prompt {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-xl);
   margin: 0 0 var(--snapshot-space-section);
   padding: 0;
   font: inherit;
-  font-size: clamp(2.5rem, 8vw, 5.5rem);
-  font-weight: var(--snapshot-font-weight-semibold);
-  line-height: var(--snapshot-line-height-display);
-  letter-spacing: var(--snapshot-letter-spacing-display);
+  font-family: var(--snapshot-font-display);
+  font-size: clamp(3rem, 9vw, 6.5rem);
+  line-height: 1;
+  text-transform: uppercase;
   text-align: left;
   color: var(--snapshot-color-text);
   background: none;
@@ -25,6 +27,38 @@
   display: inline-block;
   transform-origin: left center;
   animation: wait 1.2s var(--snapshot-ease-in-out) infinite alternate;
+}
+
+/* A film reel spinning beside the question while it waits. */
+.reel {
+  flex: none;
+  width: clamp(5rem, 13vw, 8rem);
+  height: auto;
+  overflow: visible;
+}
+
+.reelSpin {
+  /* With view-box, the origin is measured from the viewBox's 0,0: the reel's hub. */
+  transform-box: view-box;
+  transform-origin: 0 0;
+  animation: spin 1.2s linear infinite;
+}
+
+.reelDisc {
+  fill: var(--snapshot-color-film-frame);
+}
+
+/* A thin groove inside the rim, in the scene color. */
+.reelRim {
+  fill: none;
+  stroke: var(--snapshot-color-background);
+  stroke-width: 2;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* The answer snaps in like the clapper stick: fast, then settles. */
@@ -63,6 +97,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .promptText,
+  .reelSpin,
   .answer {
     animation: none;
   }

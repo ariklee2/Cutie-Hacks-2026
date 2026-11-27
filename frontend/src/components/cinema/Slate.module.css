@@ -1,0 +1,41 @@
+/* An ink slate with a hard-edged striped arm across the top. */
+.slate {
+  display: inline-flex;
+  flex-direction: column;
+  margin: 0;
+  color: var(--snapshot-color-film-frame);
+  background: var(--snapshot-color-ink);
+  transform: rotate(-2deg);
+  transform-origin: left bottom;
+}
+
+.arm {
+  display: block;
+  height: 12px;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--snapshot-color-film-frame) 0 12px,
+    var(--snapshot-color-ink) 12px 24px
+  );
+}
+
+.body {
+  display: flex;
+  align-items: baseline;
+  gap: var(--mantine-spacing-md);
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  font-family: var(--snapshot-font-display);
+  font-size: var(--mantine-font-size-md);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+
+.number {
+  color: var(--snapshot-color-marquee);
+}
+
+.label {
+  padding-left: var(--mantine-spacing-md);
+  border-left: 1px solid var(--snapshot-color-film-frame);
+}

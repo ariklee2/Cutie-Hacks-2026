@@ -1,0 +1,58 @@
+.marquee {
+  --bulb-gap: 22px;
+  --ring: 22px;
+  position: relative;
+  padding: calc(var(--ring) + var(--mantine-spacing-lg)) calc(var(--ring) + var(--mantine-spacing-xl));
+  background: var(--snapshot-color-ink);
+  border: 3px solid var(--snapshot-color-marquee);
+}
+
+/*
+ * A ring of bulbs: dots tiled across the board, masked to the outer band.
+ * Set b is offset by half a step, and the two sets take turns lighting up.
+ */
+.bulbs {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, var(--snapshot-color-marquee) 4px, transparent 5px) 0 0 / var(--bulb-gap) var(--bulb-gap);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  padding: var(--ring);
+  animation: chase var(--snapshot-marquee-blink) steps(1) infinite;
+}
+
+.bulbs[data-set='b'] {
+  background-position: calc(var(--bulb-gap) / 2) calc(var(--bulb-gap) / 2);
+  animation-delay: calc(var(--snapshot-marquee-blink) / -2);
+}
+
+.words {
+  position: relative;
+  margin: 0;
+  font-family: var(--snapshot-font-display);
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--snapshot-color-film-frame);
+  text-wrap: balance;
+}
+
+@keyframes chase {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bulbs {
+    animation: none;
+  }
+}

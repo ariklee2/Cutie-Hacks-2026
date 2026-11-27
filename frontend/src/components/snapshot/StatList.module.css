@@ -1,46 +1,40 @@
 .list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-  gap: 0 var(--mantine-spacing-xl);
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--mantine-spacing-lg) var(--mantine-spacing-xl);
   margin: 0 0 var(--snapshot-space-section);
 }
 
-/* Centered in its column; every value sits on the same line, whatever its label's length. */
-.row {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  padding: var(--mantine-spacing-md) 0;
-  text-align: center;
-  border-top: var(--snapshot-border-hairline);
-  animation: rise 0.6s var(--snapshot-ease-out) calc(0.4s + var(--i) * 0.12s) both;
+/* Each ticket is dealt onto the table, one after another. */
+.item {
+  animation: deal 0.6s var(--snapshot-ease-out) calc(0.4s + var(--i) * 0.12s) both;
 }
 
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .row {
-    animation: none;
-  }
-}
-
-/* The label is the term (dt, first in the markup), but the value shows first. */
+/* Inside the ticket the label is the term (dt, first in the markup), but the value shows first. */
 .value {
   order: -1;
   margin: 0;
-  font-size: var(--mantine-font-size-xl);
-  font-weight: var(--snapshot-font-weight-semibold);
-  letter-spacing: var(--snapshot-letter-spacing-heading);
+  font-family: var(--snapshot-font-display);
+  font-size: clamp(2.25rem, 5vw, 3rem);
+  line-height: 1.05;
   font-variant-numeric: tabular-nums;
 }
 
 .label {
   margin: 0;
   font-size: var(--mantine-font-size-sm);
+  font-weight: var(--snapshot-font-weight-semibold);
+}
+
+@keyframes deal {
+  from {
+    opacity: 0;
+    transform: translateY(32px) rotate(6deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    animation: none;
+  }
 }

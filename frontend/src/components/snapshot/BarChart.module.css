@@ -30,13 +30,28 @@
   cursor: default;
 }
 
+/* A top-N list: a rank column in poster type before the label. */
+.chart[data-ranked] .row {
+  grid-template-columns: 3.5rem var(--label-width) minmax(0, 1fr);
+}
+
+.rank {
+  font-family: var(--snapshot-font-display);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1;
+}
+
+.row[data-peak] .rank {
+  color: var(--snapshot-color-marquee);
+}
+
 .row:focus-visible {
   outline: 2px solid var(--snapshot-color-text);
   outline-offset: 4px;
 }
 
 .account {
-  font-size: var(--mantine-font-size-md);
+  font-size: var(--mantine-font-size-lg);
   font-weight: var(--snapshot-font-weight-semibold);
   overflow-wrap: anywhere;
 }
@@ -78,8 +93,9 @@
 }
 
 .value {
-  font-size: var(--mantine-font-size-lg);
-  font-weight: var(--snapshot-font-weight-semibold);
+  font-family: var(--snapshot-font-display);
+  font-size: var(--mantine-font-size-xl);
+  letter-spacing: 0.02em;
   font-variant-numeric: tabular-nums;
   animation: appear 0.3s ease-out calc(0.65s + var(--i) * 0.1s) both;
 }
@@ -178,5 +194,14 @@
   .row {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--mantine-spacing-xs);
+  }
+
+  /* Ranked: the number stays beside the name; the bar goes underneath. */
+  .chart[data-ranked] .row {
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+  }
+
+  .chart[data-ranked] .track {
+    grid-column: 1 / -1;
   }
 }

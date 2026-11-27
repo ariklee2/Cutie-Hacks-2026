@@ -2,6 +2,8 @@ import { Container } from '@mantine/core';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
+import { Slate } from '@/components/cinema/Slate';
+import { StageLights } from '@/components/cinema/StageLights';
 import { snapshotContent } from '@/content/snapshot';
 import { snapshotHref, snapshotSequence, type SnapshotStep } from '@/lib/snapshotSequence';
 
@@ -14,9 +16,11 @@ const copy = snapshotContent;
 
 /**
  * One snapshot scene: at least a full screen, in its own background color
- * (`data-scene`, see globals.css), with a giant faint `backdrop` word behind
- * it. Title, subtitle, content and the Back / Next links come in one after
- * another. Tap the sides, use ← →, or the links to move (with the film wipe).
+ * (`data-scene`, see globals.css), lit like a movie screen (StageLights:
+ * spotlights, vignette, grain), with a giant faint `backdrop` word behind
+ * it. A clapper slate ("Scene 03 / 09") sits above the poster-type title;
+ * slate, title, subtitle, content and the Back / Next links come in one
+ * after another. Tap the sides, use ← →, or the links to move (with the film wipe).
  * The last scene offers Start over (first scene) and Back to home (landing).
  */
 export function SnapshotPage({
@@ -43,6 +47,7 @@ export function SnapshotPage({
 
   return (
     <SceneTapArea className={classes.scene} data-scene={step} previous={previousHref} next={nextHref}>
+      <StageLights />
       {backdrop && (
         <span className={classes.backdrop} aria-hidden="true">
           {backdrop}
@@ -51,7 +56,12 @@ export function SnapshotPage({
 
       <Container component="section" className={classes.page}>
         <div className={classes.body}>
-          <h1 className={classes.title}>{title}</h1>
+          <div className={classes.slate}>
+            <Slate scene={index + 1} of={snapshotSequence.length} label={copy.steps[step]} />
+          </div>
+          <h1 className={classes.title}>
+            <span className={classes.titleLine}>{title}</span>
+          </h1>
           <p className={classes.subtitle}>{subtitle}</p>
           <div className={classes.content}>{children}</div>
         </div>

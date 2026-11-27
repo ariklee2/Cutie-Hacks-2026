@@ -64,6 +64,9 @@ export const snapshotContent = {
     columnReels: 'Reels watched',
     /** Tooltip / accessible value. */
     reels: (n: number) => `${reels(n)} watched`,
+    /** The #1 creator's poster, above the ranked list. */
+    billing: 'Starring',
+    posterCaption: (n: number) => `${reels(n)} watched. Your leading role this week.`,
     empty: 'No reels were watched long enough this week to rank creators.',
     failed: "Your top creators couldn't be worked out from your files.",
   },
@@ -76,6 +79,9 @@ export const snapshotContent = {
     columnHashtag: 'Hashtag',
     columnReels: 'Reels watched',
     reels: (n: number) => `${reels(n)} watched`,
+    /** The #1 hashtag's poster, above the ranked list. */
+    billing: 'Top billing',
+    posterCaption: (n: number) => `On ${reels(n)} you watched. This week’s genre.`,
     empty: 'None of the reels you watched this week had hashtags.',
     failed: "Your top hashtags couldn't be worked out from your files.",
   },

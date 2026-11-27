@@ -1,6 +1,8 @@
 /** Copy for the upload page. */
 export const uploadContent = {
   pageTitle: 'Add your Instagram files',
+  /** Slate above the heading. */
+  eyebrow: 'Box office',
   screen: {
     /** The one line on the screen while waiting for files. */
     prompt: 'Click or Drag',

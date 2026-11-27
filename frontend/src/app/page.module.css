@@ -1,0 +1,7 @@
+/* The plot: lead-size copy beside the heading. */
+.plot {
+  margin: 0;
+  max-width: 36rem;
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  line-height: 1.45;
+}

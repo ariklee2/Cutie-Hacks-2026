@@ -1,12 +1,31 @@
-import { AboutSection } from '@/components/landing/AboutSection';
+import { Finale } from '@/components/landing/Finale';
 import { Hero } from '@/components/landing/Hero';
+import { LandingBand } from '@/components/landing/LandingBand';
+import { SceneCards } from '@/components/landing/SceneCards';
+import { StepTickets } from '@/components/landing/StepTickets';
 import { landingContent } from '@/content/landing';
 
+import classes from './page.module.css';
+
 export default function HomePage() {
+  const { plot, showing, steps } = landingContent;
   return (
     <>
-      <Hero title={landingContent.title} credit={landingContent.credit} inspiration={landingContent.inspiration} />
-      <AboutSection sections={landingContent.sections} />
+      <Hero title={landingContent.title} credits={landingContent.credits} />
+
+      <LandingBand id="plot" band="var(--snapshot-color-band-1)" eyebrow={plot.eyebrow} heading={plot.heading} layout="split">
+        <p className={classes.plot}>{plot.text}</p>
+      </LandingBand>
+
+      <LandingBand id="showing" band="var(--snapshot-color-band-2)" eyebrow={showing.eyebrow} heading={showing.heading}>
+        <SceneCards scenes={showing.scenes} />
+      </LandingBand>
+
+      <LandingBand id="steps" band="var(--snapshot-color-ink)" eyebrow={steps.eyebrow} heading={steps.heading}>
+        <StepTickets steps={steps.items} />
+      </LandingBand>
+
+      <Finale />
     </>
   );
 }
