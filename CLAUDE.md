@@ -60,6 +60,20 @@ Env overrides: `SNAPSHOT_PYTHON` (a Python with pandas + pyarrow, default
 `src/lib/snapshotName.ts` (lowercase letters, numbers, `-`, `_`; ≤ 40); an
 existing name is overwritten.
 
+**Deploying** (`Dockerfile`, `.dockerignore`, `render.yaml`, `requirements.txt`
+at the repo root; steps in README): one container with Node 20 + Python
+(venv at `/opt/venv`, `SNAPSHOT_PYTHON` set), `next start` on `$PORT`,
+`/app/data` a persistent disk. `.dockerignore` keeps `data/`, `.env` and
+builds out of the image. In production (`NODE_ENV=production`)
+`src/lib/server/deployPolicy.ts` turns on: no overwriting an existing name
+(409), deleting the raw JSON uploads and the CSV after the snapshot is built
+(parquet + snapshot kept), a daily cap on recommender runs across all users
+(20, counted in `data/_recommendation_runs.json`, 429 when used up), and a
+30 MB per-file upload limit. Env overrides: `ALLOW_SNAPSHOT_OVERWRITE`,
+`KEEP_UPLOADS`, `RECOMMENDATIONS_ENABLED`, `RECOMMENDATIONS_DAILY_LIMIT`. The
+upload page (rendered per request) states that snapshots are found by name
+and whether uploads are deleted.
+
 The frontend must not fake responses. Call the backend only through
 `frontend/src/lib/api/` (one small function per endpoint: `snapshot.ts` for
 the route above; `apiRequest` in `client.ts` for a future external API),

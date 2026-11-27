@@ -1,0 +1,11 @@
+# Never bake personal data, secrets or local builds into the image.
+.git
+.env
+.env.*
+!.env.example
+data/
+**/node_modules
+frontend/.next
+**/__pycache__
+**/*.pyc
+.DS_Store

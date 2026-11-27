@@ -3,6 +3,13 @@ export const uploadContent = {
   pageTitle: 'Add your Instagram files',
   /** Slate above the heading. */
   eyebrow: 'Box office',
+  /** Fine print under the drop zone: who can see a snapshot, and what's kept. */
+  privacy: (uploadsDeleted: boolean) =>
+    `Your snapshot is saved on this server under the name you choose, and anyone who knows that name can open it. ${
+      uploadsDeleted
+        ? 'The files you upload are deleted as soon as your snapshot is built.'
+        : 'The files you upload are kept on this server.'
+    }`,
   screen: {
     /** The one line on the screen while waiting for files. */
     prompt: 'Click or Drag',

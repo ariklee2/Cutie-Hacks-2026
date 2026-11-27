@@ -15,14 +15,20 @@
  *
  * Form fields: `name`, plus one file each under `liked_posts`, `saved_posts`
  * and `videos_watched`. The Python code is run unchanged, exactly as from the
- * command line. Runs on the local Node server only (it writes to disk).
+ * command line. Runs on a Node server next to the repo (it writes to disk).
+ *
+ * In production (lib/server/deployPolicy.ts): an existing name is refused
+ * rather than overwritten, and once the snapshot is built the raw JSON
+ * uploads and the CSV copy are deleted — only the parquet table (needed for
+ * recommendations) and the snapshot stay.
  */
 import { execFile } from 'node:child_process';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { promisify } from 'node:util';
 
 import { INSTAGRAM_FILES, checkInstagramExport } from '@/lib/instagramFiles';
+import { MAX_UPLOAD_BYTES, allowSnapshotOverwrite, keepUploads } from '@/lib/server/deployPolicy';
 import { DATA_DIR, REPO_ROOT, readSnapshot } from '@/lib/server/snapshotStore';
 import { isValidSnapshotName, normaliseSnapshotName } from '@/lib/snapshotName';
 
@@ -33,7 +39,6 @@ const run = promisify(execFile);
 
 /** Python with pandas + pyarrow installed. */
 const PYTHON = process.env.SNAPSHOT_PYTHON ?? 'python3';
-const MAX_FILE_BYTES = 100 * 1024 * 1024;
 const TRANSFORM_TIMEOUT_MS = 5 * 60 * 1000;
 
 const fail = (status: number, error: string) => Response.json({ error }, { status });
@@ -56,6 +61,9 @@ export async function POST(request: Request) {
   if (!isValidSnapshotName(name)) {
     return fail(400, 'Name must be 1–40 letters, numbers, - or _.');
   }
+  if (!allowSnapshotOverwrite && (await readSnapshot(name))) {
+    return fail(409, `The name “${name}” is already taken. Pick another name.`);
+  }
 
   // Read and check all three before writing anything — the same checks as the
   // upload page (lib/instagramFiles.ts), so nothing unusable reaches data/.
@@ -66,7 +74,9 @@ export async function POST(request: Request) {
   const contents: { fileName: string; text: string }[] = [];
   for (const spec of INSTAGRAM_FILES) {
     const file = form.get(spec.kind) as File;
-    if (file.size > MAX_FILE_BYTES) return fail(413, `${spec.fileName} is too large.`);
+    if (file.size > MAX_UPLOAD_BYTES) {
+      return fail(413, `${spec.fileName} is too large (the limit is ${MAX_UPLOAD_BYTES / 1024 / 1024} MB).`);
+    }
     const text = await file.text();
     try {
       checkInstagramExport(spec.kind, text);
@@ -113,6 +123,15 @@ export async function POST(request: Request) {
     const err = error as { stderr?: string; message: string };
     console.error('[snapshot] features failed', err.stderr ?? err.message);
     return fail(500, 'The files were saved and transformed, but running the features failed. See the server log.');
+  }
+
+  // The raw exports aren't needed once the reels table exists: don't keep
+  // people's Instagram data around longer than it takes to build the snapshot.
+  if (!keepUploads) {
+    const raw = [...contents.map((c) => c.fileName), `${name}_reels.csv`];
+    await Promise.all(raw.map((f) => rm(path.join(DATA_DIR, f), { force: true }))).catch((error) =>
+      console.error('[snapshot] removing uploads failed', error),
+    );
   }
 
   return Response.json({

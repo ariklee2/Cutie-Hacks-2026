@@ -35,3 +35,11 @@
   line-height: 1;
   text-transform: uppercase;
 }
+
+/* Fine print under the drop zone, aligned with it. */
+.privacy {
+  width: 100%;
+  max-width: 60rem;
+  margin: var(--mantine-spacing-md) auto 0;
+  font-size: var(--mantine-font-size-xs);
+}
