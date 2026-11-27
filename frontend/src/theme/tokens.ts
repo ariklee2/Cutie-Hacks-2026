@@ -208,14 +208,13 @@ export const border = {
 } as const;
 
 /* --------------------------------------------------------------- Motion --
- * Motion is reserved for the film motif (intro clapperboard + film strip).
- * Everything else stays still. All of it is disabled under
+ * Motion: the film strip, scene transitions and entrances, cinema pieces. All of it is disabled under
  * prefers-reduced-motion.
  */
 export const motion = {
   easeOut: 'cubic-bezier(0.2, 0.8, 0.2, 1)', // entrances
-  easeIn: 'cubic-bezier(0.6, 0, 0.9, 0.3)', // the clapper stick snapping shut
-  easeInOut: 'cubic-bezier(0.7, 0, 0.2, 1)', // the clapperboard lifting away
+  easeIn: 'cubic-bezier(0.6, 0, 0.9, 0.3)', // snapping reveals (the suspense answer)
+  easeInOut: 'cubic-bezier(0.7, 0, 0.2, 1)', // the film wipe between scenes
   filmFrameDuration: '3s', // time for the film to advance one frame
   // Landing film: its frames are 1.2× wider, so 1.2× the time per frame keeps
   // the same on-screen speed.

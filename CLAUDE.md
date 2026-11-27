@@ -282,8 +282,7 @@ Requires Node 20.9+. API base URL goes in `frontend/.env.local` as
 
 The design should read like **a night at the movies, told the way Spotify
 Wrapped tells a year**: big, bold, playful moments one after another. Deep red
-velvet and ink, marquee gold, film running across the screen, a clapperboard
-to open, a movie screen to drop files on. The big moments are in **poster
+velvet and ink, marquee gold, film running across the screen, a movie screen to drop files on. The big moments are in **poster
 type** (Anton, uppercase) and are made of cinema objects — slates, posters,
 tickets, a marquee, a film reel — lit by soft spotlights with film
 grain over them. Everything around those moments stays plain: body copy in
@@ -431,8 +430,7 @@ Snapshot. (The header links are tickets, below.)
 
 The visual motif is **cinema**: film and the clapperboard
 (`src/components/cinema/`), and the movie screen on the upload page
-(`src/components/upload/`). Motion is allowed for the film and
-clapperboard, **chart entrances**, and the **snapshot scenes** (film wipe
+(`src/components/upload/`). Motion is allowed for the film, **chart entrances**, and the **snapshot scenes** (film wipe
 between scenes, background color easing, staggered entrances, count-ups,
 the progress bar filling, suspense reveals, the credits roll, the share
 card arriving); the landing and upload pages otherwise stay still.
@@ -454,15 +452,13 @@ card arriving); the landing and upload pages otherwise stay still.
     else sits on the film; copy goes below it, in the section bands.
   - If copy ever has to sit on the film, use `textOnFilm` (theatre red) with no
     blend, inside the frame area (clear of the 52px sprocket edges).
-- **Intro** (`IntroClapper` + `Clapperboard`): a full-screen deep-black
-  clapperboard (striped arms across the top, slate below) snaps shut, then the
-  whole board lifts off the top of the screen (~1.75s). Plays once per browser
-  session (`sessionStorage`), skippable by click. Ink and paper only.
-- Easing: `--snapshot-ease-out` for entrances, `--snapshot-ease-in` for the
-  clapper snap, `--snapshot-ease-in-out` for the board lifting away. Tokens live
+- **No intro**: the site opens straight on the page (the old full-screen
+  clapperboard intro was removed).
+- Easing: `--snapshot-ease-out` for entrances, `--snapshot-ease-in` for
+  snapping reveals, `--snapshot-ease-in-out` for the film wipe. Tokens live
   in `motion` / `film` in `tokens.ts`.
 - **Every animation is off under `prefers-reduced-motion`**: the strip stands
-  still and the intro never renders.
+  still.
 - **Drop zone** (`upload/UploadScreen`), on the light upload page: a white box
   with square corners, a **2px dashed dark red border** (`lightAccent`) and no
   black frame;
